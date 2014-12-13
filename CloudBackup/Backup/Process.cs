@@ -73,12 +73,6 @@ namespace CloudBackup.Backup
             public string Manifest { get { return _manifest.OuterXml; }}
         }
 
-        static void SetTimestamp(XmlDocument document, ArchiveJob job, DateTime now)
-        {
-            var elm = document.CreateElement("tags");
-            
-        }
-
         static public void RunBackup(ArchiveJob job)
         {
             log.InfoFormat("Starting backup of [{0}]",job.JobRootPath);

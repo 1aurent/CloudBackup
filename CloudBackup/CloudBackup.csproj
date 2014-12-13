@@ -81,6 +81,7 @@
     <Compile Include="Backup\Scheduler.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\IJobProxy.cs" />
+    <Compile Include="Database\ISettings.cs" />
     <Compile Include="Database\ISnapProxy.cs" />
     <Compile Include="Program.cs">
       <SubType>Component</SubType>
