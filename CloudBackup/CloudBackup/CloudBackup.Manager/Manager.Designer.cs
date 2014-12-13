@@ -35,6 +35,7 @@
             this.btnNewArchive = new System.Windows.Forms.Button();
             this.btnDelArchive = new System.Windows.Forms.Button();
             this.lbAllSchedule = new System.Windows.Forms.ListBox();
+            this.btnRunNow = new System.Windows.Forms.Button();
             this.btnDelSchedule = new System.Windows.Forms.Button();
             this.btnNewSchedule = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -50,10 +51,20 @@
             this.rdSchedWeekly = new System.Windows.Forms.RadioButton();
             this.rdSchedMonthly = new System.Windows.Forms.RadioButton();
             this.tabPageConfig = new System.Windows.Forms.TabPage();
+            this.btnApplyChanges = new System.Windows.Forms.Button();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.txtSshUsername = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.cbIsGlacier = new System.Windows.Forms.CheckBox();
+            this.txtSshRootPath = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtSshPwd = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtSshHost = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.cbDisplayPasswords = new System.Windows.Forms.CheckBox();
             this.txtMasterPassword = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
-            this.btnRunNow = new System.Windows.Forms.Button();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -63,6 +74,7 @@
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.tabPageConfig.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabInfos
@@ -171,6 +183,16 @@
             this.lbAllSchedule.Size = new System.Drawing.Size(180, 264);
             this.lbAllSchedule.TabIndex = 0;
             this.lbAllSchedule.SelectedIndexChanged += new System.EventHandler(this.lbAllSchedule_SelectedIndexChanged);
+            // 
+            // btnRunNow
+            // 
+            this.btnRunNow.Location = new System.Drawing.Point(5, 272);
+            this.btnRunNow.Name = "btnRunNow";
+            this.btnRunNow.Size = new System.Drawing.Size(75, 23);
+            this.btnRunNow.TabIndex = 12;
+            this.btnRunNow.Text = "Run Now";
+            this.btnRunNow.UseVisualStyleBackColor = true;
+            this.btnRunNow.Click += new System.EventHandler(this.btnRunNow_Click);
             // 
             // btnDelSchedule
             // 
@@ -322,6 +344,8 @@
             // 
             // tabPageConfig
             // 
+            this.tabPageConfig.Controls.Add(this.btnApplyChanges);
+            this.tabPageConfig.Controls.Add(this.groupBox1);
             this.tabPageConfig.Controls.Add(this.cbDisplayPasswords);
             this.tabPageConfig.Controls.Add(this.txtMasterPassword);
             this.tabPageConfig.Controls.Add(this.label4);
@@ -333,6 +357,109 @@
             this.tabPageConfig.Text = "Configuration";
             this.tabPageConfig.UseVisualStyleBackColor = true;
             // 
+            // btnApplyChanges
+            // 
+            this.btnApplyChanges.Location = new System.Drawing.Point(393, 230);
+            this.btnApplyChanges.Name = "btnApplyChanges";
+            this.btnApplyChanges.Size = new System.Drawing.Size(113, 23);
+            this.btnApplyChanges.TabIndex = 6;
+            this.btnApplyChanges.Text = "Apply Changes";
+            this.btnApplyChanges.UseVisualStyleBackColor = true;
+            this.btnApplyChanges.Click += new System.EventHandler(this.btnApplyChanges_Click);
+            // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.txtSshUsername);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.cbIsGlacier);
+            this.groupBox1.Controls.Add(this.txtSshRootPath);
+            this.groupBox1.Controls.Add(this.label7);
+            this.groupBox1.Controls.Add(this.txtSshPwd);
+            this.groupBox1.Controls.Add(this.label6);
+            this.groupBox1.Controls.Add(this.txtSshHost);
+            this.groupBox1.Controls.Add(this.label5);
+            this.groupBox1.Location = new System.Drawing.Point(46, 61);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(412, 163);
+            this.groupBox1.TabIndex = 4;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Cloud Backup Server";
+            // 
+            // txtSshUsername
+            // 
+            this.txtSshUsername.Location = new System.Drawing.Point(107, 53);
+            this.txtSshUsername.Name = "txtSshUsername";
+            this.txtSshUsername.Size = new System.Drawing.Size(299, 20);
+            this.txtSshUsername.TabIndex = 9;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(15, 56);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(86, 13);
+            this.label8.TabIndex = 8;
+            this.label8.Text = "SSH User name:";
+            // 
+            // cbIsGlacier
+            // 
+            this.cbIsGlacier.AutoSize = true;
+            this.cbIsGlacier.Location = new System.Drawing.Point(107, 131);
+            this.cbIsGlacier.Name = "cbIsGlacier";
+            this.cbIsGlacier.Size = new System.Drawing.Size(178, 17);
+            this.cbIsGlacier.TabIndex = 5;
+            this.cbIsGlacier.Text = "Check if the target is a \"Glacier\"";
+            this.cbIsGlacier.UseVisualStyleBackColor = true;
+            // 
+            // txtSshRootPath
+            // 
+            this.txtSshRootPath.Location = new System.Drawing.Point(107, 105);
+            this.txtSshRootPath.Name = "txtSshRootPath";
+            this.txtSshRootPath.Size = new System.Drawing.Size(299, 20);
+            this.txtSshRootPath.TabIndex = 4;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(18, 108);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(83, 13);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "SSH Root Path:";
+            // 
+            // txtSshPwd
+            // 
+            this.txtSshPwd.Location = new System.Drawing.Point(107, 79);
+            this.txtSshPwd.Name = "txtSshPwd";
+            this.txtSshPwd.Size = new System.Drawing.Size(299, 20);
+            this.txtSshPwd.TabIndex = 3;
+            this.txtSshPwd.UseSystemPasswordChar = true;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(20, 82);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(81, 13);
+            this.label6.TabIndex = 5;
+            this.label6.Text = "SSH Password:";
+            // 
+            // txtSshHost
+            // 
+            this.txtSshHost.Location = new System.Drawing.Point(107, 27);
+            this.txtSshHost.Name = "txtSshHost";
+            this.txtSshHost.Size = new System.Drawing.Size(299, 20);
+            this.txtSshHost.TabIndex = 2;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(46, 30);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(55, 13);
+            this.label5.TabIndex = 3;
+            this.label5.Text = "SSH host:";
+            // 
             // cbDisplayPasswords
             // 
             this.cbDisplayPasswords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -340,14 +467,14 @@
             this.cbDisplayPasswords.Location = new System.Drawing.Point(393, 281);
             this.cbDisplayPasswords.Name = "cbDisplayPasswords";
             this.cbDisplayPasswords.Size = new System.Drawing.Size(113, 17);
-            this.cbDisplayPasswords.TabIndex = 2;
+            this.cbDisplayPasswords.TabIndex = 7;
             this.cbDisplayPasswords.Text = "Display passwords";
             this.cbDisplayPasswords.UseVisualStyleBackColor = true;
             this.cbDisplayPasswords.CheckedChanged += new System.EventHandler(this.cbDisplayPasswords_CheckedChanged);
             // 
             // txtMasterPassword
             // 
-            this.txtMasterPassword.Location = new System.Drawing.Point(153, 46);
+            this.txtMasterPassword.Location = new System.Drawing.Point(153, 18);
             this.txtMasterPassword.Name = "txtMasterPassword";
             this.txtMasterPassword.Size = new System.Drawing.Size(260, 20);
             this.txtMasterPassword.TabIndex = 1;
@@ -356,21 +483,11 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(56, 49);
+            this.label4.Location = new System.Drawing.Point(56, 21);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(91, 13);
             this.label4.TabIndex = 0;
             this.label4.Text = "Master Password:";
-            // 
-            // btnRunNow
-            // 
-            this.btnRunNow.Location = new System.Drawing.Point(5, 272);
-            this.btnRunNow.Name = "btnRunNow";
-            this.btnRunNow.Size = new System.Drawing.Size(75, 23);
-            this.btnRunNow.TabIndex = 12;
-            this.btnRunNow.Text = "Run Now";
-            this.btnRunNow.UseVisualStyleBackColor = true;
-            this.btnRunNow.Click += new System.EventHandler(this.btnRunNow_Click);
             // 
             // Manager
             // 
@@ -394,6 +511,8 @@
             this.flowLayoutPanel1.PerformLayout();
             this.tabPageConfig.ResumeLayout(false);
             this.tabPageConfig.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -426,6 +545,17 @@
         private System.Windows.Forms.Button btnNewSchedule;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button btnRunNow;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtSshHost;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtSshRootPath;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox txtSshPwd;
+        private System.Windows.Forms.CheckBox cbIsGlacier;
+        private System.Windows.Forms.Button btnApplyChanges;
+        private System.Windows.Forms.TextBox txtSshUsername;
+        private System.Windows.Forms.Label label8;
     }
 }
 

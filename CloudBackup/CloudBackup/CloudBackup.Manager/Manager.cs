@@ -48,7 +48,27 @@ namespace CloudBackup.Manager
             ChannelServices.RegisterChannel(clientChannel, true);
 
             _serverLink = (IAPI)Activator.GetObject(typeof(IAPI), "ipc://localhost:19888/API");
-            ReloadJobList();
+
+            try
+            {
+                ReloadSettings();
+                ReloadJobList();
+            }
+            catch (RemotingException ex)
+            {
+                MessageBox.Show(this,
+                    "Unable to communicate with the CloudBackup service. Please check that the service is running, close this window and try again",
+                    "Unable to access service", MessageBoxButtons.OK);
+
+                btnApplyChanges.Enabled = 
+                btnNewArchive.Enabled = 
+                txtSshHost.Enabled = 
+                txtSshUsername.Enabled = 
+                txtSshPwd.Enabled = 
+                txtSshRootPath.Enabled = 
+                txtMasterPassword.Enabled = 
+                cbIsGlacier.Enabled= false;
+            }
         }
 
         void ReloadJobList()
@@ -59,6 +79,43 @@ namespace CloudBackup.Manager
                 lbAllSchedule.Items.Add(job.Name);
             }            
         }
+
+        void SetSetting(Dictionary<string,string> settings,
+            string setting, TextBox box, string @default)
+        {
+            string value;
+            if (!settings.TryGetValue(setting, out value)) value = @default;
+            box.Text = value;
+        }
+
+        void ReloadSettings()
+        {
+            var settings = _serverLink.GetAllSettings()
+                .ToDictionary(x => x.Key, x => x.Value, StringComparer.InvariantCultureIgnoreCase);
+
+            SetSetting(settings, "SshHost", txtSshHost, "changeme");
+            SetSetting(settings, "SshUser", txtSshUsername, "changeme");
+            SetSetting(settings, "SshPwd", txtSshPwd, "changeme");
+            SetSetting(settings, "SshPath", txtSshRootPath, "/home/changeme/");
+            SetSetting(settings, "ZipPwd", txtMasterPassword, "changeme");
+
+            string isGlacierStr;
+            if (!settings.TryGetValue("IsGlacier", out isGlacierStr)) isGlacierStr = "False";
+            bool isGlacier;
+            if (!bool.TryParse(isGlacierStr, out isGlacier)) isGlacier = false;
+            cbIsGlacier.Checked = isGlacier;
+        }
+
+        private void btnApplyChanges_Click(object sender, EventArgs e)
+        {
+            _serverLink.SaveSetting("SshHost", txtSshHost.Text);
+            _serverLink.SaveSetting("SshUser", txtSshUsername.Text);
+            _serverLink.SaveSetting("SshPwd", txtSshPwd.Text);
+            _serverLink.SaveSetting("SshPath", txtSshRootPath.Text);
+            _serverLink.SaveSetting("ZipPwd", txtMasterPassword.Text);
+            _serverLink.SaveSetting("IsGlacier", cbIsGlacier.Enabled.ToString());
+        }
+
 
         private void rdSchedDaily_CheckedChanged(object sender, EventArgs e)
         {
@@ -113,6 +170,7 @@ namespace CloudBackup.Manager
         {
             var showText = !cbDisplayPasswords.Checked;
             txtMasterPassword.UseSystemPasswordChar = showText;
+            txtSshPwd.UseSystemPasswordChar = showText;
         }
 
         void SyncGuiWithArchive()

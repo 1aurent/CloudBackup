@@ -3,6 +3,18 @@
 	value text not null
 );
 
+CREATE TABLE IF NOT EXISTS Settings(
+	id    text not null primary key,
+	value text not null
+);
+
+INSERT OR IGNORE INTO Version Values ('SshHost','changeme');
+INSERT OR IGNORE INTO Version Values ('SshUser','changeme');
+INSERT OR IGNORE INTO Version Values ('SshPwd', 'changeme');
+INSERT OR IGNORE INTO Version Values ('SshPath','/home/changeme/');
+INSERT OR IGNORE INTO Version Values ('IsGlacier', 'False');
+INSERT OR IGNORE INTO Version Values ('ZipPwd', 'changeme');
+
 INSERT OR IGNORE INTO Version Values (1, '1.0.0.0'); -- Database Version
 INSERT OR IGNORE INTO Version Values (2, '1.0.0.0'); -- Database Compatibility Version
 INSERT OR IGNORE INTO Version Values (3, '1.0.0.0'); -- Server Version

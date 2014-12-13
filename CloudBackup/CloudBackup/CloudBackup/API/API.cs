@@ -107,6 +107,23 @@ namespace CloudBackup.API
             ThreadPool.QueueUserWorkItem(RunJobThread, job);
         }
 
+        public KeyValuePair<string, string>[] GetAllSettings()
+        {
+            var settings = Program.Database.Settings.GetAllSettings();
+            var allSettings = new List<KeyValuePair<string, string>>();
+            while (settings.MoveNext())
+            {
+                allSettings.Add( new KeyValuePair<string, string>(settings.Current.Setting,settings.Current.Value));
+            }
+
+            return allSettings.ToArray();
+        }
+
+        public void SaveSetting(string setting, string value)
+        {
+            Program.Database.Settings.Set(setting,value);
+        }
+
         public static void ActivateApi()
         {
             log.Info("Activating API");
