@@ -95,6 +95,12 @@ namespace CloudBackup.API
             Program.Database.JobProxy.DropSchedule(uid);
         }
 
+        public void ResetArchiveJob(int uid)
+        {
+            log.InfoFormat("Resetting job [{0}]", uid);
+            Program.Database.JobProxy.ResetStatus(uid);            
+        }
+
         void RunJobThread(object objJob)
         {
             var job = (ArchiveJob) objJob;
@@ -109,14 +115,16 @@ namespace CloudBackup.API
 
         public KeyValuePair<string, string>[] GetAllSettings()
         {
-            var settings = Program.Database.Settings.GetAllSettings();
-            var allSettings = new List<KeyValuePair<string, string>>();
-            while (settings.MoveNext())
+            using (var settings = Program.Database.Settings.GetAllSettings())
             {
-                allSettings.Add( new KeyValuePair<string, string>(settings.Current.Setting,settings.Current.Value));
-            }
+                var allSettings = new List<KeyValuePair<string, string>>();
+                while (settings.MoveNext())
+                {
+                    allSettings.Add(new KeyValuePair<string, string>(settings.Current.Setting, settings.Current.Value));
+                }
 
-            return allSettings.ToArray();
+                return allSettings.ToArray();
+            }
         }
 
         public void SaveSetting(string setting, string value)

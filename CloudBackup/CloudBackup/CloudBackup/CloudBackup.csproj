@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -95,6 +95,7 @@
     <Compile Include="Utils\EnumeratorCompiler.cs" />
     <Compile Include="Utils\ObjectLoadHelper.cs" />
     <Compile Include="Utils\ParameterMapAttribute.cs" />
+    <Compile Include="Utils\PipeStream.cs" />
     <Compile Include="Utils\SqlStatementAttribute.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -45,6 +45,9 @@ namespace CloudBackup.Database
                       "DELETE from ArchiveFiles where sourceSchedule=@uid;")]
         void DropSchedule(int uid);
 
+        [SqlStatement("DELETE from ArchiveFiles where sourceSchedule=@uid;")]
+        void ResetStatus(int uid);
+
         [SqlStatement("DELETE FROM Schedule WHERE id=@uid;" +
                       "INSERT INTO Schedule " +
                       "(id,name,schedule,rootPath,active) " +

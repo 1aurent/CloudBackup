@@ -38,6 +38,7 @@ namespace CloudBackup.Manager
             btnNewSchedule.Enabled = false;
             btnDelSchedule.Enabled = false;
             btnSaveSchedule.Enabled = false;
+            btnResetStatus.Enabled =
             btnRunNow.Enabled = false;
 
             rdSchedDaily.Enabled = false;
@@ -186,6 +187,7 @@ namespace CloudBackup.Manager
                 rdSchedDaily.Enabled = 
                 rdSchedWeekly.Enabled = 
                 rdSchedMonthly.Enabled =
+                btnResetStatus.Enabled =
                 btnRunNow.Enabled = false;
                 rdSchedDaily.Checked = 
                 rdSchedWeekly.Checked = 
@@ -205,6 +207,7 @@ namespace CloudBackup.Manager
             btnNewSchedule.Enabled = true;
             btnDelSchedule.Enabled = true;
             btnSaveSchedule.Enabled = true;
+            btnResetStatus.Enabled =
             btnRunNow.Enabled = _archiveJob.JobUID.HasValue;
 
             rdSchedDaily.Enabled = true;
@@ -380,6 +383,25 @@ The schedule and the file status database will be permanently dropped. You will 
 
             _serverLink.RunJobNow(_archiveJob.JobUID.Value);
             MessageBox.Show(this, "Job has been triggered.");
+        }
+
+        private void btnResetStatus_Click(object sender, EventArgs e)
+        {
+            if (_archiveJob == null) return;
+            if (!_archiveJob.JobUID.HasValue) return;
+
+            var result = MessageBox.Show(
+                this,
+                @"WARNING:
+All file status will be dropped and the next scheduled or force backup 
+will be a full image. Existing backup will not be dropped. Do you really want to proceed?",
+                "WARNING - Are you sure that you want to go head?",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2
+                );
+
+            if (result != DialogResult.Yes) return;
+
+            _serverLink.ResetArchiveJob(_archiveJob.JobUID.Value);
         }
 
     }

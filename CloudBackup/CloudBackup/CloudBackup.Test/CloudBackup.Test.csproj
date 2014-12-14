@@ -65,6 +65,7 @@
     <Compile Include="Backup\Engine.cs" />
     <Compile Include="Backup\Scheduler.cs" />
     <Compile Include="Log4NetConf.cs" />
+    <Compile Include="PipeStreamTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

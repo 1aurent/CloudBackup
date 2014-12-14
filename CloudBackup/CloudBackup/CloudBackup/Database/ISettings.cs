@@ -20,7 +20,7 @@ namespace CloudBackup.Database
         [SqlStatement("SELECT id,value FROM Settings")]
         IEnumerator<AllSettings> GetAllSettings();
 
-        [SqlStatement("INSERT OR REPLACE Settings (id,value) VALUES (@setting,@value)")]
+        [SqlStatement("INSERT OR REPLACE INTO Settings (id,value) VALUES (@setting,@value)")]
         void Set(string setting,string value);
 
         [SqlStatement("SELECT value FROM Settings WHERE id=@setting")]

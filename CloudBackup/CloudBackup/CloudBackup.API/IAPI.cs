@@ -22,6 +22,7 @@ namespace CloudBackup.API
         ArchiveJob LoadArchiveJob(string name);
         int SaveOrUpdateArchiveJob(ArchiveJob job);
         void DropArchiveJob(int uid);
+        void ResetArchiveJob(int uid);
         void RunJobNow(int uid);
 
         KeyValuePair<string, string>[] GetAllSettings();
