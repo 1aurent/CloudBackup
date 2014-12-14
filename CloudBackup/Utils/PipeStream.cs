@@ -1,3 +1,21 @@
+/* ........................................................................
+ * copyright 2015 Laurent Dupuis
+ * ........................................................................
+ * < This program is free software: you can redistribute it and/or modify
+ * < it under the terms of the GNU General Public License as published by
+ * < the Free Software Foundation, either version 3 of the License, or
+ * < (at your option) any later version.
+ * < 
+ * < This program is distributed in the hope that it will be useful,
+ * < but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * < MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * < GNU General Public License for more details.
+ * < 
+ * < You should have received a copy of the GNU General Public License
+ * < along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * ........................................................................
+ *
+ */
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -37,7 +55,7 @@ namespace CloudBackup.Utils
             {
                 var nbA = WriteBufferSize - _writeBufferPos;
                 Buffer.BlockCopy(buffer, offset, _writeBuffer, _writeBufferPos,nbA);
-                Trace.WriteLine(string.Format("Push {0} - A",_writeBuffer.Length));
+                //Trace.WriteLine(string.Format("Push {0} - A",_writeBuffer.Length));
                 lock (_lock) { _buffers.AddLast(_writeBuffer); Monitor.Pulse(_lock); }
                 _writeBufferPos = 0;
                 _writeBuffer = new byte[WriteBufferSize];
@@ -50,7 +68,7 @@ namespace CloudBackup.Utils
             {
                 var block = new byte[count];
                 Buffer.BlockCopy(buffer, offset, block, 0, count);
-                Trace.WriteLine(string.Format("Push {0} - B", block.Length));
+                //Trace.WriteLine(string.Format("Push {0} - B", block.Length));
                 lock (_lock) { _buffers.AddLast(block); Monitor.Pulse(_lock); }
             }
             else
@@ -96,11 +114,11 @@ namespace CloudBackup.Utils
             {
                 var block = new byte[_writeBufferPos];
                 Buffer.BlockCopy(_writeBuffer, 0, block, 0, _writeBufferPos);
-                Trace.WriteLine(string.Format("Push {0} - END", block.Length));
+                //Trace.WriteLine(string.Format("Push {0} - END", block.Length));
                 lock (_lock) { _buffers.AddLast(block); _isClosed = true; Monitor.Pulse(_lock); }
                 return;
             }
-            Trace.WriteLine("Push ZERO - END");
+            //Trace.WriteLine("Push ZERO - END");
             lock (_lock) { _isClosed = true; Monitor.Pulse(_lock); }
         }
 
