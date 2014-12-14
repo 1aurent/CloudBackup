@@ -1,0 +1,151 @@
+<?xml version='1.0' encoding='windows-1252'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Product Name='CloudBackup' Id='3960C135-7768-4D41-9AAC-B589D6700100' UpgradeCode='3960C135-7768-4D41-9AAC-0009D6700000'
+    Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='Laurent Dupuis'>
+
+    <Package Id='*' Keywords='Installer'
+      Description="Laurent Dupuis's CloudBackup Installer 64bits"
+      Comments="Laurent Dupuis's CloudBackup Installer" Manufacturer='Laurent Dupuis'
+      InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x64" />
+      
+    <Media Id='1' Cabinet='CloudBackup.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
+    <Property Id='DiskPrompt' Value="Laurent Dupuis's CloudBackup Installation [1]" />
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
+    <Property Id="SERV_SYSACCOUNT" Value="1" />
+    <Property Id="UseSystemAccount" Value="1" />
+    
+		<WixVariable Id="WixUILicenseRtf" Value="Installer\License.rtf" />
+	  <WixVariable Id="WixUIBannerBmp" Value="Installer\Bitmaps\banner.bmp" />
+  	<WixVariable Id="WixUIDialogBmp" Value="Installer\Bitmaps\dialog.bmp" />
+
+    <Directory Id='TARGETDIR' Name='SourceDir'>
+      <Directory Id="ProgramMenuFolder">
+          <Directory Id="ApplicationProgramsFolder" Name="CloudBackup"/>
+      </Directory>
+    
+      <Directory Id='ProgramFiles64Folder' Name='PFiles'>
+        <Directory Id='INSTALLDIR' Name='AutoRRD'>
+					<Directory Id='BinDir' Name='Bin'>
+            <Component Id='BinX64' Guid='3960C135-7768-4D41-9AAC-B589D67AB300' Win64="yes">
+              <File Id='ExeX64' Name='CloudBackup.EXE' DiskId='1' Source='bin\Srv\Release\CloudBackup.exe' KeyPath='yes' />
+              <ServiceInstall Id="CloudBackupSrv"
+              	Name="CloudBackup"
+              	DisplayName="CloudBackup"
+              	Description="Laurent Dupuis's CloudBackup Service"
+              	Type="ownProcess"
+              	Start="auto" ErrorControl="normal"
+              	Account="LocalSystem" />
+              <ServiceControl Id="CloudBackupSrvStop"
+              	Name="CloudBackup" Stop="both" Wait="yes" Remove="uninstall" />
+            </Component>
+            <Component Id='DllX64' Guid='3960C135-7768-4D41-9AAC-B589D67AB301' Win64="yes">
+              <File Id='Dll01' Name='AlphaFS.dll' DiskId='1' Source='bin\Srv\Release\AlphaFS.dll' KeyPath='yes' />
+              <File Id='Dll02' Name='AlphaVSS.52.x64.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.52.x64.dll' KeyPath='no' />
+              <File Id='Dll03' Name='AlphaVSS.60.x64.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.60.x64.dll' KeyPath='no' />
+              <File Id='Dll04' Name='AlphaVSS.Common.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.Common.dll' KeyPath='no' />
+              <File Id='Dll05' Name='CloudBackup.API.dll' DiskId='1' Source='bin\Srv\Release\CloudBackup.API.dll' KeyPath='no' />
+              <File Id='Cfg01' Name='CloudBackup.exe.config' DiskId='1' Source='bin\Srv\Release\CloudBackup.exe.config' KeyPath='no' />
+              <File Id='Dll06' Name='Ionic.Zip.dll' DiskId='1' Source='bin\Srv\Release\Ionic.Zip.dll' KeyPath='no' />
+              <File Id='Dll07' Name='log4net.dll' DiskId='1' Source='bin\Srv\Release\log4net.dll' KeyPath='no' />
+              <File Id='Dll08' Name='Renci.SshNet.dll' DiskId='1' Source='bin\Srv\Release\Renci.SshNet.dll' KeyPath='no' />
+              <File Id='Dll09' Name='System.Data.SQLite.dll' DiskId='1' Source='bin\Srv\Release\System.Data.SQLite.dll' KeyPath='no' />
+            </Component>
+            <Component Id='Manager' Guid='3960C135-7768-4D41-9AAC-B589D67AB302' Win64="yes">
+            	<File Id='MngExe' Name='CloudBackup.Manager.exe' DiskId='1' Source='bin\Mgr\Release\CloudBackup.Manager.exe' KeyPath='yes' />
+            	<File Id='MngCfg' Name='CloudBackup.Manager.exe.config' DiskId='1' Source='bin\Mgr\Release\CloudBackup.Manager.exe.config' KeyPath='no' />
+            </Component>
+					</Directory>
+					<Directory Id='LogDir' Name='Logs'>
+						<Component Id='LogDir' Guid='3960C135-7768-4D41-9AAC-B589D67AB303' Win64="yes">
+							<CreateFolder Directory='LogDir' />
+						</Component>
+					</Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+    
+
+    <DirectoryRef Id="ApplicationProgramsFolder">
+        <Component Id="ApplicationShortcut" Guid="3960C135-7768-4D41-9AAC-B589D67AB400" Win64="yes">
+            <Shortcut Id="ManagementShortcut" 
+                 Name="CloudBackup Manager" 
+               Description="CloudBackup Server Manager Tool"
+                Target="[BinDir]CloudBackup.Manager.exe"
+                      WorkingDirectory="BinDir"/>
+            <RemoveFolder Id="ApplicationProgramsFolder" On="uninstall"/>
+            <RegistryValue Root="HKCU" Key="Software\AutoRRD" Name="installed" Type="integer" Value="1" KeyPath="yes"/>
+       </Component>
+    </DirectoryRef>
+    
+
+    <Feature Id='Complete' Title='CloudBackup' Description='The complete package.'
+      Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
+      <Feature Id='Ed64bit' Title='CloudBackup' Description='CloudBackup' Level='1'>
+        <ComponentRef Id='BinX64' />
+        <ComponentRef Id='DllX64' />
+        <ComponentRef Id='LogDir' />
+        <ComponentRef Id='Manager' />
+        <ComponentRef Id='ApplicationShortcut' />
+      </Feature>
+    </Feature>
+
+		<UI>
+	
+    	<!--UIRef Id="WixUI_InstallDir" /-->
+      <!-- UI Id="WixUI_InstallDir" -->
+          <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+          <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="12" />
+          <TextStyle Id="WixUI_Font_Title" FaceName="Tahoma" Size="9" Bold="yes" />
+
+          <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+          <Property Id="WixUI_Mode" Value="InstallDir" />
+
+          <DialogRef Id="BrowseDlg" />
+          <DialogRef Id="DiskCostDlg" />
+          <DialogRef Id="ErrorDlg" />
+          <DialogRef Id="FatalError" />
+          <DialogRef Id="FilesInUse" />
+          <DialogRef Id="MsiRMFilesInUse" />
+          <DialogRef Id="PrepareDlg" />
+          <DialogRef Id="ProgressDlg" />
+          <DialogRef Id="ResumeDlg" />
+          <DialogRef Id="UserExit" />
+          
+          <Publish Dialog="BrowseDlg" Control="OK" Event="DoAction" Value="WixUIValidatePath" Order="3">1</Publish>
+          <Publish Dialog="BrowseDlg" Control="OK" Event="SpawnDialog" Value="InvalidDirDlg" Order="4"><![CDATA[WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+
+          <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+
+          <Publish Dialog="WelcomeDlg" Control="Next" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
+
+          <Publish Dialog="LicenseAgreementDlg" Control="Back" Event="NewDialog" Value="WelcomeDlg">1</Publish>
+          <Publish Dialog="LicenseAgreementDlg" Control="Next" Event="NewDialog" Value="InstallDirDlg">LicenseAccepted = "1"</Publish>
+
+          <Publish Dialog="InstallDirDlg" Control="Back" Event="NewDialog" Value="LicenseAgreementDlg">1</Publish>
+          <Publish Dialog="InstallDirDlg" Control="Next" Event="SetTargetPath" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+          <Publish Dialog="InstallDirDlg" Control="Next" Event="DoAction" Value="WixUIValidatePath" Order="2">NOT WIXUI_DONTVALIDATEPATH</Publish>
+          <Publish Dialog="InstallDirDlg" Control="Next" Event="SpawnDialog" Value="InvalidDirDlg" Order="3"><![CDATA[NOT WIXUI_DONTVALIDATEPATH AND WIXUI_INSTALLDIR_VALID<>"1"]]></Publish>
+          <Publish Dialog="InstallDirDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg" Order="4">WIXUI_DONTVALIDATEPATH OR WIXUI_INSTALLDIR_VALID="1"</Publish>
+          <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Property="_BrowseProperty" Value="[WIXUI_INSTALLDIR]" Order="1">1</Publish>
+          <Publish Dialog="InstallDirDlg" Control="ChangeFolder" Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+          
+          <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="InstallDirDlg" Order="1">NOT Installed</Publish>
+          <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="MaintenanceTypeDlg" Order="2">Installed</Publish>
+
+          <Publish Dialog="MaintenanceWelcomeDlg" Control="Next" Event="NewDialog" Value="MaintenanceTypeDlg">1</Publish>
+
+          <Publish Dialog="MaintenanceTypeDlg" Control="RepairButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+          <Publish Dialog="MaintenanceTypeDlg" Control="RemoveButton" Event="NewDialog" Value="VerifyReadyDlg">1</Publish>
+          <Publish Dialog="MaintenanceTypeDlg" Control="Back" Event="NewDialog" Value="MaintenanceWelcomeDlg">1</Publish>
+
+          <Property Id="ARPNOMODIFY" Value="1" />
+      <!-- /UI -->
+
+      <UIRef Id="WixUI_Common" />    	
+    	<UIRef Id="WixUI_ErrorProgressText" />
+ 	
+    </UI>
+
+  </Product>
+</Wix>
+     

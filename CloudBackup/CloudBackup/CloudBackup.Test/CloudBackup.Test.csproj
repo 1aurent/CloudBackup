@@ -13,25 +13,6 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>x64</PlatformTarget>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Debug\</OutputPath>
@@ -53,23 +34,23 @@
   <ItemGroup>
     <Reference Include="AlphaFS, Version=1.5.0.0, Culture=neutral, PublicKeyToken=4b76c8c88cc75802, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\AlphaFS.dll</HintPath>
+      <HintPath>..\3rdParty\Libs\AlphaFS.dll</HintPath>
     </Reference>
     <Reference Include="AlphaVSS.52.x64">
-      <HintPath>..\Libs\AlphaVSS.52.x64.dll</HintPath>
+      <HintPath>..\3rdParty\Libs\AlphaVSS.52.x64.dll</HintPath>
     </Reference>
     <Reference Include="AlphaVSS.60.x64">
-      <HintPath>..\Libs\AlphaVSS.60.x64.dll</HintPath>
+      <HintPath>..\3rdParty\Libs\AlphaVSS.60.x64.dll</HintPath>
     </Reference>
     <Reference Include="AlphaVSS.Common, Version=1.2.4000.3, Culture=neutral, PublicKeyToken=959d3993561034e3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libs\AlphaVSS.Common.dll</HintPath>
+      <HintPath>..\3rdParty\Libs\AlphaVSS.Common.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\Libs\log4net.dll</HintPath>
+      <HintPath>..\3rdParty\Libs\log4net.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
-      <HintPath>..\Libs\nunit.framework.dll</HintPath>
+      <HintPath>..\3rdParty\Libs\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
