@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<Project ToolsVersion="4.0" InitialTargets="ALL" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+<PropertyGroup>
+      <WixToolPath>3rdParty\Wix\</WixToolPath>
+      <WixTasksPath>3rdParty\Wix\wixtasks.dll</WixTasksPath>
+</PropertyGroup>
+  <UsingTask TaskName="Candle" AssemblyFile="$(WixTasksPath)" />
+  <UsingTask TaskName="Insignia" AssemblyFile="$(WixTasksPath)" />
+  <UsingTask TaskName="Lit" AssemblyFile="$(WixTasksPath)" />
+  <UsingTask TaskName="Light" AssemblyFile="$(WixTasksPath)" />
+  <UsingTask TaskName="Torch" AssemblyFile="$(WixTasksPath)" />
+  
+<Target Name="Installer">
+	<MakeDir Directories="Bin" />
+	<MakeDir Directories="Bin\Installer\" />
+    <Candle
+      ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
+      SourceFiles="Installer\Install64.wxs"
+      AdditionalOptions="$(CompilerAdditionalOptions)" 
+      Extensions="WixUtilExtension"
+      OutputFile="Bin\Installer\" />
+    <Light
+      ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
+      Extensions="WixUIExtension;WixUtilExtension"
+      ObjectFiles="Bin\Installer\Install64.wixobj"
+      OutputFile="Bin\CloudBackup.msi" />
+</Target>
+
+<Target Name="CleanUp">
+		<RemoveDir Directories="Bin\**\*" />
+		<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug" Targets="Clean" />
+		<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release" Targets="Clean" />
+</Target>
+
+<Target Name="Main" DependsOnTargets="CleanUp" >
+	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug"   Targets="Build" />
+	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release" Targets="Build" />
+</Target>
+<Target Name="ALL" DependsOnTargets="Main;Installer" />
+
+</Project>
