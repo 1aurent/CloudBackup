@@ -65,6 +65,7 @@
             this.cbDisplayPasswords = new System.Windows.Forms.CheckBox();
             this.txtMasterPassword = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
+            this.btnResetStatus = new System.Windows.Forms.Button();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -114,6 +115,7 @@
             // 
             // spltCtrlArchive.Panel2
             // 
+            this.spltCtrlArchive.Panel2.Controls.Add(this.btnResetStatus);
             this.spltCtrlArchive.Panel2.Controls.Add(this.btnRunNow);
             this.spltCtrlArchive.Panel2.Controls.Add(this.btnDelSchedule);
             this.spltCtrlArchive.Panel2.Controls.Add(this.btnNewSchedule);
@@ -489,6 +491,16 @@
             this.label4.TabIndex = 0;
             this.label4.Text = "Master Password:";
             // 
+            // btnResetStatus
+            // 
+            this.btnResetStatus.Location = new System.Drawing.Point(86, 272);
+            this.btnResetStatus.Name = "btnResetStatus";
+            this.btnResetStatus.Size = new System.Drawing.Size(83, 23);
+            this.btnResetStatus.TabIndex = 13;
+            this.btnResetStatus.Text = "Reset Status";
+            this.btnResetStatus.UseVisualStyleBackColor = true;
+            this.btnResetStatus.Click += new System.EventHandler(this.btnResetStatus_Click);
+            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -556,6 +568,7 @@
         private System.Windows.Forms.Button btnApplyChanges;
         private System.Windows.Forms.TextBox txtSshUsername;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnResetStatus;
     }
 }
 

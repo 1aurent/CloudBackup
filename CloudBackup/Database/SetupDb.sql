@@ -8,12 +8,12 @@ CREATE TABLE IF NOT EXISTS Settings(
 	value text not null
 );
 
-INSERT OR IGNORE INTO Version Values ('SshHost','changeme');
-INSERT OR IGNORE INTO Version Values ('SshUser','changeme');
-INSERT OR IGNORE INTO Version Values ('SshPwd', 'changeme');
-INSERT OR IGNORE INTO Version Values ('SshPath','/home/changeme/');
-INSERT OR IGNORE INTO Version Values ('IsGlacier', 'False');
-INSERT OR IGNORE INTO Version Values ('ZipPwd', 'changeme');
+INSERT OR IGNORE INTO Settings Values ('SshHost','changeme');
+INSERT OR IGNORE INTO Settings Values ('SshUser','changeme');
+INSERT OR IGNORE INTO Settings Values ('SshPwd', 'changeme');
+INSERT OR IGNORE INTO Settings Values ('SshPath','/home/changeme/');
+INSERT OR IGNORE INTO Settings Values ('IsGlacier', 'False');
+INSERT OR IGNORE INTO Settings Values ('ZipPwd', 'changeme');
 
 INSERT OR IGNORE INTO Version Values (1, '1.0.0.0'); -- Database Version
 INSERT OR IGNORE INTO Version Values (2, '1.0.0.0'); -- Database Compatibility Version

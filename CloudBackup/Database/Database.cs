@@ -74,9 +74,6 @@ namespace CloudBackup.Database
 
             log.Info("Database is ready");
 
-            JobProxy = BridgeCompiler.CreateInstance<IJobProxy>(_cnx);
-            Settings = BridgeCompiler.CreateInstance<ISettings>(_cnx);
-
             _nextJobUid = (int)( JobProxy.GetJobMaxId() + 1 );
         }
 
@@ -104,7 +101,7 @@ namespace CloudBackup.Database
             return snapProxy;
         }
 
-        public IJobProxy JobProxy { get; private set; }
-        public ISettings Settings { get; private set; }
+        public IJobProxy JobProxy { get { return BridgeCompiler.CreateInstance<IJobProxy>(_cnx); } }
+        public ISettings Settings { get { return BridgeCompiler.CreateInstance<ISettings>(_cnx); } }
     }
 }

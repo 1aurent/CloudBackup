@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Schema;
 using CloudBackup.API;
+using CloudBackup.Utils;
 using Ionic.Zip;
 using Ionic.Zlib;
+using Renci.SshNet;
 using AlphaFS = Alphaleonis.Win32.Filesystem;
 
 namespace CloudBackup.Backup
@@ -19,7 +22,7 @@ namespace CloudBackup.Backup
 
         class SnapshotAccess
         {
-            static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(Process));
+            static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(SnapshotAccess));
             readonly string _snapPath;
             public SnapshotAccess(string snapPath) { _snapPath = snapPath; }
 
@@ -33,6 +36,39 @@ namespace CloudBackup.Backup
             {
                 //log.DebugFormat("SnapshotAccess Close[{0}]", _snapPath);
             }
+        }
+
+        class ProcessSettings
+        {
+            public ProcessSettings()
+            {
+                var allSettings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+                using (var settings = Program.Database.Settings.GetAllSettings())
+                {
+                    while (settings.MoveNext())
+                    {
+                        allSettings[settings.Current.Setting]=settings.Current.Value;
+                    }
+                }
+
+                SshHost = allSettings["SshHost"];
+                SshUser = allSettings["SshUser"];
+                SshPwd = allSettings["SshPwd"];
+                SshPath = allSettings["SshPath"];
+                ZipPwd = allSettings["ZipPwd"];
+
+                var isGlacier = false;
+                bool.TryParse(allSettings["IsGlacier"], out isGlacier);
+                IsGlacier = isGlacier;
+            }
+
+            public string SshHost { get; private set; }
+            public string SshUser { get; private set; }
+            public string SshPwd { get; private set; }
+            public string SshPath { get; private set; }
+            public string ZipPwd { get; private set; }
+
+            public bool IsGlacier { get; private set; }
         }
 
         class ManifestDocument
@@ -73,130 +109,190 @@ namespace CloudBackup.Backup
             public string Manifest { get { return _manifest.OuterXml; }}
         }
 
-        static public void RunBackup(ArchiveJob job)
+        class SshSinkParams
         {
-            log.InfoFormat("Starting backup of [{0}]",job.JobRootPath);
+            public SftpClient sftp;
+            public Stream stream;
+            public string file;
+            public bool isSuccess;
+            public Exception exception;
+        }
+
+        static void SshSinkThread(object rawparams)
+        {
+            SshSinkParams @params = (SshSinkParams)rawparams;
+            //sftp = sftp, stream = read, file
+            try
+            {
+                @params.sftp.UploadFile(@params.stream, @params.file, true);
+                @params.isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                log.Fatal("Unable to send message",ex);
+                @params.isSuccess = false;
+                @params.exception = ex;
+            }
+        }
+
+
+        public static void RunBackup(ArchiveJob job)
+        {
+            log.InfoFormat("Starting backup of [{0}]", job.JobRootPath);
             var engine = new Engine {RootPath = job.JobRootPath};
 
 
             var now = DateTime.Now;
             var jid = job.JobUID.Value;
             var id = now.ToUniversalTime().Ticks;
-            var fle = string.Format("{0:00000}_Archive_{1:0000}{2:00}{3:00}_{4:X}.zip", jid, now.Year, now.Month, now.Day, id);
+            var fle = string.Format("{0:00000}_Archive_{1:0000}{2:00}{3:00}_{4:X}.zip", jid, now.Year, now.Month,
+                now.Day, id);
 
             var proxy = Program.Database.CreateSnapProxy();
             proxy.CreateSnapshotFile(id, jid, fle, id);
             proxy.ClearSeenFlags(jid);
 
-            using (var zip = new ZipFile())
+            var settings = new ProcessSettings();
+            using (var sftp = new SftpClient(settings.SshHost, settings.SshUser, settings.SshPwd))
             {
-                zip.CompressionLevel = CompressionLevel.BestCompression;
-                zip.SaveProgress += zip_SaveProgress;
-                zip.MaxOutputSegmentSize = 10*1024*1024;
-
-                log.Debug("Building backup snapshot");
-
-                var manifest = new ManifestDocument(job,id);
-                manifest.AddTag("date",XmlConvert.ToString(now,XmlDateTimeSerializationMode.Utc));
-                manifest.AddTag("source",Environment.MachineName);
-                manifest.AddTag("from", job.JobRootPath);
-
-
-                using (var backup = engine.CreateBackup())
+                log.InfoFormat("Process - Connecting to {0}", settings.SshHost);
+                sftp.Connect();
+                log.InfoFormat("Process - Changing dir to {0}", settings.SshPath);
+                sftp.ChangeDirectory(settings.SshPath);
+                using (var zip = new ZipFile())
                 {
-                    backup.CreateShadowCopy();
-                    var rootPath = backup.GetSnapshotPath();
+                    zip.CompressionLevel = CompressionLevel.BestCompression;
+                    zip.SaveProgress += zip_SaveProgress;
+                    zip.MaxOutputSegmentSize = 10*1024*1024;
 
-                    var elements = backup.GetSnapshotElements();
+                    log.Debug("Building backup snapshot");
 
-                    foreach (var element in elements)
+                    var manifest = new ManifestDocument(job, id);
+                    manifest.AddTag("date", XmlConvert.ToString(now, XmlDateTimeSerializationMode.Utc));
+                    manifest.AddTag("source", Environment.MachineName);
+                    manifest.AddTag("from", job.JobRootPath);
+
+
+                    using (var backup = engine.CreateBackup())
                     {
-                        var file = proxy.FindFile(jid, element.Path);
-                        if (element.IsDirectory)
-                        {
-                            log.InfoFormat("[{0}] - Directory - Add entry", element.Path);
-                            var entry = zip.AddDirectoryByName(element.Path);
-                            entry.CreationTime = element.Created;
-                            entry.AccessedTime = element.LastAccessed;
-                            entry.ModifiedTime = element.LastModified;
+                        backup.CreateShadowCopy();
+                        var rootPath = backup.GetSnapshotPath();
 
-                            if(file!=null)
-                                proxy.SetSeenFlags(jid,element.Path);
-                            else
+                        var elements = backup.GetSnapshotElements();
+
+                        foreach (var element in elements)
+                        {
+                            var file = proxy.FindFile(jid, element.Path);
+                            if (element.IsDirectory)
+                            {
+                                log.InfoFormat("[{0}] - Directory - Add entry", element.Path);
+                                var entry = zip.AddDirectoryByName(element.Path);
+                                entry.CreationTime = element.Created;
+                                entry.AccessedTime = element.LastAccessed;
+                                entry.ModifiedTime = element.LastModified;
+
+                                if (file != null)
+                                    proxy.SetSeenFlags(jid, element.Path);
+                                else
+                                    proxy.AddFile(
+                                        element.Path, jid,
+                                        element.FileSize,
+                                        element.Created.Ticks,
+                                        element.LastModified.Ticks,
+                                        0, id
+                                        );
+
+                                continue;
+                            }
+
+                            if (file == null)
+                            {
+                                log.InfoFormat("[{0}] - New file / Archive", element.Path);
+                                var entryDoc = new SnapshotAccess(rootPath + element.Path);
+                                var entry = zip.AddEntry(element.Path, entryDoc.OpenDelegate, entryDoc.CloseDelegate);
+                                entry.CreationTime = element.Created;
+                                entry.AccessedTime = element.LastAccessed;
+                                entry.ModifiedTime = element.LastModified;
+
                                 proxy.AddFile(
                                     element.Path, jid,
                                     element.FileSize,
                                     element.Created.Ticks,
                                     element.LastModified.Ticks,
-                                    0,id
-                                );
+                                    entry.Crc,
+                                    id
+                                    );
+                                continue;
+                            }
 
-                            continue;
-                        }
+                            if (
+                                file.Modified == element.LastModified.Ticks &&
+                                file.Created == element.Created.Ticks &&
+                                file.FileSize == element.FileSize
+                                )
+                            {
+                                log.InfoFormat("[{0}] - No change / No archive", element.Path);
+                                proxy.SetSeenFlags(jid, element.Path);
+                                continue;
+                            }
 
-                        if (file == null)
-                        {
-                            log.InfoFormat("[{0}] - New file / Archive", element.Path);
-                            var entryDoc = new SnapshotAccess(rootPath + element.Path);
-                            var entry = zip.AddEntry(element.Path, entryDoc.OpenDelegate,entryDoc.CloseDelegate);
-                            entry.CreationTime = element.Created;
-                            entry.AccessedTime = element.LastAccessed;
-                            entry.ModifiedTime = element.LastModified;
-                            
-                            proxy.AddFile(
-                                element.Path,jid,
+                            log.InfoFormat("[{0}] - File changed / Archiving", element.Path);
+                            var entryDoc2 = new SnapshotAccess(rootPath + element.Path);
+                            var entry2 = zip.AddEntry(element.Path, entryDoc2.OpenDelegate, entryDoc2.CloseDelegate);
+                            entry2.CreationTime = element.Created;
+                            entry2.AccessedTime = element.LastAccessed;
+                            entry2.ModifiedTime = element.LastModified;
+
+                            proxy.UpdateFile(
+                                element.Path, jid,
                                 element.FileSize,
                                 element.Created.Ticks,
                                 element.LastModified.Ticks,
-                                entry.Crc,
+                                entry2.Crc,
                                 id
-                            );
-                            continue;
+                                );
                         }
 
-                        if (
-                            file.Modified == element.LastModified.Ticks &&
-                            file.Created == element.Created.Ticks &&
-                            file.FileSize == element.FileSize
-                            )
+                        using (var delFiles = proxy.GetDeletedFiles(jid))
                         {
-                            log.InfoFormat("[{0}] - No change / No archive", element.Path);
-                            proxy.SetSeenFlags(jid, element.Path);
-                            continue;
+                            while (delFiles.MoveNext())
+                            {
+                                manifest.NotifyDelFile(delFiles.Current.SourcePath, delFiles.Current.FileSize);
+                            }
                         }
 
-                        log.InfoFormat("[{0}] - File changed / Archiving", element.Path);
-                        var entryDoc2 = new SnapshotAccess(rootPath + element.Path);
-                        var entry2 = zip.AddEntry(element.Path, entryDoc2.OpenDelegate, entryDoc2.CloseDelegate);
-                        entry2.CreationTime = element.Created;
-                        entry2.AccessedTime = element.LastAccessed;
-                        entry2.ModifiedTime = element.LastModified;
+                        zip.Comment = manifest.Manifest;
+                        //zip.AddEntry(string.Format("_manifest_{0:X}.xml",id),xmlDoc.OuterXml,Encoding.UTF8);
 
-                        proxy.UpdateFile(
-                            element.Path, jid,
-                            element.FileSize,
-                            element.Created.Ticks,
-                            element.LastModified.Ticks,
-                            entry2.Crc,
-                            id
-                        );
-                    }
+                        log.InfoFormat("Process completed - Streaming ZIP file");
 
-                    using (var delFiles = proxy.GetDeletedFiles(jid))
-                    {
-                        while (delFiles.MoveNext())
+                        Stream write, read;
+                        PipeStream.CreatePipe(out write,out read);
+
+                        var sshThread = new Thread(SshSinkThread);
+                        var param = new SshSinkParams { sftp = sftp, stream = read, file = fle };
+                        sshThread.Start(param);
+                        zip.Save(write);
+                        write.Dispose();
+                        log.InfoFormat("Process completed - Joining");
+                        sshThread.Join();
+                        log.InfoFormat("Process completed - Droping backup");
+                        backup.DropBackup();
+
+                        if (!param.isSuccess)
                         {
-                            manifest.NotifyDelFile(delFiles.Current.SourcePath, delFiles.Current.FileSize);
+                            log.ErrorFormat("SFTP transfert is not successfull");
+                            throw new Exception("Transfert failed", param.exception);
                         }
                     }
 
-                    zip.Comment = manifest.Manifest;
-                    //zip.AddEntry(string.Format("_manifest_{0:X}.xml",id),xmlDoc.OuterXml,Encoding.UTF8);
-                    
-                    log.InfoFormat("Process completed - Generating ZIP file");
-                    zip.Save(fle);
-                    log.InfoFormat("Process completed - Clean Up");
-                    backup.DropBackup();
+                    //log.InfoFormat("Process - Upload temporary file {0} to cloud", tempFile);
+                    //using (var sTmpFle = File.OpenRead(tempFile))
+                    //{
+                    //    sftp.UploadFile(sTmpFle,fle,true);    
+                    //}
+
+                    //File.Delete(tempFile);
                 }
             }
             log.InfoFormat("Process completed - Commit Transaction");
