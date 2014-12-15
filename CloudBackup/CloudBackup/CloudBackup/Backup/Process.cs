@@ -21,6 +21,7 @@ using System.IO;
 using System.Threading;
 using System.Xml;
 using CloudBackup.API;
+using CloudBackup.Backend;
 using CloudBackup.Utils;
 using Ionic.Zip;
 using Ionic.Zlib;
@@ -238,23 +239,48 @@ namespace CloudBackup.Backup
 
                         log.InfoFormat("Process completed - Streaming ZIP file");
 
-                        Stream write, read;
-                        PipeStream.CreatePipe(out write,out read);
+                        bool transfertIsSuccess;
+                        Exception transferException;
+                        if (backend is FTP)
+                        {
+                            try
+                            {
+                                using (var sendStream = ((FTP)backend).GetWriteStream(fle))
+                                {
+                                    zip.Save(sendStream);
+                                }
+                                transferException = null;
+                                transfertIsSuccess = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                transferException = ex;
+                                transfertIsSuccess = false;
+                            }
+                        }
+                        else
+                        {
+                            Stream write, read;
+                            PipeStream.CreatePipe(out write, out read);
 
-                        var sshThread = new Thread(SshSinkThread);
-                        var param = new SshSinkParams { Target = backend, Stream = read, File = fle };
-                        sshThread.Start(param);
-                        zip.Save(write);
-                        write.Dispose();
-                        log.InfoFormat("Process completed - Joining");
-                        sshThread.Join();
+                            var sshThread = new Thread(SshSinkThread);
+                            var param = new SshSinkParams { Target = backend, Stream = read, File = fle };
+                            sshThread.Start(param);
+                            zip.Save(write);
+                            write.Dispose();
+                            log.InfoFormat("Process completed - Joining");
+                            sshThread.Join();
+
+                            transfertIsSuccess = param.IsSuccess;
+                            transferException = param.Exception;
+                        }
                         log.InfoFormat("Process completed - Droping backup");
                         backup.DropBackup();
 
-                        if (!param.IsSuccess)
+                        if (!transfertIsSuccess)
                         {
                             log.ErrorFormat("File transfert is not successfull");
-                            throw new Exception("Transfert failed", param.Exception);
+                            throw new Exception("Transfert failed", transferException);
                         }
                     }
                 }

@@ -21,7 +21,7 @@ namespace CloudBackup.API
 
         public Target()
         {
-            TargetServer = new Uri("ssh://changeme@host.example.com:22/");
+            TargetServer = new Uri("SFTP://changeme@host.example.com:22/");
             Password = "changeme";
             ZipPassword = "";
             ProxyServer = null;
