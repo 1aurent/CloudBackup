@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.FtpClient;
 using System.Text;
 using CloudBackup.API;
 
@@ -19,8 +20,12 @@ namespace CloudBackup.Backend
             {
                 case "sftp":
                     return new SFTP(target);
-                case "scp":
-                    return new SCP(target);
+                case "ftp":
+                    return new FTP(target, FtpEncryptionMode.None);
+                case "ftps":
+                    return new FTP(target, FtpEncryptionMode.Implicit);
+                case "ftpes":
+                    return new FTP(target, FtpEncryptionMode.Explicit);
 
 
                 default:

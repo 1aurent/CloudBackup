@@ -17,17 +17,10 @@
  *
  */
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using CloudBackup.API;
 using CloudBackup.Manager.Schedule;
@@ -182,7 +175,7 @@ namespace CloudBackup.Manager
             tbArchiveJobName.Text = _archiveJob.UniqueJobName;
             tbRootFolder.Text = _archiveJob.JobRootPath;
 
-            cbTargetProtocol.Text = _archiveJob.JobTarget.TargetServer.Scheme;
+            cbTargetProtocol.SelectedItem = _archiveJob.JobTarget.TargetServer.Scheme.ToUpper();
             txtTargetUser.Text = _archiveJob.JobTarget.TargetServer.UserInfo;
             txtTargetHost.Text = _archiveJob.JobTarget.TargetServer.Host;
             txtTargetPort.Text = _archiveJob.JobTarget.TargetServer.Port.ToString();
@@ -414,6 +407,25 @@ will be a full image. Existing backup will not be dropped. Do you really want to
                 txtTargetPwd.UseSystemPasswordChar =
                     txtTargetZipPwd.UseSystemPasswordChar =
                         !cbTargetShowPass.Checked;
+        }
+
+        private void cbTargetProtocol_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var proto = cbTargetProtocol.SelectedItem as string;
+            if(string.IsNullOrEmpty(proto)) return;
+            switch (proto)
+            {
+                case "SFTP":
+                    txtTargetPort.Text = "22";
+                    break;
+                case "FTP":
+                case "FTPES":
+                    txtTargetPort.Text = "21";
+                    break;
+                case "FTPS":
+                    txtTargetPort.Text = "990";
+                    break;
+            }
         }
 
     }

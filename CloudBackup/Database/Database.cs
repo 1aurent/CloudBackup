@@ -19,6 +19,8 @@
 using System;
 using System.Data.SQLite;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 using CloudBackup.Utils;
 
 namespace CloudBackup.Database
@@ -38,11 +40,12 @@ namespace CloudBackup.Database
             var cstr = (new SQLiteConnectionStringBuilder()
             {
                 DataSource = Path.Combine(Program.Configuration.DatabasePath, "cbackup.db"),
-                FailIfMissing = false
+                FailIfMissing = false,
             }).ConnectionString;
 
             log.DebugFormat("Database - Opening database [{0}]",cstr);
             _cnx = new SQLiteConnection(cstr);
+            _cnx.SetPassword(GetDatabasePassword());
             _cnx.Open();
 
 
@@ -116,5 +119,32 @@ namespace CloudBackup.Database
         }
 
         public IJobProxy JobProxy { get { return BridgeCompiler.CreateInstance<IJobProxy>(_cnx); } }
+
+        static byte[] GetDatabasePassword()
+        {
+            var secret = new byte[128];
+            byte[] buffer;
+
+            if (File.Exists("cbackup.secure"))
+            {
+                using (var fle = File.OpenRead("cbackup.secure"))
+                {
+                    buffer = new byte[(int)fle.Length];
+                    fle.Read(buffer, 0, (int)fle.Length);
+                }
+                secret = ProtectedData.Unprotect(buffer, null, DataProtectionScope.LocalMachine);
+            }
+            else
+            {
+                using (var rng = RandomNumberGenerator.Create())
+                {
+                    rng.GetBytes(secret);
+                    buffer = ProtectedData.Protect(secret, null, DataProtectionScope.LocalMachine);
+                    using (var fle = File.OpenWrite("cbackup.secure")) fle.Write(buffer, 0, buffer.Length);
+                }
+            }
+            return secret;
+        }
+
     }
 }

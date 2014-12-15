@@ -83,8 +83,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.rtbLicence = new System.Windows.Forms.RichTextBox();
             this.tabPageLegal = new System.Windows.Forms.TabPage();
-            this.rtbLegalNotice = new System.Windows.Forms.RichTextBox();
             this.label8 = new System.Windows.Forms.Label();
+            this.rtbLegalNotice = new System.Windows.Forms.RichTextBox();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -515,12 +515,14 @@
             this.cbTargetProtocol.FormattingEnabled = true;
             this.cbTargetProtocol.Items.AddRange(new object[] {
             "SFTP",
-            "SCP",
-            "FTP"});
+            "FTP",
+            "FTPS",
+            "FTPES"});
             this.cbTargetProtocol.Location = new System.Drawing.Point(10, 19);
             this.cbTargetProtocol.Name = "cbTargetProtocol";
-            this.cbTargetProtocol.Size = new System.Drawing.Size(52, 21);
+            this.cbTargetProtocol.Size = new System.Drawing.Size(63, 21);
             this.cbTargetProtocol.TabIndex = 0;
+            this.cbTargetProtocol.SelectedIndexChanged += new System.EventHandler(this.cbTargetProtocol_SelectedIndexChanged);
             // 
             // label11
             // 
@@ -535,9 +537,9 @@
             // 
             this.txtTargetHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTargetHost.Location = new System.Drawing.Point(68, 19);
+            this.txtTargetHost.Location = new System.Drawing.Point(79, 19);
             this.txtTargetHost.Name = "txtTargetHost";
-            this.txtTargetHost.Size = new System.Drawing.Size(230, 20);
+            this.txtTargetHost.Size = new System.Drawing.Size(219, 20);
             this.txtTargetHost.TabIndex = 1;
             // 
             // txtTargetPath
@@ -723,6 +725,15 @@
             this.tabPageLegal.Text = "Legal";
             this.tabPageLegal.UseVisualStyleBackColor = true;
             // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(6, 12);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(73, 13);
+            this.label8.TabIndex = 1;
+            this.label8.Text = "Legal notices:";
+            // 
             // rtbLegalNotice
             // 
             this.rtbLegalNotice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -734,15 +745,6 @@
             this.rtbLegalNotice.Size = new System.Drawing.Size(604, 483);
             this.rtbLegalNotice.TabIndex = 0;
             this.rtbLegalNotice.Text = "";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 12);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(73, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Legal notices:";
             // 
             // Manager
             // 
