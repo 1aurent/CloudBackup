@@ -35,62 +35,48 @@
             this.btnNewArchive = new System.Windows.Forms.Button();
             this.btnDelArchive = new System.Windows.Forms.Button();
             this.lbAllSchedule = new System.Windows.Forms.ListBox();
-            this.btnResetStatus = new System.Windows.Forms.Button();
-            this.btnRunNow = new System.Windows.Forms.Button();
-            this.btnDelSchedule = new System.Windows.Forms.Button();
-            this.btnNewSchedule = new System.Windows.Forms.Button();
+            this.tabJobSettings = new System.Windows.Forms.TabControl();
+            this.tabPageJobSchedule = new System.Windows.Forms.TabPage();
             this.cbAllSchedules = new System.Windows.Forms.ComboBox();
-            this.btnSaveSchedule = new System.Windows.Forms.Button();
-            this.tbArchiveJobName = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
-            this.tbRootFolder = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.btnNewSchedule = new System.Windows.Forms.Button();
+            this.btnDelSchedule = new System.Windows.Forms.Button();
             this.panelSchedule = new System.Windows.Forms.FlowLayoutPanel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.rdSchedDaily = new System.Windows.Forms.RadioButton();
             this.rdSchedWeekly = new System.Windows.Forms.RadioButton();
             this.rdSchedMonthly = new System.Windows.Forms.RadioButton();
-            this.tabPageConfig = new System.Windows.Forms.TabPage();
-            this.btnApplyChanges = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.txtSshUsername = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.cbIsGlacier = new System.Windows.Forms.CheckBox();
-            this.txtSshRootPath = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtSshPwd = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtSshHost = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.cbDisplayPasswords = new System.Windows.Forms.CheckBox();
-            this.txtMasterPassword = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
-            this.label11 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
-            this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.checkBox2 = new System.Windows.Forms.CheckBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
-            this.textBox8 = new System.Windows.Forms.TextBox();
-            this.label15 = new System.Windows.Forms.Label();
+            this.tabPageJobTarget = new System.Windows.Forms.TabPage();
             this.label16 = new System.Windows.Forms.Label();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.textBox10 = new System.Windows.Forms.TextBox();
+            this.txtSshProxyPwd = new System.Windows.Forms.TextBox();
+            this.txtSshProxyUser = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.txtSshProxyHost = new System.Windows.Forms.TextBox();
+            this.txtSshProxyPort = new System.Windows.Forms.TextBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.cbUseSshProxy = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.cbTargetShowPass = new System.Windows.Forms.CheckBox();
+            this.txtTargetZipPwd = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.txtTargetPwd = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtTargetUser = new System.Windows.Forms.TextBox();
+            this.cbTargetProtocol = new System.Windows.Forms.ComboBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtTargetHost = new System.Windows.Forms.TextBox();
+            this.txtTargetPath = new System.Windows.Forms.TextBox();
+            this.txtTargetPort = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.btnResetStatus = new System.Windows.Forms.Button();
+            this.btnRunNow = new System.Windows.Forms.Button();
+            this.btnSaveSchedule = new System.Windows.Forms.Button();
+            this.tbArchiveJobName = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.tbRootFolder = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.tabPageConfig = new System.Windows.Forms.TabPage();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -98,12 +84,10 @@
             this.spltCtrlArchive.Panel2.SuspendLayout();
             this.spltCtrlArchive.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tabJobSettings.SuspendLayout();
+            this.tabPageJobSchedule.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
-            this.tabPageConfig.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.tabControl1.SuspendLayout();
-            this.tabPage1.SuspendLayout();
-            this.tabPage2.SuspendLayout();
+            this.tabPageJobTarget.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabInfos
@@ -143,7 +127,7 @@
             // 
             // spltCtrlArchive.Panel2
             // 
-            this.spltCtrlArchive.Panel2.Controls.Add(this.tabControl1);
+            this.spltCtrlArchive.Panel2.Controls.Add(this.tabJobSettings);
             this.spltCtrlArchive.Panel2.Controls.Add(this.btnResetStatus);
             this.spltCtrlArchive.Panel2.Controls.Add(this.btnRunNow);
             this.spltCtrlArchive.Panel2.Controls.Add(this.btnSaveSchedule);
@@ -210,49 +194,33 @@
             this.lbAllSchedule.TabIndex = 0;
             this.lbAllSchedule.SelectedIndexChanged += new System.EventHandler(this.lbAllSchedule_SelectedIndexChanged);
             // 
-            // btnResetStatus
+            // tabJobSettings
             // 
-            this.btnResetStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnResetStatus.Location = new System.Drawing.Point(86, 485);
-            this.btnResetStatus.Name = "btnResetStatus";
-            this.btnResetStatus.Size = new System.Drawing.Size(83, 23);
-            this.btnResetStatus.TabIndex = 13;
-            this.btnResetStatus.Text = "Reset Status";
-            this.btnResetStatus.UseVisualStyleBackColor = true;
-            this.btnResetStatus.Click += new System.EventHandler(this.btnResetStatus_Click);
+            this.tabJobSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tabJobSettings.Controls.Add(this.tabPageJobSchedule);
+            this.tabJobSettings.Controls.Add(this.tabPageJobTarget);
+            this.tabJobSettings.Location = new System.Drawing.Point(3, 63);
+            this.tabJobSettings.Name = "tabJobSettings";
+            this.tabJobSettings.SelectedIndex = 0;
+            this.tabJobSettings.Size = new System.Drawing.Size(376, 416);
+            this.tabJobSettings.TabIndex = 19;
             // 
-            // btnRunNow
+            // tabPageJobSchedule
             // 
-            this.btnRunNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnRunNow.Location = new System.Drawing.Point(5, 485);
-            this.btnRunNow.Name = "btnRunNow";
-            this.btnRunNow.Size = new System.Drawing.Size(75, 23);
-            this.btnRunNow.TabIndex = 12;
-            this.btnRunNow.Text = "Run Now";
-            this.btnRunNow.UseVisualStyleBackColor = true;
-            this.btnRunNow.Click += new System.EventHandler(this.btnRunNow_Click);
-            // 
-            // btnDelSchedule
-            // 
-            this.btnDelSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelSchedule.Location = new System.Drawing.Point(300, 4);
-            this.btnDelSchedule.Name = "btnDelSchedule";
-            this.btnDelSchedule.Size = new System.Drawing.Size(62, 23);
-            this.btnDelSchedule.TabIndex = 11;
-            this.btnDelSchedule.Text = "Remove";
-            this.btnDelSchedule.UseVisualStyleBackColor = true;
-            this.btnDelSchedule.Click += new System.EventHandler(this.btnDelSchedule_Click);
-            // 
-            // btnNewSchedule
-            // 
-            this.btnNewSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnNewSchedule.Location = new System.Drawing.Point(252, 4);
-            this.btnNewSchedule.Name = "btnNewSchedule";
-            this.btnNewSchedule.Size = new System.Drawing.Size(42, 23);
-            this.btnNewSchedule.TabIndex = 10;
-            this.btnNewSchedule.Text = "Add";
-            this.btnNewSchedule.UseVisualStyleBackColor = true;
-            this.btnNewSchedule.Click += new System.EventHandler(this.btnNewSchedule_Click);
+            this.tabPageJobSchedule.Controls.Add(this.cbAllSchedules);
+            this.tabPageJobSchedule.Controls.Add(this.btnNewSchedule);
+            this.tabPageJobSchedule.Controls.Add(this.btnDelSchedule);
+            this.tabPageJobSchedule.Controls.Add(this.panelSchedule);
+            this.tabPageJobSchedule.Controls.Add(this.flowLayoutPanel1);
+            this.tabPageJobSchedule.Location = new System.Drawing.Point(4, 22);
+            this.tabPageJobSchedule.Name = "tabPageJobSchedule";
+            this.tabPageJobSchedule.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageJobSchedule.Size = new System.Drawing.Size(368, 390);
+            this.tabPageJobSchedule.TabIndex = 0;
+            this.tabPageJobSchedule.Text = "Schedule";
+            this.tabPageJobSchedule.UseVisualStyleBackColor = true;
             // 
             // cbAllSchedules
             // 
@@ -266,52 +234,27 @@
             this.cbAllSchedules.TabIndex = 8;
             this.cbAllSchedules.SelectedIndexChanged += new System.EventHandler(this.cbAllSchedules_SelectedIndexChanged);
             // 
-            // btnSaveSchedule
+            // btnNewSchedule
             // 
-            this.btnSaveSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveSchedule.Location = new System.Drawing.Point(302, 485);
-            this.btnSaveSchedule.Name = "btnSaveSchedule";
-            this.btnSaveSchedule.Size = new System.Drawing.Size(75, 23);
-            this.btnSaveSchedule.TabIndex = 7;
-            this.btnSaveSchedule.Text = "Save";
-            this.btnSaveSchedule.UseVisualStyleBackColor = true;
-            this.btnSaveSchedule.Click += new System.EventHandler(this.btnSaveSchedule_Click);
+            this.btnNewSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnNewSchedule.Location = new System.Drawing.Point(252, 4);
+            this.btnNewSchedule.Name = "btnNewSchedule";
+            this.btnNewSchedule.Size = new System.Drawing.Size(42, 23);
+            this.btnNewSchedule.TabIndex = 10;
+            this.btnNewSchedule.Text = "Add";
+            this.btnNewSchedule.UseVisualStyleBackColor = true;
+            this.btnNewSchedule.Click += new System.EventHandler(this.btnNewSchedule_Click);
             // 
-            // tbArchiveJobName
+            // btnDelSchedule
             // 
-            this.tbArchiveJobName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbArchiveJobName.Location = new System.Drawing.Point(76, 11);
-            this.tbArchiveJobName.Name = "tbArchiveJobName";
-            this.tbArchiveJobName.Size = new System.Drawing.Size(301, 20);
-            this.tbArchiveJobName.TabIndex = 6;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(32, 14);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(38, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "Name:";
-            // 
-            // tbRootFolder
-            // 
-            this.tbRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tbRootFolder.Location = new System.Drawing.Point(76, 37);
-            this.tbRootFolder.Name = "tbRootFolder";
-            this.tbRootFolder.Size = new System.Drawing.Size(301, 20);
-            this.tbRootFolder.TabIndex = 4;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 40);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(65, 13);
-            this.label2.TabIndex = 3;
-            this.label2.Text = "Root Folder:";
+            this.btnDelSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnDelSchedule.Location = new System.Drawing.Point(300, 4);
+            this.btnDelSchedule.Name = "btnDelSchedule";
+            this.btnDelSchedule.Size = new System.Drawing.Size(62, 23);
+            this.btnDelSchedule.TabIndex = 11;
+            this.btnDelSchedule.Text = "Remove";
+            this.btnDelSchedule.UseVisualStyleBackColor = true;
+            this.btnDelSchedule.Click += new System.EventHandler(this.btnDelSchedule_Click);
             // 
             // panelSchedule
             // 
@@ -371,356 +314,75 @@
             this.rdSchedMonthly.UseVisualStyleBackColor = true;
             this.rdSchedMonthly.CheckedChanged += new System.EventHandler(this.rdSchedMonthly_CheckedChanged);
             // 
-            // tabPageConfig
+            // tabPageJobTarget
             // 
-            this.tabPageConfig.Controls.Add(this.btnApplyChanges);
-            this.tabPageConfig.Controls.Add(this.groupBox1);
-            this.tabPageConfig.Controls.Add(this.cbDisplayPasswords);
-            this.tabPageConfig.Controls.Add(this.txtMasterPassword);
-            this.tabPageConfig.Controls.Add(this.label4);
-            this.tabPageConfig.Location = new System.Drawing.Point(4, 22);
-            this.tabPageConfig.Name = "tabPageConfig";
-            this.tabPageConfig.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageConfig.Size = new System.Drawing.Size(751, 479);
-            this.tabPageConfig.TabIndex = 1;
-            this.tabPageConfig.Text = "Configuration";
-            this.tabPageConfig.UseVisualStyleBackColor = true;
+            this.tabPageJobTarget.Controls.Add(this.label16);
+            this.tabPageJobTarget.Controls.Add(this.txtSshProxyPwd);
+            this.tabPageJobTarget.Controls.Add(this.txtSshProxyUser);
+            this.tabPageJobTarget.Controls.Add(this.label17);
+            this.tabPageJobTarget.Controls.Add(this.label14);
+            this.tabPageJobTarget.Controls.Add(this.txtSshProxyHost);
+            this.tabPageJobTarget.Controls.Add(this.txtSshProxyPort);
+            this.tabPageJobTarget.Controls.Add(this.label15);
+            this.tabPageJobTarget.Controls.Add(this.cbUseSshProxy);
+            this.tabPageJobTarget.Controls.Add(this.label12);
+            this.tabPageJobTarget.Controls.Add(this.cbTargetShowPass);
+            this.tabPageJobTarget.Controls.Add(this.txtTargetZipPwd);
+            this.tabPageJobTarget.Controls.Add(this.label13);
+            this.tabPageJobTarget.Controls.Add(this.txtTargetPwd);
+            this.tabPageJobTarget.Controls.Add(this.label1);
+            this.tabPageJobTarget.Controls.Add(this.txtTargetUser);
+            this.tabPageJobTarget.Controls.Add(this.cbTargetProtocol);
+            this.tabPageJobTarget.Controls.Add(this.label11);
+            this.tabPageJobTarget.Controls.Add(this.txtTargetHost);
+            this.tabPageJobTarget.Controls.Add(this.txtTargetPath);
+            this.tabPageJobTarget.Controls.Add(this.txtTargetPort);
+            this.tabPageJobTarget.Controls.Add(this.label10);
+            this.tabPageJobTarget.Controls.Add(this.label9);
+            this.tabPageJobTarget.Location = new System.Drawing.Point(4, 22);
+            this.tabPageJobTarget.Name = "tabPageJobTarget";
+            this.tabPageJobTarget.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageJobTarget.Size = new System.Drawing.Size(368, 390);
+            this.tabPageJobTarget.TabIndex = 1;
+            this.tabPageJobTarget.Text = "Target";
+            this.tabPageJobTarget.UseVisualStyleBackColor = true;
             // 
-            // btnApplyChanges
+            // label16
             // 
-            this.btnApplyChanges.Location = new System.Drawing.Point(393, 230);
-            this.btnApplyChanges.Name = "btnApplyChanges";
-            this.btnApplyChanges.Size = new System.Drawing.Size(113, 23);
-            this.btnApplyChanges.TabIndex = 6;
-            this.btnApplyChanges.Text = "Apply Changes";
-            this.btnApplyChanges.UseVisualStyleBackColor = true;
-            this.btnApplyChanges.Click += new System.EventHandler(this.btnApplyChanges_Click);
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(7, 243);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(56, 13);
+            this.label16.TabIndex = 27;
+            this.label16.Text = "Password:";
             // 
-            // groupBox1
+            // txtSshProxyPwd
             // 
-            this.groupBox1.Controls.Add(this.txtSshUsername);
-            this.groupBox1.Controls.Add(this.label8);
-            this.groupBox1.Controls.Add(this.cbIsGlacier);
-            this.groupBox1.Controls.Add(this.txtSshRootPath);
-            this.groupBox1.Controls.Add(this.label7);
-            this.groupBox1.Controls.Add(this.txtSshPwd);
-            this.groupBox1.Controls.Add(this.label6);
-            this.groupBox1.Controls.Add(this.txtSshHost);
-            this.groupBox1.Controls.Add(this.label5);
-            this.groupBox1.Location = new System.Drawing.Point(46, 61);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(412, 163);
-            this.groupBox1.TabIndex = 4;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Cloud Backup Server";
-            // 
-            // txtSshUsername
-            // 
-            this.txtSshUsername.Location = new System.Drawing.Point(107, 53);
-            this.txtSshUsername.Name = "txtSshUsername";
-            this.txtSshUsername.Size = new System.Drawing.Size(299, 20);
-            this.txtSshUsername.TabIndex = 9;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(15, 56);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(86, 13);
-            this.label8.TabIndex = 8;
-            this.label8.Text = "SSH User name:";
-            // 
-            // cbIsGlacier
-            // 
-            this.cbIsGlacier.AutoSize = true;
-            this.cbIsGlacier.Location = new System.Drawing.Point(107, 131);
-            this.cbIsGlacier.Name = "cbIsGlacier";
-            this.cbIsGlacier.Size = new System.Drawing.Size(178, 17);
-            this.cbIsGlacier.TabIndex = 5;
-            this.cbIsGlacier.Text = "Check if the target is a \"Glacier\"";
-            this.cbIsGlacier.UseVisualStyleBackColor = true;
-            // 
-            // txtSshRootPath
-            // 
-            this.txtSshRootPath.Location = new System.Drawing.Point(107, 105);
-            this.txtSshRootPath.Name = "txtSshRootPath";
-            this.txtSshRootPath.Size = new System.Drawing.Size(299, 20);
-            this.txtSshRootPath.TabIndex = 4;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(18, 108);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(83, 13);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "SSH Root Path:";
-            // 
-            // txtSshPwd
-            // 
-            this.txtSshPwd.Location = new System.Drawing.Point(107, 79);
-            this.txtSshPwd.Name = "txtSshPwd";
-            this.txtSshPwd.Size = new System.Drawing.Size(299, 20);
-            this.txtSshPwd.TabIndex = 3;
-            this.txtSshPwd.UseSystemPasswordChar = true;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(20, 82);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(81, 13);
-            this.label6.TabIndex = 5;
-            this.label6.Text = "SSH Password:";
-            // 
-            // txtSshHost
-            // 
-            this.txtSshHost.Location = new System.Drawing.Point(107, 27);
-            this.txtSshHost.Name = "txtSshHost";
-            this.txtSshHost.Size = new System.Drawing.Size(299, 20);
-            this.txtSshHost.TabIndex = 2;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(46, 30);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(55, 13);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "SSH host:";
-            // 
-            // cbDisplayPasswords
-            // 
-            this.cbDisplayPasswords.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbDisplayPasswords.AutoSize = true;
-            this.cbDisplayPasswords.Location = new System.Drawing.Point(628, 454);
-            this.cbDisplayPasswords.Name = "cbDisplayPasswords";
-            this.cbDisplayPasswords.Size = new System.Drawing.Size(113, 17);
-            this.cbDisplayPasswords.TabIndex = 7;
-            this.cbDisplayPasswords.Text = "Display passwords";
-            this.cbDisplayPasswords.UseVisualStyleBackColor = true;
-            this.cbDisplayPasswords.CheckedChanged += new System.EventHandler(this.cbDisplayPasswords_CheckedChanged);
-            // 
-            // txtMasterPassword
-            // 
-            this.txtMasterPassword.Location = new System.Drawing.Point(153, 18);
-            this.txtMasterPassword.Name = "txtMasterPassword";
-            this.txtMasterPassword.Size = new System.Drawing.Size(260, 20);
-            this.txtMasterPassword.TabIndex = 1;
-            this.txtMasterPassword.UseSystemPasswordChar = true;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(56, 21);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(91, 13);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "Master Password:";
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "SFTP",
-            "SCP",
-            "FTP"});
-            this.comboBox1.Location = new System.Drawing.Point(10, 19);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(52, 21);
-            this.comboBox1.TabIndex = 0;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtSshProxyPwd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(68, 19);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(230, 20);
-            this.textBox1.TabIndex = 1;
+            this.txtSshProxyPwd.Location = new System.Drawing.Point(69, 240);
+            this.txtSshProxyPwd.Name = "txtSshProxyPwd";
+            this.txtSshProxyPwd.Size = new System.Drawing.Size(293, 20);
+            this.txtSshProxyPwd.TabIndex = 26;
+            this.txtSshProxyPwd.UseSystemPasswordChar = true;
             // 
-            // label1
+            // txtSshProxyUser
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(66, 3);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(32, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Host:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox2.Location = new System.Drawing.Point(304, 19);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(58, 20);
-            this.textBox2.TabIndex = 3;
-            // 
-            // label9
-            // 
-            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(304, 3);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(29, 13);
-            this.label9.TabIndex = 4;
-            this.label9.Text = "Port:";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(31, 48);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(32, 13);
-            this.label10.TabIndex = 5;
-            this.label10.Text = "Path:";
-            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // textBox3
-            // 
-            this.textBox3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtSshProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox3.Location = new System.Drawing.Point(69, 45);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(293, 20);
-            this.textBox3.TabIndex = 6;
+            this.txtSshProxyUser.Location = new System.Drawing.Point(69, 214);
+            this.txtSshProxyUser.Name = "txtSshProxyUser";
+            this.txtSshProxyUser.Size = new System.Drawing.Size(293, 20);
+            this.txtSshProxyUser.TabIndex = 25;
             // 
-            // checkBox1
+            // label17
             // 
-            this.checkBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(248, 367);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(114, 17);
-            this.checkBox1.TabIndex = 16;
-            this.checkBox1.Text = "Display Passwords";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(4, 74);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(63, 13);
-            this.label11.TabIndex = 7;
-            this.label11.Text = "User Name:";
-            // 
-            // textBox4
-            // 
-            this.textBox4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox4.Location = new System.Drawing.Point(69, 71);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(293, 20);
-            this.textBox4.TabIndex = 8;
-            // 
-            // textBox5
-            // 
-            this.textBox5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox5.Location = new System.Drawing.Point(69, 97);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(293, 20);
-            this.textBox5.TabIndex = 9;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(7, 100);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(56, 13);
-            this.label12.TabIndex = 10;
-            this.label12.Text = "Password:";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(7, 126);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(76, 13);
-            this.label13.TabIndex = 17;
-            this.label13.Text = "ZIP Password:";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox6.Location = new System.Drawing.Point(88, 123);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(274, 20);
-            this.textBox6.TabIndex = 18;
-            // 
-            // tabControl1
-            // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tabControl1.Controls.Add(this.tabPage1);
-            this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(3, 63);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(376, 416);
-            this.tabControl1.TabIndex = 19;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.cbAllSchedules);
-            this.tabPage1.Controls.Add(this.btnNewSchedule);
-            this.tabPage1.Controls.Add(this.btnDelSchedule);
-            this.tabPage1.Controls.Add(this.panelSchedule);
-            this.tabPage1.Controls.Add(this.flowLayoutPanel1);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(368, 353);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Schedule";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.label16);
-            this.tabPage2.Controls.Add(this.textBox9);
-            this.tabPage2.Controls.Add(this.textBox10);
-            this.tabPage2.Controls.Add(this.label17);
-            this.tabPage2.Controls.Add(this.label14);
-            this.tabPage2.Controls.Add(this.textBox7);
-            this.tabPage2.Controls.Add(this.textBox8);
-            this.tabPage2.Controls.Add(this.label15);
-            this.tabPage2.Controls.Add(this.checkBox2);
-            this.tabPage2.Controls.Add(this.label12);
-            this.tabPage2.Controls.Add(this.checkBox1);
-            this.tabPage2.Controls.Add(this.textBox6);
-            this.tabPage2.Controls.Add(this.label13);
-            this.tabPage2.Controls.Add(this.textBox5);
-            this.tabPage2.Controls.Add(this.label1);
-            this.tabPage2.Controls.Add(this.textBox4);
-            this.tabPage2.Controls.Add(this.comboBox1);
-            this.tabPage2.Controls.Add(this.label11);
-            this.tabPage2.Controls.Add(this.textBox1);
-            this.tabPage2.Controls.Add(this.textBox3);
-            this.tabPage2.Controls.Add(this.textBox2);
-            this.tabPage2.Controls.Add(this.label10);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(368, 390);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Target";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2
-            // 
-            this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(10, 165);
-            this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(148, 17);
-            this.checkBox2.TabIndex = 19;
-            this.checkBox2.Text = "Connect via a SSH proxy:";
-            this.checkBox2.UseVisualStyleBackColor = true;
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(4, 217);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(63, 13);
+            this.label17.TabIndex = 24;
+            this.label17.Text = "User Name:";
             // 
             // label14
             // 
@@ -731,22 +393,22 @@
             this.label14.TabIndex = 21;
             this.label14.Text = "Host:";
             // 
-            // textBox7
+            // txtSshProxyHost
             // 
-            this.textBox7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txtSshProxyHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox7.Location = new System.Drawing.Point(45, 188);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(253, 20);
-            this.textBox7.TabIndex = 20;
+            this.txtSshProxyHost.Location = new System.Drawing.Point(45, 188);
+            this.txtSshProxyHost.Name = "txtSshProxyHost";
+            this.txtSshProxyHost.Size = new System.Drawing.Size(253, 20);
+            this.txtSshProxyHost.TabIndex = 20;
             // 
-            // textBox8
+            // txtSshProxyPort
             // 
-            this.textBox8.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox8.Location = new System.Drawing.Point(304, 188);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(58, 20);
-            this.textBox8.TabIndex = 22;
+            this.txtSshProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSshProxyPort.Location = new System.Drawing.Point(304, 188);
+            this.txtSshProxyPort.Name = "txtSshProxyPort";
+            this.txtSshProxyPort.Size = new System.Drawing.Size(58, 20);
+            this.txtSshProxyPort.TabIndex = 22;
             // 
             // label15
             // 
@@ -758,41 +420,230 @@
             this.label15.TabIndex = 23;
             this.label15.Text = "Port:";
             // 
-            // label16
+            // cbUseSshProxy
             // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(7, 243);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(56, 13);
-            this.label16.TabIndex = 27;
-            this.label16.Text = "Password:";
+            this.cbUseSshProxy.AutoSize = true;
+            this.cbUseSshProxy.Location = new System.Drawing.Point(10, 165);
+            this.cbUseSshProxy.Name = "cbUseSshProxy";
+            this.cbUseSshProxy.Size = new System.Drawing.Size(148, 17);
+            this.cbUseSshProxy.TabIndex = 19;
+            this.cbUseSshProxy.Text = "Connect via a SSH proxy:";
+            this.cbUseSshProxy.UseVisualStyleBackColor = true;
             // 
-            // textBox9
+            // label12
             // 
-            this.textBox9.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(7, 100);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(56, 13);
+            this.label12.TabIndex = 10;
+            this.label12.Text = "Password:";
+            // 
+            // cbTargetShowPass
+            // 
+            this.cbTargetShowPass.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbTargetShowPass.AutoSize = true;
+            this.cbTargetShowPass.Location = new System.Drawing.Point(248, 367);
+            this.cbTargetShowPass.Name = "cbTargetShowPass";
+            this.cbTargetShowPass.Size = new System.Drawing.Size(114, 17);
+            this.cbTargetShowPass.TabIndex = 16;
+            this.cbTargetShowPass.Text = "Display Passwords";
+            this.cbTargetShowPass.UseVisualStyleBackColor = true;
+            this.cbTargetShowPass.CheckedChanged += new System.EventHandler(this.cbTargetShowPass_CheckedChanged);
+            // 
+            // txtTargetZipPwd
+            // 
+            this.txtTargetZipPwd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox9.Location = new System.Drawing.Point(69, 240);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(293, 20);
-            this.textBox9.TabIndex = 26;
+            this.txtTargetZipPwd.Location = new System.Drawing.Point(88, 123);
+            this.txtTargetZipPwd.Name = "txtTargetZipPwd";
+            this.txtTargetZipPwd.Size = new System.Drawing.Size(274, 20);
+            this.txtTargetZipPwd.TabIndex = 18;
+            this.txtTargetZipPwd.UseSystemPasswordChar = true;
             // 
-            // textBox10
+            // label13
             // 
-            this.textBox10.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(7, 126);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(76, 13);
+            this.label13.TabIndex = 17;
+            this.label13.Text = "ZIP Password:";
+            // 
+            // txtTargetPwd
+            // 
+            this.txtTargetPwd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox10.Location = new System.Drawing.Point(69, 214);
-            this.textBox10.Name = "textBox10";
-            this.textBox10.Size = new System.Drawing.Size(293, 20);
-            this.textBox10.TabIndex = 25;
+            this.txtTargetPwd.Location = new System.Drawing.Point(69, 97);
+            this.txtTargetPwd.Name = "txtTargetPwd";
+            this.txtTargetPwd.Size = new System.Drawing.Size(293, 20);
+            this.txtTargetPwd.TabIndex = 9;
+            this.txtTargetPwd.UseSystemPasswordChar = true;
             // 
-            // label17
+            // label1
             // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(4, 217);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(63, 13);
-            this.label17.TabIndex = 24;
-            this.label17.Text = "User Name:";
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(66, 3);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "Host:";
+            // 
+            // txtTargetUser
+            // 
+            this.txtTargetUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTargetUser.Location = new System.Drawing.Point(69, 71);
+            this.txtTargetUser.Name = "txtTargetUser";
+            this.txtTargetUser.Size = new System.Drawing.Size(293, 20);
+            this.txtTargetUser.TabIndex = 8;
+            // 
+            // cbTargetProtocol
+            // 
+            this.cbTargetProtocol.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbTargetProtocol.FormattingEnabled = true;
+            this.cbTargetProtocol.Items.AddRange(new object[] {
+            "SFTP",
+            "SCP",
+            "FTP"});
+            this.cbTargetProtocol.Location = new System.Drawing.Point(10, 19);
+            this.cbTargetProtocol.Name = "cbTargetProtocol";
+            this.cbTargetProtocol.Size = new System.Drawing.Size(52, 21);
+            this.cbTargetProtocol.TabIndex = 0;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(4, 74);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(63, 13);
+            this.label11.TabIndex = 7;
+            this.label11.Text = "User Name:";
+            // 
+            // txtTargetHost
+            // 
+            this.txtTargetHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTargetHost.Location = new System.Drawing.Point(68, 19);
+            this.txtTargetHost.Name = "txtTargetHost";
+            this.txtTargetHost.Size = new System.Drawing.Size(230, 20);
+            this.txtTargetHost.TabIndex = 1;
+            // 
+            // txtTargetPath
+            // 
+            this.txtTargetPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTargetPath.Location = new System.Drawing.Point(69, 45);
+            this.txtTargetPath.Name = "txtTargetPath";
+            this.txtTargetPath.Size = new System.Drawing.Size(293, 20);
+            this.txtTargetPath.TabIndex = 6;
+            // 
+            // txtTargetPort
+            // 
+            this.txtTargetPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTargetPort.Location = new System.Drawing.Point(304, 19);
+            this.txtTargetPort.Name = "txtTargetPort";
+            this.txtTargetPort.Size = new System.Drawing.Size(58, 20);
+            this.txtTargetPort.TabIndex = 3;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(31, 48);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(32, 13);
+            this.label10.TabIndex = 5;
+            this.label10.Text = "Path:";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label9
+            // 
+            this.label9.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(304, 3);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(29, 13);
+            this.label9.TabIndex = 4;
+            this.label9.Text = "Port:";
+            // 
+            // btnResetStatus
+            // 
+            this.btnResetStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnResetStatus.Location = new System.Drawing.Point(86, 485);
+            this.btnResetStatus.Name = "btnResetStatus";
+            this.btnResetStatus.Size = new System.Drawing.Size(83, 23);
+            this.btnResetStatus.TabIndex = 13;
+            this.btnResetStatus.Text = "Reset Status";
+            this.btnResetStatus.UseVisualStyleBackColor = true;
+            this.btnResetStatus.Click += new System.EventHandler(this.btnResetStatus_Click);
+            // 
+            // btnRunNow
+            // 
+            this.btnRunNow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnRunNow.Location = new System.Drawing.Point(5, 485);
+            this.btnRunNow.Name = "btnRunNow";
+            this.btnRunNow.Size = new System.Drawing.Size(75, 23);
+            this.btnRunNow.TabIndex = 12;
+            this.btnRunNow.Text = "Run Now";
+            this.btnRunNow.UseVisualStyleBackColor = true;
+            this.btnRunNow.Click += new System.EventHandler(this.btnRunNow_Click);
+            // 
+            // btnSaveSchedule
+            // 
+            this.btnSaveSchedule.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveSchedule.Location = new System.Drawing.Point(302, 485);
+            this.btnSaveSchedule.Name = "btnSaveSchedule";
+            this.btnSaveSchedule.Size = new System.Drawing.Size(75, 23);
+            this.btnSaveSchedule.TabIndex = 7;
+            this.btnSaveSchedule.Text = "Save";
+            this.btnSaveSchedule.UseVisualStyleBackColor = true;
+            this.btnSaveSchedule.Click += new System.EventHandler(this.btnSaveSchedule_Click);
+            // 
+            // tbArchiveJobName
+            // 
+            this.tbArchiveJobName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbArchiveJobName.Location = new System.Drawing.Point(76, 11);
+            this.tbArchiveJobName.Name = "tbArchiveJobName";
+            this.tbArchiveJobName.Size = new System.Drawing.Size(301, 20);
+            this.tbArchiveJobName.TabIndex = 6;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(32, 14);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(38, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Name:";
+            // 
+            // tbRootFolder
+            // 
+            this.tbRootFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbRootFolder.Location = new System.Drawing.Point(76, 37);
+            this.tbRootFolder.Name = "tbRootFolder";
+            this.tbRootFolder.Size = new System.Drawing.Size(301, 20);
+            this.tbRootFolder.TabIndex = 4;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(5, 40);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(65, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Root Folder:";
+            // 
+            // tabPageConfig
+            // 
+            this.tabPageConfig.Location = new System.Drawing.Point(4, 22);
+            this.tabPageConfig.Name = "tabPageConfig";
+            this.tabPageConfig.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageConfig.Size = new System.Drawing.Size(616, 517);
+            this.tabPageConfig.TabIndex = 1;
+            this.tabPageConfig.Text = "Configuration";
+            this.tabPageConfig.UseVisualStyleBackColor = true;
             // 
             // Manager
             // 
@@ -812,16 +663,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).EndInit();
             this.spltCtrlArchive.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
+            this.tabJobSettings.ResumeLayout(false);
+            this.tabPageJobSchedule.ResumeLayout(false);
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
-            this.tabPageConfig.ResumeLayout(false);
-            this.tabPageConfig.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            this.tabControl1.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
-            this.tabPage2.ResumeLayout(false);
-            this.tabPage2.PerformLayout();
+            this.tabPageJobTarget.ResumeLayout(false);
+            this.tabPageJobTarget.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -845,52 +692,38 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox tbRootFolder;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox cbDisplayPasswords;
-        private System.Windows.Forms.TextBox txtMasterPassword;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnSaveSchedule;
         private System.Windows.Forms.ComboBox cbAllSchedules;
         private System.Windows.Forms.Button btnDelSchedule;
         private System.Windows.Forms.Button btnNewSchedule;
         private System.Windows.Forms.Button btnRunNow;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtSshHost;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox txtSshRootPath;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox txtSshPwd;
-        private System.Windows.Forms.CheckBox cbIsGlacier;
-        private System.Windows.Forms.Button btnApplyChanges;
-        private System.Windows.Forms.TextBox txtSshUsername;
-        private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Button btnResetStatus;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox txtTargetPort;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.TextBox txtTargetHost;
+        private System.Windows.Forms.ComboBox cbTargetProtocol;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox txtTargetPath;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.CheckBox checkBox1;
-        private System.Windows.Forms.TextBox textBox4;
+        private System.Windows.Forms.CheckBox cbTargetShowPass;
+        private System.Windows.Forms.TextBox txtTargetUser;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox txtTargetPwd;
+        private System.Windows.Forms.TextBox txtTargetZipPwd;
         private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.TabControl tabJobSettings;
+        private System.Windows.Forms.TabPage tabPageJobSchedule;
+        private System.Windows.Forms.TabPage tabPageJobTarget;
         private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.TextBox textBox10;
+        private System.Windows.Forms.TextBox txtSshProxyPwd;
+        private System.Windows.Forms.TextBox txtSshProxyUser;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox textBox7;
-        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox txtSshProxyHost;
+        private System.Windows.Forms.TextBox txtSshProxyPort;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.CheckBox checkBox2;
+        private System.Windows.Forms.CheckBox cbUseSshProxy;
     }
 }
 

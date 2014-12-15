@@ -35,14 +35,10 @@ namespace CloudBackup.Backup
 
             public ScheduleJob(Database.ScheduleRow rawSchedule)
             {
-                _job = new ArchiveJob
-                {
-                    JobUID = rawSchedule.Uid,
-                    UniqueJobName = rawSchedule.Name,
-                    JobRootPath = rawSchedule.RootPath,
-                    Active = rawSchedule.Active
-                };
-                _job.LoadSchedule(rawSchedule.Schedule);
+                _job = ArchiveJob.LoadSchedule(rawSchedule.Description);
+                _job.JobUID = rawSchedule.Uid;
+                _job.UniqueJobName = rawSchedule.Name;
+                _job.Active = rawSchedule.Active;
             }
 
             public ScheduleJob(ArchiveJob job)

@@ -17,7 +17,6 @@
  *
  */
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Xml;
@@ -25,7 +24,6 @@ using CloudBackup.API;
 using CloudBackup.Utils;
 using Ionic.Zip;
 using Ionic.Zlib;
-using Renci.SshNet;
 using AlphaFS = Alphaleonis.Win32.Filesystem;
 
 namespace CloudBackup.Backup
@@ -50,39 +48,6 @@ namespace CloudBackup.Backup
             {
                 //log.DebugFormat("SnapshotAccess Close[{0}]", _snapPath);
             }
-        }
-
-        class ProcessSettings
-        {
-            public ProcessSettings()
-            {
-                var allSettings = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-                using (var settings = Program.Database.Settings.GetAllSettings())
-                {
-                    while (settings.MoveNext())
-                    {
-                        allSettings[settings.Current.Setting]=settings.Current.Value;
-                    }
-                }
-
-                SshHost = allSettings["SshHost"];
-                SshUser = allSettings["SshUser"];
-                SshPwd = allSettings["SshPwd"];
-                SshPath = allSettings["SshPath"];
-                ZipPwd = allSettings["ZipPwd"];
-
-                var isGlacier = false;
-                bool.TryParse(allSettings["IsGlacier"], out isGlacier);
-                IsGlacier = isGlacier;
-            }
-
-            public string SshHost { get; private set; }
-            public string SshUser { get; private set; }
-            public string SshPwd { get; private set; }
-            public string SshPath { get; private set; }
-            public string ZipPwd { get; private set; }
-
-            public bool IsGlacier { get; private set; }
         }
 
         class ManifestDocument
@@ -125,27 +90,26 @@ namespace CloudBackup.Backup
 
         class SshSinkParams
         {
-            public SftpClient sftp;
-            public Stream stream;
-            public string file;
-            public bool isSuccess;
-            public Exception exception;
+            public Backend.Backend Target;
+            public Stream Stream;
+            public string File;
+            public bool IsSuccess;
+            public Exception Exception;
         }
 
         static void SshSinkThread(object rawparams)
         {
-            SshSinkParams @params = (SshSinkParams)rawparams;
-            //sftp = sftp, stream = read, file
+            var @params = (SshSinkParams)rawparams;
             try
             {
-                @params.sftp.UploadFile(@params.stream, @params.file, true);
-                @params.isSuccess = true;
+                @params.Target.Upload(@params.File, @params.Stream);
+                @params.IsSuccess = true;
             }
             catch (Exception ex)
             {
                 log.Fatal("Unable to send message",ex);
-                @params.isSuccess = false;
-                @params.exception = ex;
+                @params.IsSuccess = false;
+                @params.Exception = ex;
             }
         }
 
@@ -166,13 +130,8 @@ namespace CloudBackup.Backup
             proxy.CreateSnapshotFile(id, jid, fle, id);
             proxy.ClearSeenFlags(jid);
 
-            var settings = new ProcessSettings();
-            using (var sftp = new SftpClient(settings.SshHost, settings.SshUser, settings.SshPwd))
+            using (var backend = Backend.Backend.OpenBackend(job.JobTarget))
             {
-                log.InfoFormat("Process - Connecting to {0}", settings.SshHost);
-                sftp.Connect();
-                log.InfoFormat("Process - Changing dir to {0}", settings.SshPath);
-                sftp.ChangeDirectory(settings.SshPath);
                 using (var zip = new ZipFile())
                 {
                     zip.CompressionLevel = CompressionLevel.BestCompression;
@@ -276,7 +235,6 @@ namespace CloudBackup.Backup
                         }
 
                         zip.Comment = manifest.Manifest;
-                        //zip.AddEntry(string.Format("_manifest_{0:X}.xml",id),xmlDoc.OuterXml,Encoding.UTF8);
 
                         log.InfoFormat("Process completed - Streaming ZIP file");
 
@@ -284,7 +242,7 @@ namespace CloudBackup.Backup
                         PipeStream.CreatePipe(out write,out read);
 
                         var sshThread = new Thread(SshSinkThread);
-                        var param = new SshSinkParams { sftp = sftp, stream = read, file = fle };
+                        var param = new SshSinkParams { Target = backend, Stream = read, File = fle };
                         sshThread.Start(param);
                         zip.Save(write);
                         write.Dispose();
@@ -293,20 +251,12 @@ namespace CloudBackup.Backup
                         log.InfoFormat("Process completed - Droping backup");
                         backup.DropBackup();
 
-                        if (!param.isSuccess)
+                        if (!param.IsSuccess)
                         {
-                            log.ErrorFormat("SFTP transfert is not successfull");
-                            throw new Exception("Transfert failed", param.exception);
+                            log.ErrorFormat("File transfert is not successfull");
+                            throw new Exception("Transfert failed", param.Exception);
                         }
                     }
-
-                    //log.InfoFormat("Process - Upload temporary file {0} to cloud", tempFile);
-                    //using (var sTmpFle = File.OpenRead(tempFile))
-                    //{
-                    //    sftp.UploadFile(sTmpFle,fle,true);    
-                    //}
-
-                    //File.Delete(tempFile);
                 }
             }
             log.InfoFormat("Process completed - Commit Transaction");

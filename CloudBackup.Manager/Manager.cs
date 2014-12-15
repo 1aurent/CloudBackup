@@ -49,19 +49,8 @@ namespace CloudBackup.Manager
         public Manager()
         {
             InitializeComponent();
-
-            tbArchiveJobName.Enabled = false;
-            tbRootFolder.Enabled = false;
-            cbAllSchedules.Enabled = false;
-            btnNewSchedule.Enabled = false;
-            btnDelSchedule.Enabled = false;
-            btnSaveSchedule.Enabled = false;
-            btnResetStatus.Enabled =
-            btnRunNow.Enabled = false;
-
-            rdSchedDaily.Enabled = false;
-            rdSchedWeekly.Enabled = false;
-            rdSchedMonthly.Enabled = false;
+            cbTargetProtocol.SelectedItem = 0;
+            Utils.EnableDisablePanel(spltCtrlArchive.Panel2, false);
 
             var clientChannel = new IpcChannel();
             ChannelServices.RegisterChannel(clientChannel, true);
@@ -70,7 +59,6 @@ namespace CloudBackup.Manager
 
             try
             {
-                ReloadSettings();
                 ReloadJobList();
             }
             catch (RemotingException)
@@ -79,14 +67,8 @@ namespace CloudBackup.Manager
                     "Unable to communicate with the CloudBackup service. Please check that the service is running, close this window and try again",
                     "Unable to access service", MessageBoxButtons.OK);
 
-                btnApplyChanges.Enabled = 
-                btnNewArchive.Enabled = 
-                txtSshHost.Enabled = 
-                txtSshUsername.Enabled = 
-                txtSshPwd.Enabled = 
-                txtSshRootPath.Enabled = 
-                txtMasterPassword.Enabled = 
-                cbIsGlacier.Enabled= false;
+                btnNewArchive.Enabled = false;
+
             }
         }
 
@@ -96,45 +78,17 @@ namespace CloudBackup.Manager
             foreach (var job in _serverLink.GetJobs())
             {
                 lbAllSchedule.Items.Add(job.Name);
-            }            
+            }
+            if (lbAllSchedule.Items.Count == 0)
+            {
+                _archiveJob = null;
+                SyncGuiWithArchive();
+            }
+            else
+            {
+                lbAllSchedule.SelectedIndex = 0;
+            }
         }
-
-        void SetSetting(Dictionary<string,string> settings,
-            string setting, TextBox box, string @default)
-        {
-            string value;
-            if (!settings.TryGetValue(setting, out value)) value = @default;
-            box.Text = value;
-        }
-
-        void ReloadSettings()
-        {
-            var settings = _serverLink.GetAllSettings()
-                .ToDictionary(x => x.Key, x => x.Value, StringComparer.InvariantCultureIgnoreCase);
-
-            SetSetting(settings, "SshHost", txtSshHost, "changeme");
-            SetSetting(settings, "SshUser", txtSshUsername, "changeme");
-            SetSetting(settings, "SshPwd", txtSshPwd, "changeme");
-            SetSetting(settings, "SshPath", txtSshRootPath, "/home/changeme/");
-            SetSetting(settings, "ZipPwd", txtMasterPassword, "changeme");
-
-            string isGlacierStr;
-            if (!settings.TryGetValue("IsGlacier", out isGlacierStr)) isGlacierStr = "False";
-            bool isGlacier;
-            if (!bool.TryParse(isGlacierStr, out isGlacier)) isGlacier = false;
-            cbIsGlacier.Checked = isGlacier;
-        }
-
-        private void btnApplyChanges_Click(object sender, EventArgs e)
-        {
-            _serverLink.SaveSetting("SshHost", txtSshHost.Text);
-            _serverLink.SaveSetting("SshUser", txtSshUsername.Text);
-            _serverLink.SaveSetting("SshPwd", txtSshPwd.Text);
-            _serverLink.SaveSetting("SshPath", txtSshRootPath.Text);
-            _serverLink.SaveSetting("ZipPwd", txtMasterPassword.Text);
-            _serverLink.SaveSetting("IsGlacier", cbIsGlacier.Enabled.ToString());
-        }
-
 
         private void rdSchedDaily_CheckedChanged(object sender, EventArgs e)
         {
@@ -185,31 +139,11 @@ namespace CloudBackup.Manager
             cbAllSchedules.Items[cbAllSchedules.SelectedIndex] = itm;
         }
 
-        private void cbDisplayPasswords_CheckedChanged(object sender, EventArgs e)
-        {
-            var showText = !cbDisplayPasswords.Checked;
-            txtMasterPassword.UseSystemPasswordChar = showText;
-            txtSshPwd.UseSystemPasswordChar = showText;
-        }
-
         void SyncGuiWithArchive()
         {
             if (_archiveJob == null)
             {
-                tbArchiveJobName.Enabled = 
-                tbRootFolder.Enabled = 
-                cbAllSchedules.Enabled = 
-                btnNewSchedule.Enabled = 
-                btnDelSchedule.Enabled = 
-                btnSaveSchedule.Enabled = 
-                rdSchedDaily.Enabled = 
-                rdSchedWeekly.Enabled = 
-                rdSchedMonthly.Enabled =
-                btnResetStatus.Enabled =
-                btnRunNow.Enabled = false;
-                rdSchedDaily.Checked = 
-                rdSchedWeekly.Checked = 
-                rdSchedMonthly.Checked = false;
+                Utils.EnableDisablePanel(spltCtrlArchive.Panel2, false);
 
                 tbArchiveJobName.Text =
                     tbRootFolder.Text = "";
@@ -219,24 +153,34 @@ namespace CloudBackup.Manager
                 return;
             }
 
-            tbArchiveJobName.Enabled = true;
-            tbRootFolder.Enabled = true;
-            cbAllSchedules.Enabled = true;
-            btnNewSchedule.Enabled = true;
-            btnDelSchedule.Enabled = true;
-            btnSaveSchedule.Enabled = true;
+            Utils.EnableDisablePanel(spltCtrlArchive.Panel2, true);
             btnResetStatus.Enabled =
             btnRunNow.Enabled = _archiveJob.JobUID.HasValue;
 
-            rdSchedDaily.Enabled = true;
-            rdSchedWeekly.Enabled = true;
-            rdSchedMonthly.Enabled = true;
             rdSchedDaily.Checked = false;
             rdSchedWeekly.Checked = false;
             rdSchedMonthly.Checked = false;
 
             tbArchiveJobName.Text = _archiveJob.UniqueJobName;
             tbRootFolder.Text = _archiveJob.JobRootPath;
+
+            cbTargetProtocol.Text = _archiveJob.JobTarget.TargetServer.Scheme;
+            txtTargetUser.Text = _archiveJob.JobTarget.TargetServer.UserInfo;
+            txtTargetHost.Text = _archiveJob.JobTarget.TargetServer.Host;
+            txtTargetPort.Text = _archiveJob.JobTarget.TargetServer.Port.ToString();
+            txtTargetPath.Text = _archiveJob.JobTarget.TargetServer.AbsolutePath;
+            txtTargetPwd.Text = _archiveJob.JobTarget.Password;
+            txtTargetZipPwd.Text = _archiveJob.JobTarget.ZipPassword;
+
+            if (_archiveJob.JobTarget.ProxyServer != null)
+            {
+                cbUseSshProxy.Checked = true;
+
+                txtSshProxyHost.Text = _archiveJob.JobTarget.ProxyServer.Host;
+                txtSshProxyPort.Text = _archiveJob.JobTarget.ProxyServer.Port.ToString();
+                txtSshProxyUser.Text = _archiveJob.JobTarget.ProxyServer.UserInfo;
+                txtSshProxyPwd.Text = _archiveJob.JobTarget.ProxyPassword;
+            }
 
             cbAllSchedules.Items.Clear();
             for (var i=0;i<_archiveJob.Schedules.Count;++i)
@@ -253,6 +197,30 @@ namespace CloudBackup.Manager
             if (_current != null && _schedule != null) _current.UpdateJobSchedule(_schedule);
             _archiveJob.UniqueJobName = tbArchiveJobName.Text;
             _archiveJob.JobRootPath = tbRootFolder.Text;
+
+            _archiveJob.JobTarget.TargetServer = new Uri(
+                string.Format("{0}://{1}@{2}:{3}{4}{5}",
+                cbTargetProtocol.Text,
+                Uri.EscapeUriString(txtTargetUser.Text),
+                Uri.EscapeUriString(txtTargetHost.Text),
+                Uri.EscapeUriString(txtTargetPort.Text),
+                txtTargetPath.Text.StartsWith("/")?"":"/",
+                Uri.EscapeUriString(txtTargetPath.Text)
+                )
+            );
+            _archiveJob.JobTarget.Password = txtTargetPwd.Text;
+            _archiveJob.JobTarget.ZipPassword = txtTargetZipPwd.Text;
+
+            if (cbUseSshProxy.Checked)
+            {
+                _archiveJob.JobTarget.ProxyServer = new Uri(
+                    string.Format("ssh://{0}@{1}:{2}",
+                       Uri.EscapeUriString(txtSshProxyUser.Text),
+                       Uri.EscapeUriString(txtSshProxyHost.Text),
+                        txtSshProxyPort.Text
+                        ));
+            }
+
             _archiveJob.Schedules.Clear();
             foreach (var item in cbAllSchedules.Items)
             {
@@ -420,6 +388,14 @@ will be a full image. Existing backup will not be dropped. Do you really want to
             if (result != DialogResult.Yes) return;
 
             _serverLink.ResetArchiveJob(_archiveJob.JobUID.Value);
+        }
+
+        private void cbTargetShowPass_CheckedChanged(object sender, EventArgs e)
+        {
+            txtSshProxyPwd.UseSystemPasswordChar =
+                txtTargetPwd.UseSystemPasswordChar =
+                    txtTargetZipPwd.UseSystemPasswordChar =
+                        !cbTargetShowPass.Checked;
         }
 
     }

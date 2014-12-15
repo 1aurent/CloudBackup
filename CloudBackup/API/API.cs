@@ -48,15 +48,11 @@ namespace CloudBackup.API
             var archiveJob = Program.Database.JobProxy.LoadSchedule(uid);
             if (archiveJob == null) return null;
 
-            var job = new ArchiveJob
-            {
-                JobUID = archiveJob.Uid,
-                UniqueJobName = archiveJob.Name,
-                JobRootPath = archiveJob.RootPath,
-                Active = archiveJob.Active
-            };
+            var job = ArchiveJob.LoadSchedule(archiveJob.Description);
+            job.JobUID = uid;
+            job.UniqueJobName = archiveJob.Name;
+            job.Active = archiveJob.Active;
 
-            job.LoadSchedule(archiveJob.Schedule);
             return job;
         }
 
@@ -65,16 +61,12 @@ namespace CloudBackup.API
             var archiveJob = Program.Database.JobProxy.LoadSchedule(name);
             if (archiveJob == null) return null;
 
-            var job = new ArchiveJob
-            {
-                JobUID = archiveJob.Uid,
-                UniqueJobName = archiveJob.Name,
-                JobRootPath = archiveJob.RootPath,
-                Active = archiveJob.Active
-            };
+            var job = ArchiveJob.LoadSchedule(archiveJob.Description);
+            job.JobUID = archiveJob.Uid;
+            job.UniqueJobName = archiveJob.Name;
+            job.Active = archiveJob.Active;
             log.InfoFormat("Loading job [{0}]:[{1}] {2}", job.JobUID, job.UniqueJobName, job);
 
-            job.LoadSchedule(archiveJob.Schedule);
             return job;
         }
 
@@ -86,14 +78,13 @@ namespace CloudBackup.API
                 job.JobUID = Program.Database.GenerateJobUid();
             }
 
-            var xmlSchedule = job.SaveSchedule();
+            var xmlSchedule = ArchiveJob.SaveSchedule(job);
             log.InfoFormat("Schedule : {0}",xmlSchedule);
 
             Program.Database.JobProxy.InsertSchedule(
                 job.JobUID.Value,
                 job.UniqueJobName,
                 xmlSchedule,
-                job.JobRootPath,
                 job.Active
             );
 
@@ -124,25 +115,6 @@ namespace CloudBackup.API
         {
             var job = LoadArchiveJob(uid);
             ThreadPool.QueueUserWorkItem(RunJobThread, job);
-        }
-
-        public KeyValuePair<string, string>[] GetAllSettings()
-        {
-            using (var settings = Program.Database.Settings.GetAllSettings())
-            {
-                var allSettings = new List<KeyValuePair<string, string>>();
-                while (settings.MoveNext())
-                {
-                    allSettings.Add(new KeyValuePair<string, string>(settings.Current.Setting, settings.Current.Value));
-                }
-
-                return allSettings.ToArray();
-            }
-        }
-
-        public void SaveSetting(string setting, string value)
-        {
-            Program.Database.Settings.Set(setting,value);
         }
 
         public static void ActivateApi()

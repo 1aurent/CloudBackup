@@ -42,8 +42,5 @@ namespace CloudBackup.API
         void DropArchiveJob(int uid);
         void ResetArchiveJob(int uid);
         void RunJobNow(int uid);
-
-        KeyValuePair<string, string>[] GetAllSettings();
-        void SaveSetting(string setting, string value);
     }
 }

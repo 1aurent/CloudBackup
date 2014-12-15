@@ -3,18 +3,6 @@
 	value text not null
 );
 
-CREATE TABLE IF NOT EXISTS Settings(
-	id    text not null primary key,
-	value text not null
-);
-
-INSERT OR IGNORE INTO Settings Values ('SshHost','changeme');
-INSERT OR IGNORE INTO Settings Values ('SshUser','changeme');
-INSERT OR IGNORE INTO Settings Values ('SshPwd', 'changeme');
-INSERT OR IGNORE INTO Settings Values ('SshPath','/home/changeme/');
-INSERT OR IGNORE INTO Settings Values ('IsGlacier', 'False');
-INSERT OR IGNORE INTO Settings Values ('ZipPwd', 'changeme');
-
 INSERT OR IGNORE INTO Version Values (1, '1.0.0.0'); -- Database Version
 INSERT OR IGNORE INTO Version Values (2, '1.0.0.0'); -- Database Compatibility Version
 INSERT OR IGNORE INTO Version Values (3, '1.0.0.0'); -- Server Version
@@ -22,8 +10,7 @@ INSERT OR IGNORE INTO Version Values (3, '1.0.0.0'); -- Server Version
 CREATE TABLE IF NOT EXISTS Schedule(
 	id integer not null primary key,
 	name text not null,
-	schedule text not null,
-	rootPath text not null,
+	description text not null,
 	active integer not null
 );
 CREATE UNIQUE INDEX IF NOT EXISTS ScheduleNames ON Schedule(name);
