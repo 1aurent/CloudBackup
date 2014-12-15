@@ -116,6 +116,5 @@ namespace CloudBackup.Database
         }
 
         public IJobProxy JobProxy { get { return BridgeCompiler.CreateInstance<IJobProxy>(_cnx); } }
-        public ISettings Settings { get { return BridgeCompiler.CreateInstance<ISettings>(_cnx); } }
     }
 }

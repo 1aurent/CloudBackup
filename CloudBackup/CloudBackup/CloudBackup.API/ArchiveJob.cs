@@ -37,6 +37,7 @@ namespace CloudBackup.API
         {
             UniqueJobName = "New Job";
             JobRootPath = "C:\\";
+            JobTarget = new Target();
             Schedules = new List<JobSchedule>();
             Active = true;
 
@@ -49,23 +50,25 @@ namespace CloudBackup.API
         public string JobRootPath { get; set; }
         public bool Active { get; set; }
 
+        public Target JobTarget { get; set; }
+
         public List<JobSchedule> Schedules { get; private set; }
 
-        public void LoadSchedule(string xmlSchedule)
+        public static ArchiveJob LoadSchedule(string xmlSchedule)
         {
-            var serializer = new XmlSerializer(typeof(List<JobSchedule>));
+            var serializer = new XmlSerializer(typeof(ArchiveJob));
             using (TextReader reader = new StringReader(xmlSchedule))
             {
-                Schedules = (List<JobSchedule>)serializer.Deserialize(reader);
+                return (ArchiveJob)serializer.Deserialize(reader);
             }
         }
 
-        public string SaveSchedule()
+        public static string SaveSchedule(ArchiveJob job)
         {
-            var serializer = new XmlSerializer(typeof(List<JobSchedule>));
+            var serializer = new XmlSerializer(typeof(ArchiveJob));
             using (TextWriter writer = new StringWriter())
             {
-                serializer.Serialize(writer,Schedules);
+                serializer.Serialize(writer, job);
                 return writer.ToString();
             }            
         }
@@ -78,6 +81,7 @@ namespace CloudBackup.API
             UniqueJobName = info.GetString("name");
             JobRootPath = info.GetString("path");
             Active = info.GetBoolean("active");
+            JobTarget = (Target)info.GetValue("target", typeof(Target));
             Schedules = (List<JobSchedule>)info.GetValue("schedules", typeof(List<JobSchedule>));
         }
 
@@ -89,6 +93,7 @@ namespace CloudBackup.API
             info.AddValue("name", UniqueJobName);
             info.AddValue("path", JobRootPath);
             info.AddValue("active", Active);
+            info.AddValue("target", JobTarget);
             info.AddValue("schedules", Schedules);
         }
 
@@ -104,6 +109,14 @@ namespace CloudBackup.API
             UniqueJobName = reader.GetAttribute("name");
             JobRootPath = reader.GetAttribute("path");
             Active = int.Parse(reader.GetAttribute("active")??"0") != 0;
+
+            //- Read target
+            reader.Read(); if (reader.Name != "Target") throw new Exception("Expecting Target node");
+            JobTarget = new Target();
+            JobTarget.ReadXml(reader);
+            //reader.ReadEndElement();
+
+            //- Read Schedule
             reader.Read(); if (reader.Name != "Schedules") throw new Exception("Expecting Schedules node");
             Schedules.Clear();
             reader.Read(); 
@@ -123,6 +136,13 @@ namespace CloudBackup.API
             writer.WriteAttributeString("name", UniqueJobName);
             writer.WriteAttributeString("path", JobRootPath);
             writer.WriteAttributeString("active", Active?"1":"0");
+
+            //- Write target
+            writer.WriteStartElement("Target");
+            JobTarget.WriteXml(writer);
+            writer.WriteEndElement();
+
+            //- Write schedule
             writer.WriteStartElement("Schedules");
             foreach (var jobSchedule in Schedules)
             {

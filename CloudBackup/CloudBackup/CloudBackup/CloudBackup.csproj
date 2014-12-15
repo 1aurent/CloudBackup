@@ -77,7 +77,7 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite">
-      <HintPath>..\Libs\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\3rdParty\Libs\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.ServiceProcess" />
@@ -89,12 +89,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="API\API.cs" />
+    <Compile Include="Backend\Backend.cs" />
+    <Compile Include="Backend\SCP.cs" />
+    <Compile Include="Backend\SFTP.cs" />
     <Compile Include="Backup\Engine.cs" />
     <Compile Include="Backup\Process.cs" />
     <Compile Include="Backup\Scheduler.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\IJobProxy.cs" />
-    <Compile Include="Database\ISettings.cs" />
     <Compile Include="Database\ISnapProxy.cs" />
     <Compile Include="Program.cs">
       <SubType>Component</SubType>
@@ -112,7 +114,9 @@
     <Compile Include="Utils\SqlStatementAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Database\SetupDb.sql" />

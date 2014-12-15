@@ -30,10 +30,8 @@ namespace CloudBackup.Database
         public int Uid { get; set; }
         [ColumnMap("name")] 
         public string Name      { get; set; }
-        [ColumnMap("schedule")]
-        public string Schedule { get; set; }
-        [ColumnMap("rootPath")]
-        public string RootPath { get; set; }
+        [ColumnMap("description")]
+        public string Description { get; set; }
         [ColumnMap("active")]
         public bool Active { get; set; }
     }
@@ -43,13 +41,13 @@ namespace CloudBackup.Database
         [SqlStatement("SELECT Id JobUID, Name, Active from Schedule")]
         IEnumerator<JobOverview> GetJobOverview();
 
-        [SqlStatement("SELECT id,name,schedule,rootPath,active from Schedule where id=@uid")]
+        [SqlStatement("SELECT id,name,description,active from Schedule where id=@uid")]
         ScheduleRow LoadSchedule(int uid);
 
-        [SqlStatement("SELECT id,name,schedule,rootPath,active from Schedule where name=@name")]
+        [SqlStatement("SELECT id,name,description,active from Schedule where name=@name")]
         ScheduleRow LoadSchedule(string name);
 
-        [SqlStatement("SELECT id,name,schedule,rootPath,active from Schedule where active<>0")]
+        [SqlStatement("SELECT id,name,description,active from Schedule where active<>0")]
         IEnumerator<ScheduleRow> LoadAllActiveSchedule();
 
         [SqlStatement("SELECT ifnull(max(Id),0) from Schedule")]
@@ -63,10 +61,9 @@ namespace CloudBackup.Database
         [SqlStatement("DELETE from ArchiveFiles where sourceSchedule=@uid;")]
         void ResetStatus(int uid);
 
-        [SqlStatement("DELETE FROM Schedule WHERE id=@uid;" +
-                      "INSERT INTO Schedule " +
-                      "(id,name,schedule,rootPath,active) " +
-                      "values (@uid,@name,@schedule,@rootPath,@active)")]
-        void InsertSchedule(int uid, string name, string schedule, string rootPath, bool active);
+        [SqlStatement("INSERT OR REPLACE INTO Schedule " +
+                      "(id,name,description,active) " +
+                      "values (@uid,@name,@description,@active)")]
+        void InsertSchedule(int uid, string name, string description, bool active);
     }
 }
