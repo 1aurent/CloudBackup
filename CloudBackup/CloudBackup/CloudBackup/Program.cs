@@ -112,13 +112,21 @@ namespace CloudBackup
         {
             log.Info("OnStart");
 
-            Database = new Database.Database();
-            if (Configuration.DisableAPI)
-                log.InfoFormat("API is disabled");
-            else
-                API.API.ActivateApi();
+            try
+            {
+                Database = new Database.Database();
+                if (Configuration.DisableAPI)
+                    log.InfoFormat("API is disabled");
+                else
+                    API.API.ActivateApi();
 
-            Scheduler = new Scheduler();
+                Scheduler = new Scheduler();
+            }
+            catch (Exception ex)
+            {
+                log.ErrorFormat("Exception during OnStart : {0}",ex);
+                throw;
+            }
         }
 
         protected override void OnStop()
