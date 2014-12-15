@@ -49,7 +49,8 @@
               <File Id='Dll07' Name='log4net.dll' DiskId='1' Source='bin\Srv\Release\log4net.dll' KeyPath='no' />
               <File Id='Dll08' Name='Renci.SshNet.dll' DiskId='1' Source='bin\Srv\Release\Renci.SshNet.dll' KeyPath='no' />
               <File Id='Dll09' Name='System.Data.SQLite.dll' DiskId='1' Source='bin\Srv\Release\System.Data.SQLite.dll' KeyPath='no' />
-              <File Id='Dll0A' Name='System.Net.FtpClient.dll' DiskId='1' Source='bin\Srv\Release\System.Net.FtpClient.dll' KeyPath='no' />
+              <File Id='Dll0A' Name='SQLite.Interop.dll' DiskId='1' Source='3rdParty\Libs\SQLite.Interop.dll' KeyPath='no' />
+              <File Id='Dll0B' Name='System.Net.FtpClient.dll' DiskId='1' Source='bin\Srv\Release\System.Net.FtpClient.dll' KeyPath='no' />
             </Component>
             <Component Id='Manager' Guid='3960C135-7768-4D41-9AAC-B589D67AB302' Win64="yes">
             	<File Id='MngExe' Name='CloudBackup.Manager.exe' DiskId='1' Source='bin\Mgr\Release\CloudBackup.Manager.exe' KeyPath='yes' />
