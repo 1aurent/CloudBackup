@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
@@ -46,6 +47,19 @@ namespace CloudBackup.Manager
 
         IAPI _serverLink;
 
+        static void SetupRtfBox(RichTextBox target, string fileName)
+        {
+            using (var tmp = System.Reflection.Assembly.GetCallingAssembly().GetManifestResourceStream(
+                typeof(Manager), fileName))
+            {
+                using (var txtReader = new StreamReader(tmp))
+                {
+                    target.Rtf = txtReader.ReadToEnd();
+                }
+            }            
+        }
+
+
         public Manager()
         {
             InitializeComponent();
@@ -54,6 +68,10 @@ namespace CloudBackup.Manager
 
             var clientChannel = new IpcChannel();
             ChannelServices.RegisterChannel(clientChannel, true);
+
+            //- Setup the legal
+            SetupRtfBox(rtbLicence, "license.rtf");
+            SetupRtfBox(rtbLegalNotice, "legal.rtf");
 
             _serverLink = (IAPI)Activator.GetObject(typeof(IAPI), "ipc://localhost:19888/API");
 
