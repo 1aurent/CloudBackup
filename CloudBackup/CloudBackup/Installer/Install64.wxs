@@ -35,8 +35,9 @@
               	Type="ownProcess"
               	Start="auto" ErrorControl="normal"
               	Account="LocalSystem" />
-              <ServiceControl Id="CloudBackupSrvStop"
-              	Name="CloudBackup" Stop="both" Wait="yes" Remove="uninstall" />
+              <!--ServiceControl Id="CloudBackupSrvStop"
+              	Name="CloudBackup" Stop="both" Wait="yes" Remove="uninstall" /-->
+              <ServiceControl Id="CloudBackupSrvCtrl" Start="install" Stop="both" Remove="uninstall" Name="CloudBackup" Wait="yes" />
             </Component>
             <Component Id='DllX64' Guid='3960C135-7768-4D41-9AAC-B589D67AB301' Win64="yes">
               <File Id='Dll01' Name='AlphaFS.dll' DiskId='1' Source='bin\Srv\Release\AlphaFS.dll' KeyPath='yes' />
@@ -60,7 +61,7 @@
 					<Directory Id='LogDir' Name='LogDir'>
 						<Component Id='LogDir' Guid='3960C135-7768-4D41-9AAC-B589D67AB303' Win64="yes">
 							<CreateFolder Directory='LogDir' >
-								<util:PermissionEx User="Users" GenericAll="yes" />
+								<util:PermissionEx User="Users" GenericRead="yes" />
 							</CreateFolder>
 						</Component>
 					</Directory>
