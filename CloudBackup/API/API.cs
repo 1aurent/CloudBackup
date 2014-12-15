@@ -17,6 +17,7 @@
  *
  */
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
@@ -120,13 +121,26 @@ namespace CloudBackup.API
         public static void ActivateApi()
         {
             log.Info("Activating API");
-            var serverChannel = new IpcChannel("localhost:19888");
+
+            var serverSinkProvider = new BinaryServerFormatterSinkProvider
+            {
+                TypeFilterLevel = System.Runtime.Serialization.Formatters.TypeFilterLevel.Full
+            };
+
+            IDictionary properties = new Hashtable();
+            properties["portName"] = "localhost:19888";
+            properties["authorizedGroup"] = "Interactive";
+
+            var serverChannel = new IpcChannel(properties, null, serverSinkProvider);
             ChannelServices.RegisterChannel(serverChannel,true);
+            
+            
 
             log.DebugFormat(" - The name of the channel is {0}.",serverChannel.ChannelName);
             log.DebugFormat(" - The priority of the channel is {0}.", serverChannel.ChannelPriority);
 
             var channelData = (ChannelDataStore)serverChannel.ChannelData;
+            
             foreach (var uri in channelData.ChannelUris)
             {
                 log.DebugFormat(" - The channel URI is {0}.", uri);
