@@ -416,7 +416,7 @@ will be a full image. Existing backup will not be dropped. Do you really want to
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            (new LegalNotices()).ShowDialog(this);
+            (new LegalNoticies()).ShowDialog(this);
         }
 
     }
