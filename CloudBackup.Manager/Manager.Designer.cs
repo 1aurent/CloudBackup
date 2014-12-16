@@ -82,9 +82,7 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.rtbLicence = new System.Windows.Forms.RichTextBox();
-            this.tabPageLegal = new System.Windows.Forms.TabPage();
-            this.label8 = new System.Windows.Forms.Label();
-            this.rtbLegalNotice = new System.Windows.Forms.RichTextBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -97,14 +95,12 @@
             this.flowLayoutPanel1.SuspendLayout();
             this.tabPageJobTarget.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
-            this.tabPageLegal.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabInfos
             // 
             this.tabInfos.Controls.Add(this.tabPageArchive);
             this.tabInfos.Controls.Add(this.tabPageAbout);
-            this.tabInfos.Controls.Add(this.tabPageLegal);
             this.tabInfos.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabInfos.Location = new System.Drawing.Point(5, 5);
             this.tabInfos.Name = "tabInfos";
@@ -650,6 +646,7 @@
             // 
             // tabPageAbout
             // 
+            this.tabPageAbout.Controls.Add(this.linkLabel1);
             this.tabPageAbout.Controls.Add(this.label7);
             this.tabPageAbout.Controls.Add(this.label6);
             this.tabPageAbout.Controls.Add(this.label5);
@@ -713,38 +710,16 @@
             this.rtbLicence.TabIndex = 0;
             this.rtbLicence.Text = "";
             // 
-            // tabPageLegal
+            // linkLabel1
             // 
-            this.tabPageLegal.Controls.Add(this.label8);
-            this.tabPageLegal.Controls.Add(this.rtbLegalNotice);
-            this.tabPageLegal.Location = new System.Drawing.Point(4, 22);
-            this.tabPageLegal.Name = "tabPageLegal";
-            this.tabPageLegal.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLegal.Size = new System.Drawing.Size(616, 517);
-            this.tabPageLegal.TabIndex = 2;
-            this.tabPageLegal.Text = "Legal";
-            this.tabPageLegal.UseVisualStyleBackColor = true;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(6, 12);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(73, 13);
-            this.label8.TabIndex = 1;
-            this.label8.Text = "Legal notices:";
-            // 
-            // rtbLegalNotice
-            // 
-            this.rtbLegalNotice.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.rtbLegalNotice.Location = new System.Drawing.Point(6, 28);
-            this.rtbLegalNotice.Name = "rtbLegalNotice";
-            this.rtbLegalNotice.ReadOnly = true;
-            this.rtbLegalNotice.Size = new System.Drawing.Size(604, 483);
-            this.rtbLegalNotice.TabIndex = 0;
-            this.rtbLegalNotice.Text = "";
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(477, 96);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(133, 13);
+            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Embedded libraries licence";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // Manager
             // 
@@ -772,8 +747,6 @@
             this.tabPageJobTarget.PerformLayout();
             this.tabPageAbout.ResumeLayout(false);
             this.tabPageAbout.PerformLayout();
-            this.tabPageLegal.ResumeLayout(false);
-            this.tabPageLegal.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -834,9 +807,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TabPage tabPageLegal;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.RichTextBox rtbLegalNotice;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -37,6 +38,17 @@ namespace CloudBackup.Manager
             }
         }
 
+        static public void SetupRtfBox(RichTextBox target, string fileName)
+        {
+            using (var tmp = System.Reflection.Assembly.GetCallingAssembly().GetManifestResourceStream(
+                typeof(Manager), fileName))
+            {
+                using (var txtReader = new StreamReader(tmp))
+                {
+                    target.Rtf = txtReader.ReadToEnd();
+                }
+            }
+        }
 
     }
 }

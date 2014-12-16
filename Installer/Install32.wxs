@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='windows-1252'?>
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  <Product Name='CloudBackup' Id='3960C135-7768-4D41-9AAC-B589D6700100' UpgradeCode='3960C135-7768-4D41-9AAC-0009D6700000'
+  <Product Name='CloudBackup' Id='3960C135-7768-3232-9AAC-B589D6700100' UpgradeCode='3960C135-7768-3232-9AAC-0009D6700000'
     Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='Laurent Dupuis'>
 
     <Package Id='*' Keywords='Installer'
-      Description="Laurent Dupuis's CloudBackup Installer 64bits"
+      Description="Laurent Dupuis's CloudBackup Installer 32bits"
       Comments="Laurent Dupuis's CloudBackup Installer" Manufacturer='Laurent Dupuis'
-      InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x64" />
+      InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x86" />
       
     <Media Id='1' Cabinet='CloudBackup.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
     <Property Id='DiskPrompt' Value="Laurent Dupuis's CloudBackup Installation [1]" />
@@ -23,11 +23,11 @@
           <Directory Id="ApplicationProgramsFolder" Name="CloudBackup"/>
       </Directory>
     
-      <Directory Id='ProgramFiles64Folder' Name='PFiles'>
+      <Directory Id='ProgramFilesFolder' Name='PFiles'>
         <Directory Id='INSTALLDIR' Name='CloudBackup'>
 					<Directory Id='BinDir' Name='Bin'>
-            <Component Id='BinX64' Guid='3960C135-7768-4D41-9AAC-B589D67AB300' Win64="yes">
-              <File Id='ExeX64' Name='CloudBackup.EXE' DiskId='1' Source='bin\Srv\Release\CloudBackup.exe' KeyPath='yes' />
+            <Component Id='BinX32' Guid='3960C135-7768-3232-9AAC-B589D67AB300'>
+              <File Id='ExeX32' Name='CloudBackup.EXE' DiskId='1' Source='bin\Srv\Release\CloudBackup.exe' KeyPath='yes' />
               <ServiceInstall Id="CloudBackupSrv"
               	Name="CloudBackup"
               	DisplayName="CloudBackup"
@@ -39,10 +39,10 @@
               	Name="CloudBackup" Stop="both" Wait="yes" Remove="uninstall" /-->
               <ServiceControl Id="CloudBackupSrvCtrl" Start="install" Stop="both" Remove="uninstall" Name="CloudBackup" Wait="yes" />
             </Component>
-            <Component Id='DllX64' Guid='3960C135-7768-4D41-9AAC-B589D67AB301' Win64="yes">
+            <Component Id='DllX32' Guid='3960C135-7768-3232-9AAC-B589D67AB301'>
               <File Id='Dll01' Name='AlphaFS.dll' DiskId='1' Source='bin\Srv\Release\AlphaFS.dll' KeyPath='yes' />
-              <File Id='Dll02' Name='AlphaVSS.52.x64.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.52.x64.dll' KeyPath='no' />
-              <File Id='Dll03' Name='AlphaVSS.60.x64.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.60.x64.dll' KeyPath='no' />
+              <File Id='Dll02' Name='AlphaVSS.52.x64.dll' DiskId='1' Source='3rdParty\Libs\AlphaVSS.52.x86.dll' KeyPath='no' />
+              <File Id='Dll03' Name='AlphaVSS.60.x64.dll' DiskId='1' Source='3rdParty\Libs\AlphaVSS.60.x86.dll' KeyPath='no' />
               <File Id='Dll04' Name='AlphaVSS.Common.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.Common.dll' KeyPath='no' />
               <File Id='Dll05' Name='CloudBackup.API.dll' DiskId='1' Source='bin\Srv\Release\CloudBackup.API.dll' KeyPath='no' />
               <File Id='Cfg01' Name='CloudBackup.exe.config' DiskId='1' Source='Installer\CloudBackup.exe.config' KeyPath='no' />
@@ -50,18 +50,18 @@
               <File Id='Dll07' Name='log4net.dll' DiskId='1' Source='bin\Srv\Release\log4net.dll' KeyPath='no' />
               <File Id='Dll08' Name='Renci.SshNet.dll' DiskId='1' Source='bin\Srv\Release\Renci.SshNet.dll' KeyPath='no' />
               <File Id='Dll09' Name='System.Data.SQLite.dll' DiskId='1' Source='bin\Srv\Release\System.Data.SQLite.dll' KeyPath='no' />
-              <File Id='Dll0A' Name='SQLite.Interop.dll' DiskId='1' Source='3rdParty\Libs\SQLite.Interop.dll' KeyPath='no' />
+              <File Id='Dll0A' Name='SQLite.Interop.dll' DiskId='1' Source='3rdParty\Libs\x86.SQLite.Interop.dll' KeyPath='no' />
               <File Id='Dll0B' Name='System.Net.FtpClient.dll' DiskId='1' Source='bin\Srv\Release\System.Net.FtpClient.dll' KeyPath='no' />
             </Component>
-            <Component Id='Manager' Guid='3960C135-7768-4D41-9AAC-B589D67AB302' Win64="yes">
+            <Component Id='Manager' Guid='3960C135-7768-3232-9AAC-B589D67AB302'>
             	<File Id='MngExe' Name='CloudBackup.Manager.exe' DiskId='1' Source='bin\Mgr\Release\CloudBackup.Manager.exe' KeyPath='yes' />
             	<File Id='MngCfg' Name='CloudBackup.Manager.exe.config' DiskId='1' Source='bin\Mgr\Release\CloudBackup.Manager.exe.config' KeyPath='no' />
             </Component>
 					</Directory>
 					<Directory Id='LogDir' Name='LogDir'>
-						<Component Id='LogDir' Guid='3960C135-7768-4D41-9AAC-B589D67AB303' Win64="yes">
+						<Component Id='LogDir' Guid='3960C135-7768-3232-9AAC-B589D67AB303'>
 							<CreateFolder Directory='LogDir' >
-								<util:PermissionEx User="Users" GenericRead="yes"  Traverse="yes" />
+								<util:PermissionEx User="Users" GenericRead="yes" Traverse="yes" />
 							</CreateFolder>
 						</Component>
 					</Directory>
@@ -71,7 +71,7 @@
     
 
     <DirectoryRef Id="ApplicationProgramsFolder">
-        <Component Id="ApplicationShortcut" Guid="3960C135-7768-4D41-9AAC-B589D67AB400" Win64="yes">
+        <Component Id="ApplicationShortcut" Guid="3960C135-7768-3232-9AAC-B589D67AB400">
             <Shortcut Id="ManagementShortcut" 
                  Name="CloudBackup Manager" 
                Description="CloudBackup Server Manager Tool"
@@ -85,9 +85,9 @@
 
     <Feature Id='Complete' Title='CloudBackup' Description='The complete package.'
       Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
-      <Feature Id='Ed64bit' Title='CloudBackup' Description='CloudBackup' Level='1'>
-        <ComponentRef Id='BinX64' />
-        <ComponentRef Id='DllX64' />
+      <Feature Id='Ed32bit' Title='CloudBackup' Description='CloudBackup' Level='1'>
+        <ComponentRef Id='BinX32' />
+        <ComponentRef Id='DllX32' />
         <ComponentRef Id='LogDir' />
         <ComponentRef Id='Manager' />
         <ComponentRef Id='ApplicationShortcut' />
