@@ -70,7 +70,7 @@ namespace CloudBackup.Backup
             {
                 var xmlEm = _manifest.CreateElement("tag");       
                 var nmeAttr = _manifest.CreateAttribute("name");
-                xmlEm.InnerText = value;
+                xmlEm.InnerText = name;
                 nmeAttr.InnerText = value;
                 xmlEm.Attributes.SetNamedItem(nmeAttr);
                 _tagsRoot.AppendChild(xmlEm);       
