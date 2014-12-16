@@ -61,7 +61,7 @@
 					<Directory Id='LogDir' Name='LogDir'>
 						<Component Id='LogDir' Guid='3960C135-7768-4D41-9AAC-B589D67AB303' Win64="yes">
 							<CreateFolder Directory='LogDir' >
-								<util:PermissionEx User="Users" GenericRead="yes" />
+								<util:PermissionEx User="Users" GenericRead="yes"  Traverse="yes" />
 							</CreateFolder>
 						</Component>
 					</Directory>

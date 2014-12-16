@@ -11,7 +11,23 @@
   <UsingTask TaskName="Light" AssemblyFile="$(WixTasksPath)" />
   <UsingTask TaskName="Torch" AssemblyFile="$(WixTasksPath)" />
   
-<Target Name="Installer">
+<Target Name="Installer32">
+	<MakeDir Directories="Bin" />
+	<MakeDir Directories="Bin\Installer\" />
+    <Candle
+      ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
+      SourceFiles="Installer\Install32.wxs"
+      AdditionalOptions="$(CompilerAdditionalOptions)" 
+      Extensions="WixUtilExtension"
+      OutputFile="Bin\Installer\" />
+    <Light
+      ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
+      Extensions="WixUIExtension;WixUtilExtension"
+      ObjectFiles="Bin\Installer\Install32.wixobj"
+      OutputFile="Bin\CloudBackup32.msi" />
+</Target>
+
+<Target Name="Installer64">
 	<MakeDir Directories="Bin" />
 	<MakeDir Directories="Bin\Installer\" />
     <Candle
@@ -24,7 +40,7 @@
       ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
       Extensions="WixUIExtension;WixUtilExtension"
       ObjectFiles="Bin\Installer\Install64.wixobj"
-      OutputFile="Bin\CloudBackup.msi" />
+      OutputFile="Bin\CloudBackup64.msi" />
 </Target>
 
 <Target Name="CleanUp">
@@ -37,6 +53,7 @@
 	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug"   Targets="Build" />
 	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release" Targets="Build" />
 </Target>
-<Target Name="ALL" DependsOnTargets="Main;Installer" />
+<Target Name="Installers" DependsOnTargets="Installer32;Installer64" />
+<Target Name="ALL" DependsOnTargets="Main;Installers" />
 
 </Project>

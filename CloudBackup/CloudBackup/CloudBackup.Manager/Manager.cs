@@ -40,19 +40,6 @@ namespace CloudBackup.Manager
 
         IAPI _serverLink;
 
-        static void SetupRtfBox(RichTextBox target, string fileName)
-        {
-            using (var tmp = System.Reflection.Assembly.GetCallingAssembly().GetManifestResourceStream(
-                typeof(Manager), fileName))
-            {
-                using (var txtReader = new StreamReader(tmp))
-                {
-                    target.Rtf = txtReader.ReadToEnd();
-                }
-            }            
-        }
-
-
         public Manager()
         {
             InitializeComponent();
@@ -63,8 +50,7 @@ namespace CloudBackup.Manager
             ChannelServices.RegisterChannel(clientChannel, true);
 
             //- Setup the legal
-            SetupRtfBox(rtbLicence, "license.rtf");
-            SetupRtfBox(rtbLegalNotice, "legal.rtf");
+            Utils.SetupRtfBox(rtbLicence, "license.rtf");
 
             _serverLink = (IAPI)Activator.GetObject(typeof(IAPI), "ipc://localhost:19888/API");
 
@@ -426,6 +412,11 @@ will be a full image. Existing backup will not be dropped. Do you really want to
                     txtTargetPort.Text = "990";
                     break;
             }
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            (new LegalNotices()).ShowDialog(this);
         }
 
     }
