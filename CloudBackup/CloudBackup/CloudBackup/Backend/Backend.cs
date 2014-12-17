@@ -13,6 +13,7 @@ namespace CloudBackup.Backend
         public abstract void Dispose();
 
         public abstract void Upload(string fileName, Stream source);
+        public abstract void Delete(string fileName);
 
         public static Backend OpenBackend(Target target)
         {

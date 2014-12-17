@@ -41,6 +41,6 @@ namespace CloudBackup.API
         int SaveOrUpdateArchiveJob(ArchiveJob job);
         void DropArchiveJob(int uid);
         void ResetArchiveJob(int uid);
-        void RunJobNow(int uid);
+        void RunJobNow(int uid, bool forceFullBackup);
     }
 }

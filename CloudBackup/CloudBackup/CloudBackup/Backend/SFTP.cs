@@ -39,5 +39,10 @@ namespace CloudBackup.Backend
         {
             _sftp.UploadFile(source,fileName,true);
         }
+
+        public override void Delete(string fileName)
+        {
+            _sftp.DeleteFile(fileName);
+        }
     }
 }

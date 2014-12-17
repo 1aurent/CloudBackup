@@ -50,6 +50,13 @@ namespace CloudBackup.Database
         public long FileSize { get; set; }
     }
 
+    public class SnapshotFile
+    {
+        [ColumnMap("id")]
+        public long Id { get; set; }
+        [ColumnMap("name")]
+        public string FileName { get; set; }
+    }
 
     public interface ISnapProxy 
     {
@@ -58,6 +65,13 @@ namespace CloudBackup.Database
         [SqlStatement("INSERT INTO SnapshotFile (id,sourceSchedule,name,created) " +
                       "VALUES (@id,@schedule,@name,@created)")]
         void CreateSnapshotFile(long id, int schedule, string name, long created);
+
+        [SqlStatement("SELECT id,name FROM SnapshotFile sf WHERE" +
+                      " (SELECT COUNT(*) FROM ArchiveFiles af WHERE sf.id=af.lastSnapshot) = 0")]
+        IEnumerator<SnapshotFile> GetSnapshotFileToClear(int schedule);
+
+        [SqlStatement("DELETE FROM SnapshotFile WHERE sourceSchedule=@schedule AND id=@id")]
+        void DeleteSnapshotFile(int schedule,long id);
 
         [SqlStatement("SELECT sourcePath,sourceSchedule,fileSize,created,modified,notedHash " +
                       "FROM ArchiveFiles WHERE sourceSchedule=@schedule AND sourcePath=@path")]
@@ -71,6 +85,9 @@ namespace CloudBackup.Database
 
         [SqlStatement("SELECT sourcePath,fileSize FROM ArchiveFiles WHERE seen=0 AND sourceSchedule=@schedule")]
         IEnumerator<DeleteFile> GetDeletedFiles(int schedule);
+
+        [SqlStatement("DELETE FROM ArchiveFiles WHERE sourceSchedule=@schedule")]
+        void ClearAllFiles(int schedule);
 
         [SqlStatement("DELETE FROM ArchiveFiles WHERE seen=0 AND sourceSchedule=@schedule")]
         void ClearDeleteFiles(int schedule);

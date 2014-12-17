@@ -15,6 +15,7 @@ namespace CloudBackup.API
         public Uri TargetServer { get; set; }
         public string Password { get; set; }
         public string ZipPassword { get; set; }
+        public bool ManageTargetFiles { get; set; }
 
         public Uri ProxyServer { get; set; }
         public string ProxyPassword { get; set; }
@@ -26,6 +27,7 @@ namespace CloudBackup.API
             ZipPassword = "";
             ProxyServer = null;
             ProxyPassword = null;
+            ManageTargetFiles = true;
         }
 
         protected Target(SerializationInfo info, StreamingContext context)
@@ -33,6 +35,7 @@ namespace CloudBackup.API
             TargetServer = new Uri(info.GetString("targetServer"));
             Password = info.GetString("password");
             ZipPassword = info.GetString("zipPassword");
+            ManageTargetFiles = info.GetBoolean("isFilesManaged");
 
             var usingProxy = info.GetBoolean("haveProxy");
             if (usingProxy)
@@ -48,6 +51,7 @@ namespace CloudBackup.API
             info.AddValue("targetServer",TargetServer.ToString());
             info.AddValue("password", Password);
             info.AddValue("zipPassword", ZipPassword);
+            info.AddValue("isFilesManaged", ManageTargetFiles);
 
             if (ProxyServer != null)
             {
@@ -68,6 +72,7 @@ namespace CloudBackup.API
             TargetServer = new Uri(reader.GetAttribute("targetServer"));
             Password = reader.GetAttribute("password");
             ZipPassword = reader.GetAttribute("zipPassword");
+            ManageTargetFiles = XmlConvert.ToBoolean(reader.GetAttribute("isFilesManaged") ?? "False");
             var val = reader.GetAttribute("proxyServer");
             if (val != null)
             {
@@ -81,6 +86,7 @@ namespace CloudBackup.API
             writer.WriteAttributeString("targetServer", TargetServer.ToString());
             writer.WriteAttributeString("password", Password);
             writer.WriteAttributeString("zipPassword", ZipPassword);
+            writer.WriteAttributeString("isFilesManaged", XmlConvert.ToString(ManageTargetFiles));
             if (ProxyServer != null)
             {
                 writer.WriteAttributeString("proxyServer", ProxyServer.ToString());
