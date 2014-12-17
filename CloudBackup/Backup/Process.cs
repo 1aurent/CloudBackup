@@ -29,7 +29,7 @@ using AlphaFS = Alphaleonis.Win32.Filesystem;
 
 namespace CloudBackup.Backup
 {
-    public class Process
+    public class Process : IDisposable
     {
         static readonly log4net.ILog log = log4net.LogManager.GetLogger(typeof(Process));
 
@@ -114,179 +114,221 @@ namespace CloudBackup.Backup
             }
         }
 
+        Process(ArchiveJob job)
+        {
+            _job = job;
+            _now = DateTime.Now;
+            var jid = job.JobUID.Value;
+            _id = _now.ToUniversalTime().Ticks;
+            _fileName = string.Format("{0:00000}_Archive_{1:0000}{2:00}{3:00}_{4:X}.zip", jid, _now.Year, _now.Month,
+                _now.Day, _id);
+
+            _proxy = Program.Database.CreateSnapProxy();
+            _proxy.CreateSnapshotFile(_id, jid, _fileName, _id);
+            _proxy.ClearSeenFlags(jid);
+
+            _backend = Backend.Backend.OpenBackend(job.JobTarget);
+            _zipFile = new ZipFile()
+            {
+                CompressionLevel = CompressionLevel.BestCompression,
+                UseZip64WhenSaving = Zip64Option.Always
+            };
+            _zipFile.SaveProgress += zip_SaveProgress;
+        }
+
+        readonly ArchiveJob _job;
+        readonly string _fileName;
+        readonly DateTime _now;
+        readonly long _id;
+
+        Database.ISnapProxy _proxy;
+        Engine.IBackup _backup;
+        Backend.Backend _backend;
+        ZipFile _zipFile;
+
+
+        public void Dispose()
+        {
+            if(_zipFile!=null) { _zipFile.Dispose(); _zipFile=null;}
+            if(_backend!=null) { _backend.Dispose(); _backend=null;}
+            if(_backup!=null) { _backup.Dispose(); _backup=null;}
+        }
+
+        private void BuildSnapshot(Engine.IBackup backup)
+        {
+            log.Debug("Building backup snapshot");
+
+            var manifest = new ManifestDocument(_job, _id);
+            manifest.AddTag("date", XmlConvert.ToString(_now, XmlDateTimeSerializationMode.Utc));
+            manifest.AddTag("source", Environment.MachineName);
+            manifest.AddTag("from", _job.JobRootPath);
+
+            var jid = _job.JobUID.Value;
+
+            backup.CreateShadowCopy();
+            var rootPath = backup.GetSnapshotPath();
+
+            var elements = backup.GetSnapshotElements();
+
+            foreach (var element in elements)
+            {
+                var file = _proxy.FindFile(jid, element.Path);
+                if (element.IsDirectory)
+                {
+                    log.InfoFormat("[{0}] - Directory - Add entry", element.Path);
+                    var entry = _zipFile.AddDirectoryByName(element.Path);
+                    entry.CreationTime = element.Created;
+                    entry.AccessedTime = element.LastAccessed;
+                    entry.ModifiedTime = element.LastModified;
+
+                    if (file != null)
+                        _proxy.SetSeenFlags(jid, element.Path);
+                    else
+                        _proxy.AddFile(
+                            element.Path, jid,
+                            element.FileSize,
+                            element.Created.Ticks,
+                            element.LastModified.Ticks,
+                            0, _id
+                            );
+
+                    continue;
+                }
+
+                if (file == null)
+                {
+                    log.InfoFormat("[{0}] - New file / Archive", element.Path);
+                    var entryDoc = new SnapshotAccess(rootPath + element.Path);
+                    var entry = _zipFile.AddEntry(element.Path, entryDoc.OpenDelegate, entryDoc.CloseDelegate);
+                    entry.CreationTime = element.Created;
+                    entry.AccessedTime = element.LastAccessed;
+                    entry.ModifiedTime = element.LastModified;
+
+                    _proxy.AddFile(
+                        element.Path, jid,
+                        element.FileSize,
+                        element.Created.Ticks,
+                        element.LastModified.Ticks,
+                        entry.Crc,
+                        _id
+                        );
+                    continue;
+                }
+
+                if (
+                    file.Modified == element.LastModified.Ticks &&
+                    file.Created == element.Created.Ticks &&
+                    file.FileSize == element.FileSize
+                    )
+                {
+                    log.InfoFormat("[{0}] - No change / No archive", element.Path);
+                    _proxy.SetSeenFlags(jid, element.Path);
+                    continue;
+                }
+
+                log.InfoFormat("[{0}] - File changed / Archiving", element.Path);
+                var entryDoc2 = new SnapshotAccess(rootPath + element.Path);
+                var entry2 = _zipFile.AddEntry(element.Path, entryDoc2.OpenDelegate, entryDoc2.CloseDelegate);
+                entry2.CreationTime = element.Created;
+                entry2.AccessedTime = element.LastAccessed;
+                entry2.ModifiedTime = element.LastModified;
+
+                _proxy.UpdateFile(
+                    element.Path, jid,
+                    element.FileSize,
+                    element.Created.Ticks,
+                    element.LastModified.Ticks,
+                    entry2.Crc,
+                    _id
+                    );
+            }
+
+            using (var delFiles = _proxy.GetDeletedFiles(jid))
+            {
+                while (delFiles.MoveNext())
+                {
+                    manifest.NotifyDelFile(delFiles.Current.SourcePath, delFiles.Current.FileSize);
+                }
+            }
+
+            _zipFile.Comment = manifest.Manifest;
+        }
+
+        void PublishZipFile(Engine.IBackup backup)
+        {
+            log.InfoFormat("Process completed - Streaming ZIP file");
+
+            bool transfertIsSuccess;
+            Exception transferException;
+            if (_backend is FTP)
+            {
+                try
+                {
+                    using (var sendStream = ((FTP)_backend).GetWriteStream(_fileName))
+                    {
+                        _zipFile.Save(sendStream);
+                    }
+                    transferException = null;
+                    transfertIsSuccess = true;
+                }
+                catch (Exception ex)
+                {
+                    transferException = ex;
+                    transfertIsSuccess = false;
+                }
+            }
+            else
+            {
+                Stream write, read;
+                PipeStream.CreatePipe(out write, out read);
+
+                var sshThread = new Thread(SshSinkThread);
+                var param = new SshSinkParams { Target = _backend, Stream = read, File = _fileName };
+                sshThread.Start(param);
+                _zipFile.Save(write);
+                write.Dispose();
+                log.InfoFormat("Process completed - Joining");
+                sshThread.Join();
+
+                transfertIsSuccess = param.IsSuccess;
+                transferException = param.Exception;
+            }
+
+            log.InfoFormat("Process completed - Droping backup");
+            backup.DropBackup();
+
+            if (!transfertIsSuccess)
+            {
+                log.ErrorFormat("File transfert is not successfull");
+                throw new Exception("Transfert failed", transferException);
+            }
+        }
+
+        void CommitTransaction()
+        {
+            _proxy.Transaction.Commit();
+            _proxy = null;
+        }
 
         public static void RunBackup(ArchiveJob job)
         {
             log.InfoFormat("Starting backup of [{0}]", job.JobRootPath);
-            var engine = new Engine {RootPath = job.JobRootPath};
 
-
-            var now = DateTime.Now;
-            var jid = job.JobUID.Value;
-            var id = now.ToUniversalTime().Ticks;
-            var fle = string.Format("{0:00000}_Archive_{1:0000}{2:00}{3:00}_{4:X}.zip", jid, now.Year, now.Month,
-                now.Day, id);
-
-            var proxy = Program.Database.CreateSnapProxy();
-            proxy.CreateSnapshotFile(id, jid, fle, id);
-            proxy.ClearSeenFlags(jid);
-
-            using (var backend = Backend.Backend.OpenBackend(job.JobTarget))
+            using (var process = new Process(job))
             {
-                using (var zip = new ZipFile())
+                var engine = new Engine { RootPath = job.JobRootPath };
+                using (var backup = engine.CreateBackup())
                 {
-                    zip.CompressionLevel = CompressionLevel.BestCompression;
-                    zip.SaveProgress += zip_SaveProgress;
-                    zip.MaxOutputSegmentSize = 10*1024*1024;
+                    //- First create a snapshot
+                    process.BuildSnapshot(backup);
 
-                    log.Debug("Building backup snapshot");
-
-                    var manifest = new ManifestDocument(job, id);
-                    manifest.AddTag("date", XmlConvert.ToString(now, XmlDateTimeSerializationMode.Utc));
-                    manifest.AddTag("source", Environment.MachineName);
-                    manifest.AddTag("from", job.JobRootPath);
-
-
-                    using (var backup = engine.CreateBackup())
-                    {
-                        backup.CreateShadowCopy();
-                        var rootPath = backup.GetSnapshotPath();
-
-                        var elements = backup.GetSnapshotElements();
-
-                        foreach (var element in elements)
-                        {
-                            var file = proxy.FindFile(jid, element.Path);
-                            if (element.IsDirectory)
-                            {
-                                log.InfoFormat("[{0}] - Directory - Add entry", element.Path);
-                                var entry = zip.AddDirectoryByName(element.Path);
-                                entry.CreationTime = element.Created;
-                                entry.AccessedTime = element.LastAccessed;
-                                entry.ModifiedTime = element.LastModified;
-
-                                if (file != null)
-                                    proxy.SetSeenFlags(jid, element.Path);
-                                else
-                                    proxy.AddFile(
-                                        element.Path, jid,
-                                        element.FileSize,
-                                        element.Created.Ticks,
-                                        element.LastModified.Ticks,
-                                        0, id
-                                        );
-
-                                continue;
-                            }
-
-                            if (file == null)
-                            {
-                                log.InfoFormat("[{0}] - New file / Archive", element.Path);
-                                var entryDoc = new SnapshotAccess(rootPath + element.Path);
-                                var entry = zip.AddEntry(element.Path, entryDoc.OpenDelegate, entryDoc.CloseDelegate);
-                                entry.CreationTime = element.Created;
-                                entry.AccessedTime = element.LastAccessed;
-                                entry.ModifiedTime = element.LastModified;
-
-                                proxy.AddFile(
-                                    element.Path, jid,
-                                    element.FileSize,
-                                    element.Created.Ticks,
-                                    element.LastModified.Ticks,
-                                    entry.Crc,
-                                    id
-                                    );
-                                continue;
-                            }
-
-                            if (
-                                file.Modified == element.LastModified.Ticks &&
-                                file.Created == element.Created.Ticks &&
-                                file.FileSize == element.FileSize
-                                )
-                            {
-                                log.InfoFormat("[{0}] - No change / No archive", element.Path);
-                                proxy.SetSeenFlags(jid, element.Path);
-                                continue;
-                            }
-
-                            log.InfoFormat("[{0}] - File changed / Archiving", element.Path);
-                            var entryDoc2 = new SnapshotAccess(rootPath + element.Path);
-                            var entry2 = zip.AddEntry(element.Path, entryDoc2.OpenDelegate, entryDoc2.CloseDelegate);
-                            entry2.CreationTime = element.Created;
-                            entry2.AccessedTime = element.LastAccessed;
-                            entry2.ModifiedTime = element.LastModified;
-
-                            proxy.UpdateFile(
-                                element.Path, jid,
-                                element.FileSize,
-                                element.Created.Ticks,
-                                element.LastModified.Ticks,
-                                entry2.Crc,
-                                id
-                                );
-                        }
-
-                        using (var delFiles = proxy.GetDeletedFiles(jid))
-                        {
-                            while (delFiles.MoveNext())
-                            {
-                                manifest.NotifyDelFile(delFiles.Current.SourcePath, delFiles.Current.FileSize);
-                            }
-                        }
-
-                        zip.Comment = manifest.Manifest;
-
-                        log.InfoFormat("Process completed - Streaming ZIP file");
-
-                        bool transfertIsSuccess;
-                        Exception transferException;
-                        if (backend is FTP)
-                        {
-                            try
-                            {
-                                using (var sendStream = ((FTP)backend).GetWriteStream(fle))
-                                {
-                                    zip.Save(sendStream);
-                                }
-                                transferException = null;
-                                transfertIsSuccess = true;
-                            }
-                            catch (Exception ex)
-                            {
-                                transferException = ex;
-                                transfertIsSuccess = false;
-                            }
-                        }
-                        else
-                        {
-                            Stream write, read;
-                            PipeStream.CreatePipe(out write, out read);
-
-                            var sshThread = new Thread(SshSinkThread);
-                            var param = new SshSinkParams { Target = backend, Stream = read, File = fle };
-                            sshThread.Start(param);
-                            zip.Save(write);
-                            write.Dispose();
-                            log.InfoFormat("Process completed - Joining");
-                            sshThread.Join();
-
-                            transfertIsSuccess = param.IsSuccess;
-                            transferException = param.Exception;
-                        }
-                        log.InfoFormat("Process completed - Droping backup");
-                        backup.DropBackup();
-
-                        if (!transfertIsSuccess)
-                        {
-                            log.ErrorFormat("File transfert is not successfull");
-                            throw new Exception("Transfert failed", transferException);
-                        }
-                    }
+                    //- Publish ZIP file
+                    process.PublishZipFile(backup);
                 }
+
+                log.InfoFormat("Process completed - Commit Transaction");
+                process.CommitTransaction();
             }
-            log.InfoFormat("Process completed - Commit Transaction");
-            proxy.Transaction.Commit();
         }
 
         static void zip_SaveProgress(object sender, SaveProgressEventArgs e)
@@ -294,5 +336,6 @@ namespace CloudBackup.Backup
             if(e.EventType==ZipProgressEventType.Saving_AfterRenameTempArchive)
                 log.InfoFormat("Zip Save [{0}]",e.ArchiveName);
         }
+
     }
 }
