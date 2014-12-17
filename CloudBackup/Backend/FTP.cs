@@ -61,5 +61,10 @@ namespace CloudBackup.Backend
                 source.CopyTo(dest);
             }
         }
+
+        public override void Delete(string fileName)
+        {
+            _ftp.DeleteFile(fileName);
+        }
     }
 }

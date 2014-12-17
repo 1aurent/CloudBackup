@@ -92,6 +92,7 @@ namespace CloudBackup.API
         }
 
         public JobScheduleType ScheduleType { get; set; }
+        public bool ForceFullBackup { get; set; }
 
         public DailySchedule Daily     { get; private set; }
         public WeeklySchedule  Weekly  { get; private set; }
@@ -99,14 +100,15 @@ namespace CloudBackup.API
 
         public override string ToString()
         {
+            var type = ForceFullBackup ? "Full " : "Incr ";
             switch (ScheduleType)
             {
             case JobScheduleType.Daily:
-                    return string.Concat("Daily ", Daily.ToString());
+                    return string.Concat(type,"Daily ", Daily.ToString());
             case JobScheduleType.Weekly:
-                    return string.Concat("Weekly ", Weekly.ToString());
+                    return string.Concat(type, "Weekly ", Weekly.ToString());
             case JobScheduleType.Monthly:
-                    return string.Concat("Monthly ", Monthly.ToString());
+                    return string.Concat(type, "Monthly ", Monthly.ToString());
             }
             return "Invalid " + ScheduleType;
         }
@@ -114,6 +116,7 @@ namespace CloudBackup.API
         protected JobSchedule(SerializationInfo info, StreamingContext context)
         {
             ScheduleType = (JobScheduleType)Enum.Parse(typeof(JobScheduleType), info.GetString("type"));
+            ForceFullBackup = info.GetBoolean("fullBackup");
             Daily = (DailySchedule) info.GetValue("daily", typeof (DailySchedule));
             Weekly = (WeeklySchedule)info.GetValue("weekly", typeof(WeeklySchedule));
             Monthly = (MonthlySchedule)info.GetValue("monthly", typeof(MonthlySchedule));            
@@ -122,6 +125,7 @@ namespace CloudBackup.API
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("type",  ScheduleType.ToString());
+            info.AddValue("fullBackup",ForceFullBackup);
             info.AddValue("daily", Daily);
             info.AddValue("weekly", Weekly);
             info.AddValue("monthly", Monthly);
@@ -134,6 +138,7 @@ namespace CloudBackup.API
             ScheduleType = (JobScheduleType) Enum.Parse(typeof (JobScheduleType),
                 reader.GetAttribute("type") ?? "Weekly",
                 true);
+            ForceFullBackup = XmlConvert.ToBoolean(reader.GetAttribute("fullBackup") ?? "False");
 
             reader.Read(); if(reader.Name!="Daily") throw new Exception("Expecting Daily node");
             Daily.RunAt = HourMinute.Parse(reader.GetAttribute("runAt"));
@@ -157,6 +162,7 @@ namespace CloudBackup.API
         public void WriteXml(XmlWriter writer)
         {
             writer.WriteAttributeString("type", ScheduleType.ToString());
+            writer.WriteAttributeString("fullBackup", XmlConvert.ToString(ForceFullBackup));
             writer.WriteStartElement("Daily");
             writer.WriteAttributeString("runAt", Daily.RunAt.ToString());
             writer.WriteAttributeString("every", Daily.Every.ToString());

@@ -108,14 +108,16 @@ namespace CloudBackup.API
 
         void RunJobThread(object objJob)
         {
-            var job = (ArchiveJob) objJob;
-            Backup.Process.RunBackup(job);
+            var job = (dynamic)objJob;
+            Backup.Process.RunBackup(job.Job, job.ForceFullBackup);
         }
 
-        public void RunJobNow(int uid)
+        public void RunJobNow(int uid,bool forceFullBackup)
         {
             var job = LoadArchiveJob(uid);
-            ThreadPool.QueueUserWorkItem(RunJobThread, job);
+            ThreadPool.QueueUserWorkItem(RunJobThread,
+                new { Job = job, ForceFullBackup = forceFullBackup }
+                );
         }
 
         public static void ActivateApi()

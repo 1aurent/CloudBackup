@@ -17,6 +17,7 @@
  *
  */
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Xml;
@@ -120,8 +121,9 @@ namespace CloudBackup.Backup
             _now = DateTime.Now;
             var jid = job.JobUID.Value;
             _id = _now.ToUniversalTime().Ticks;
-            _fileName = string.Format("{0:00000}_Archive_{1:0000}{2:00}{3:00}_{4:X}.zip", jid, _now.Year, _now.Month,
-                _now.Day, _id);
+            _fileName = string.Format("{0:00000}_Archive_{1:0000}{2:00}{3:00}_{4:00}{5:00}{6:00}_{7:X}.zip", jid, _now.Year, _now.Month,
+                _now.Day, _now.Hour,_now.Minute,_now.Second,
+                _now.Millisecond);
 
             _proxy = Program.Database.CreateSnapProxy();
             _proxy.CreateSnapshotFile(_id, jid, _fileName, _id);
@@ -154,7 +156,7 @@ namespace CloudBackup.Backup
             if(_backup!=null) { _backup.Dispose(); _backup=null;}
         }
 
-        private void BuildSnapshot(Engine.IBackup backup)
+        private void BuildSnapshot(Engine.IBackup backup, bool forceFullBackup)
         {
             log.Debug("Building backup snapshot");
 
@@ -162,12 +164,18 @@ namespace CloudBackup.Backup
             manifest.AddTag("date", XmlConvert.ToString(_now, XmlDateTimeSerializationMode.Utc));
             manifest.AddTag("source", Environment.MachineName);
             manifest.AddTag("from", _job.JobRootPath);
+            manifest.AddTag("fullBackup", XmlConvert.ToString(forceFullBackup));
 
             var jid = _job.JobUID.Value;
 
+            if (forceFullBackup)
+            {
+                _proxy.ClearAllFiles(jid);
+            }
+
+
             backup.CreateShadowCopy();
             var rootPath = backup.GetSnapshotPath();
-
             var elements = backup.GetSnapshotElements();
 
             foreach (var element in elements)
@@ -310,7 +318,49 @@ namespace CloudBackup.Backup
             _proxy = null;
         }
 
-        public static void RunBackup(ArchiveJob job)
+        void ClearUnneededFiles()
+        {
+            log.InfoFormat("Post-Process - Removing unneeded files");
+
+            var jid = _job.JobUID.Value;
+            var proxy = Program.Database.CreateSnapProxy();
+            try
+            {
+                var list = new List<long>();
+                var unneededFiles = proxy.GetSnapshotFileToClear(jid);
+                while (unneededFiles.MoveNext())
+                {
+                    var fileToClear = unneededFiles.Current;
+                    log.InfoFormat("Clearing unneeded file {0}",fileToClear);
+
+                    try
+                    {
+                        _backend.Delete(fileToClear.FileName);
+                        list.Add(fileToClear.Id);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat("Unable to clear file {0} : {1}",fileToClear,ex);
+                    }
+                }
+
+                foreach (var id in list)
+                {
+                    proxy.DeleteSnapshotFile(jid,id);
+                }
+            }
+            catch (Exception ex)
+            {
+                log.Error("ClearUnneededFiles failed",ex);
+            }
+            finally
+            {
+                proxy.Transaction.Commit();
+            }
+
+        }
+
+        public static void RunBackup(ArchiveJob job,bool forceFullBackup)
         {
             log.InfoFormat("Starting backup of [{0}]", job.JobRootPath);
 
@@ -320,7 +370,7 @@ namespace CloudBackup.Backup
                 using (var backup = engine.CreateBackup())
                 {
                     //- First create a snapshot
-                    process.BuildSnapshot(backup);
+                    process.BuildSnapshot(backup, forceFullBackup);
 
                     //- Publish ZIP file
                     process.PublishZipFile(backup);
@@ -328,6 +378,12 @@ namespace CloudBackup.Backup
 
                 log.InfoFormat("Process completed - Commit Transaction");
                 process.CommitTransaction();
+
+                // Post process
+                if (job.JobTarget.ManageTargetFiles)
+                {
+                    process.ClearUnneededFiles();
+                }
             }
         }
 

@@ -168,6 +168,7 @@ namespace CloudBackup.Manager
             txtTargetPath.Text = _archiveJob.JobTarget.TargetServer.AbsolutePath;
             txtTargetPwd.Text = _archiveJob.JobTarget.Password;
             txtTargetZipPwd.Text = _archiveJob.JobTarget.ZipPassword;
+            cbTargetSelfclean.Checked = _archiveJob.JobTarget.ManageTargetFiles;
 
             if (_archiveJob.JobTarget.ProxyServer != null)
             {
@@ -191,7 +192,11 @@ namespace CloudBackup.Manager
 
         void SyncArchiveWithGui()
         {
-            if (_current != null && _schedule != null) _current.UpdateJobSchedule(_schedule);
+            if (_schedule != null)
+            {
+                _schedule.ForceFullBackup = cbForceFullbackup.Checked;
+                if (_current != null) _current.UpdateJobSchedule(_schedule);
+            }
             _archiveJob.UniqueJobName = tbArchiveJobName.Text;
             _archiveJob.JobRootPath = tbRootFolder.Text;
 
@@ -207,6 +212,7 @@ namespace CloudBackup.Manager
             );
             _archiveJob.JobTarget.Password = txtTargetPwd.Text;
             _archiveJob.JobTarget.ZipPassword = txtTargetZipPwd.Text;
+            _archiveJob.JobTarget.ManageTargetFiles = cbTargetSelfclean.Checked;
 
             if (cbUseSshProxy.Checked)
             {
@@ -279,6 +285,7 @@ namespace CloudBackup.Manager
             if (_current != null && _schedule != null) _current.UpdateJobSchedule(_schedule);
             _schedule = itm;
 
+            cbForceFullbackup.Checked = itm.ForceFullBackup;
             rdSchedDaily.Checked = false;
             rdSchedWeekly.Checked = false;
             rdSchedMonthly.Checked = false;
@@ -364,7 +371,7 @@ The schedule and the file status database will be permanently dropped. You will 
             if(_archiveJob==null) return;
             if(!_archiveJob.JobUID.HasValue) return;
 
-            _serverLink.RunJobNow(_archiveJob.JobUID.Value);
+            _serverLink.RunJobNow(_archiveJob.JobUID.Value, false);
             MessageBox.Show(this, "Job has been triggered.");
         }
 

@@ -46,12 +46,14 @@ namespace CloudBackup.Backup
                 _job = job;
             }
 
-            public DateTime NextRunTime { get; set; }
+            public DateTime NextRunTime { get; private set; }
+            public bool IsFullBackup { get; private set; }
             public ArchiveJob JobSpec { get { return _job; }}
 
             public DateTime ComputeNextRuntime(DateTime now)
             {
                 var next = DateTime.MaxValue;
+                var fullBackup = false;
 
                 foreach (var jobSchedule in _job.Schedules)
                 {
@@ -73,8 +75,15 @@ namespace CloudBackup.Backup
                             break;
                     }
 
-                    if (scheduleTime < next) next = scheduleTime;
+                    if (scheduleTime < next)
+                    {
+                        next = scheduleTime;
+                        fullBackup = jobSchedule.ForceFullBackup;
+                    }
                 }
+
+                NextRunTime = next;
+                IsFullBackup = fullBackup;
 
                 return next;
             }
@@ -233,7 +242,7 @@ namespace CloudBackup.Backup
                     {
                         log.InfoFormat("Setting up job {0}:[{1}]", jobs.Current.Uid, jobs.Current.Name);
                         var sc = new ScheduleJob(jobs.Current);
-                        sc.NextRunTime = sc.ComputeNextRuntime(now);
+                        sc.ComputeNextRuntime(now);
                         log.DebugFormat("Job {0}:[{1}] - Next run time @ {2}", jobs.Current.Uid, jobs.Current.Name,sc);
                         _allJobs.Add(jobs.Current.Uid, sc);
                     }
@@ -243,9 +252,9 @@ namespace CloudBackup.Backup
 
         void RunJob(object jobObj)
         {
-            var job = (ArchiveJob) jobObj;
+            var job = (dynamic) jobObj;
 
-            Process.RunBackup(job);
+            Process.RunBackup(job.Job,job.ForceFullBackup);
         }
 
         void ProcessSchedule(object unused)
@@ -281,9 +290,11 @@ namespace CloudBackup.Backup
                         currentJob.JobSpec.JobUID,
                         currentJob.JobSpec.UniqueJobName);
 
-                    ThreadPool.QueueUserWorkItem(RunJob, currentJob.JobSpec);
+                    ThreadPool.QueueUserWorkItem(RunJob,
+                        new { Job = currentJob.JobSpec, ForceFullBackup =currentJob.IsFullBackup }
+                    );
 
-                    currentJob.NextRunTime = currentJob.ComputeNextRuntime(now);
+                    currentJob.ComputeNextRuntime(now);
                     log.DebugFormat("Job {0}:[{1}] - Next run time @ {2}",
                         currentJob.JobSpec.JobUID, currentJob.JobSpec.UniqueJobName, 
                         currentJob.NextRunTime);

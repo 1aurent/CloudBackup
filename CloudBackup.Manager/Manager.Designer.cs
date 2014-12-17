@@ -37,6 +37,7 @@
             this.lbAllSchedule = new System.Windows.Forms.ListBox();
             this.tabJobSettings = new System.Windows.Forms.TabControl();
             this.tabPageJobSchedule = new System.Windows.Forms.TabPage();
+            this.cbForceFullbackup = new System.Windows.Forms.CheckBox();
             this.cbAllSchedules = new System.Windows.Forms.ComboBox();
             this.btnNewSchedule = new System.Windows.Forms.Button();
             this.btnDelSchedule = new System.Windows.Forms.Button();
@@ -46,6 +47,7 @@
             this.rdSchedWeekly = new System.Windows.Forms.RadioButton();
             this.rdSchedMonthly = new System.Windows.Forms.RadioButton();
             this.tabPageJobTarget = new System.Windows.Forms.TabPage();
+            this.cbTargetSelfclean = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
             this.txtSshProxyPwd = new System.Windows.Forms.TextBox();
             this.txtSshProxyUser = new System.Windows.Forms.TextBox();
@@ -77,12 +79,12 @@
             this.tbRootFolder = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.tabPageAbout = new System.Windows.Forms.TabPage();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.rtbLicence = new System.Windows.Forms.RichTextBox();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -216,6 +218,7 @@
             // 
             // tabPageJobSchedule
             // 
+            this.tabPageJobSchedule.Controls.Add(this.cbForceFullbackup);
             this.tabPageJobSchedule.Controls.Add(this.cbAllSchedules);
             this.tabPageJobSchedule.Controls.Add(this.btnNewSchedule);
             this.tabPageJobSchedule.Controls.Add(this.btnDelSchedule);
@@ -228,6 +231,16 @@
             this.tabPageJobSchedule.TabIndex = 0;
             this.tabPageJobSchedule.Text = "Schedule";
             this.tabPageJobSchedule.UseVisualStyleBackColor = true;
+            // 
+            // cbForceFullbackup
+            // 
+            this.cbForceFullbackup.AutoSize = true;
+            this.cbForceFullbackup.Location = new System.Drawing.Point(13, 198);
+            this.cbForceFullbackup.Name = "cbForceFullbackup";
+            this.cbForceFullbackup.Size = new System.Drawing.Size(245, 17);
+            this.cbForceFullbackup.TabIndex = 12;
+            this.cbForceFullbackup.Text = "Force full back-up instead of an increment one";
+            this.cbForceFullbackup.UseVisualStyleBackColor = true;
             // 
             // cbAllSchedules
             // 
@@ -323,6 +336,7 @@
             // 
             // tabPageJobTarget
             // 
+            this.tabPageJobTarget.Controls.Add(this.cbTargetSelfclean);
             this.tabPageJobTarget.Controls.Add(this.label16);
             this.tabPageJobTarget.Controls.Add(this.txtSshProxyPwd);
             this.tabPageJobTarget.Controls.Add(this.txtSshProxyUser);
@@ -354,10 +368,20 @@
             this.tabPageJobTarget.Text = "Target";
             this.tabPageJobTarget.UseVisualStyleBackColor = true;
             // 
+            // cbTargetSelfclean
+            // 
+            this.cbTargetSelfclean.AutoSize = true;
+            this.cbTargetSelfclean.Location = new System.Drawing.Point(10, 149);
+            this.cbTargetSelfclean.Name = "cbTargetSelfclean";
+            this.cbTargetSelfclean.Size = new System.Drawing.Size(196, 17);
+            this.cbTargetSelfclean.TabIndex = 28;
+            this.cbTargetSelfclean.Text = "Remove unneccesary files on target";
+            this.cbTargetSelfclean.UseVisualStyleBackColor = true;
+            // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(7, 243);
+            this.label16.Location = new System.Drawing.Point(7, 264);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(56, 13);
             this.label16.TabIndex = 27;
@@ -367,7 +391,7 @@
             // 
             this.txtSshProxyPwd.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSshProxyPwd.Location = new System.Drawing.Point(69, 240);
+            this.txtSshProxyPwd.Location = new System.Drawing.Point(69, 261);
             this.txtSshProxyPwd.Name = "txtSshProxyPwd";
             this.txtSshProxyPwd.Size = new System.Drawing.Size(293, 20);
             this.txtSshProxyPwd.TabIndex = 26;
@@ -377,7 +401,7 @@
             // 
             this.txtSshProxyUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSshProxyUser.Location = new System.Drawing.Point(69, 214);
+            this.txtSshProxyUser.Location = new System.Drawing.Point(69, 235);
             this.txtSshProxyUser.Name = "txtSshProxyUser";
             this.txtSshProxyUser.Size = new System.Drawing.Size(293, 20);
             this.txtSshProxyUser.TabIndex = 25;
@@ -385,7 +409,7 @@
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(4, 217);
+            this.label17.Location = new System.Drawing.Point(4, 238);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(63, 13);
             this.label17.TabIndex = 24;
@@ -394,7 +418,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(7, 191);
+            this.label14.Location = new System.Drawing.Point(7, 212);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(32, 13);
             this.label14.TabIndex = 21;
@@ -404,7 +428,7 @@
             // 
             this.txtSshProxyHost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSshProxyHost.Location = new System.Drawing.Point(45, 188);
+            this.txtSshProxyHost.Location = new System.Drawing.Point(45, 209);
             this.txtSshProxyHost.Name = "txtSshProxyHost";
             this.txtSshProxyHost.Size = new System.Drawing.Size(253, 20);
             this.txtSshProxyHost.TabIndex = 20;
@@ -412,7 +436,7 @@
             // txtSshProxyPort
             // 
             this.txtSshProxyPort.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSshProxyPort.Location = new System.Drawing.Point(304, 188);
+            this.txtSshProxyPort.Location = new System.Drawing.Point(304, 209);
             this.txtSshProxyPort.Name = "txtSshProxyPort";
             this.txtSshProxyPort.Size = new System.Drawing.Size(58, 20);
             this.txtSshProxyPort.TabIndex = 22;
@@ -421,7 +445,7 @@
             // 
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(304, 172);
+            this.label15.Location = new System.Drawing.Point(304, 193);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(29, 13);
             this.label15.TabIndex = 23;
@@ -430,7 +454,7 @@
             // cbUseSshProxy
             // 
             this.cbUseSshProxy.AutoSize = true;
-            this.cbUseSshProxy.Location = new System.Drawing.Point(10, 165);
+            this.cbUseSshProxy.Location = new System.Drawing.Point(10, 186);
             this.cbUseSshProxy.Name = "cbUseSshProxy";
             this.cbUseSshProxy.Size = new System.Drawing.Size(148, 17);
             this.cbUseSshProxy.TabIndex = 19;
@@ -660,6 +684,17 @@
             this.tabPageAbout.Text = "About";
             this.tabPageAbout.UseVisualStyleBackColor = true;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(477, 96);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(133, 13);
+            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "Embedded libraries licence";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -710,17 +745,6 @@
             this.rtbLicence.TabIndex = 0;
             this.rtbLicence.Text = "";
             // 
-            // linkLabel1
-            // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(477, 96);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(133, 13);
-            this.linkLabel1.TabIndex = 5;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "Embedded libraries licence";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -741,6 +765,7 @@
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tabJobSettings.ResumeLayout(false);
             this.tabPageJobSchedule.ResumeLayout(false);
+            this.tabPageJobSchedule.PerformLayout();
             this.flowLayoutPanel1.ResumeLayout(false);
             this.flowLayoutPanel1.PerformLayout();
             this.tabPageJobTarget.ResumeLayout(false);
@@ -808,6 +833,8 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.CheckBox cbForceFullbackup;
+        private System.Windows.Forms.CheckBox cbTargetSelfclean;
     }
 }
 
