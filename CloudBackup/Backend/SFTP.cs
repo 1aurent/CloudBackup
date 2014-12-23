@@ -14,16 +14,16 @@ namespace CloudBackup.Backend
 
         SftpClient _sftp;
 
-        public SFTP(Target target)
+        public SFTP(Uri targetServer,string password)
         {
-            _sftp = new SftpClient(target.TargetServer.Host,
-                target.TargetServer.UserInfo,
-                target.Password);
+            _sftp = new SftpClient(targetServer.Host,targetServer.Port,
+                targetServer.UserInfo,
+                password);
 
-            log.InfoFormat("SFTP - Connecting to {0}", target.TargetServer);
+            log.InfoFormat("SFTP - Connecting to {0}", targetServer);
             _sftp.Connect();
-            log.InfoFormat("SFTP - Changing dir to {0}", target.TargetServer.LocalPath);
-            _sftp.ChangeDirectory(target.TargetServer.LocalPath);
+            log.InfoFormat("SFTP - Changing dir to {0}", targetServer.LocalPath);
+            _sftp.ChangeDirectory(targetServer.LocalPath);
         }
 
         public override void Dispose()

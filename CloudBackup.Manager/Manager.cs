@@ -222,6 +222,7 @@ namespace CloudBackup.Manager
                        Uri.EscapeUriString(txtSshProxyHost.Text),
                         txtSshProxyPort.Text
                         ));
+                _archiveJob.JobTarget.ProxyPassword = txtSshProxyPwd.Text;
             }
 
             _archiveJob.Schedules.Clear();
