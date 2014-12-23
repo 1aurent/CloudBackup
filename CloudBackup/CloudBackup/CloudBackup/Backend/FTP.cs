@@ -15,24 +15,24 @@ namespace CloudBackup.Backend
 
         FtpClient _ftp;
 
-        public FTP(Target target, FtpEncryptionMode mode)
+        public FTP(Uri target, string password, FtpEncryptionMode mode)
         {
             _ftp = new FtpClient
             {
                 EncryptionMode = mode,
-                Host = target.TargetServer.Host,
-                Port = target.TargetServer.Port,
+                Host = target.Host,
+                Port = target.Port,
                 Credentials = new NetworkCredential(
-                    target.TargetServer.UserInfo,
-                    target.Password
+                    target.UserInfo,
+                    password
                     )
             };
 
-            log.InfoFormat("FTP - Connecting to {0}", target.TargetServer);
+            log.InfoFormat("FTP - Connecting to {0}", target);
             _ftp.Connect();
 
-            log.InfoFormat("FTP - Changing dir to {0}", target.TargetServer.LocalPath);
-            _ftp.SetWorkingDirectory(target.TargetServer.LocalPath);
+            log.InfoFormat("FTP - Changing dir to {0}", target.LocalPath);
+            _ftp.SetWorkingDirectory(target.LocalPath);
         }
 
         public override void Dispose()

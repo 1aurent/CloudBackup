@@ -34,6 +34,16 @@ namespace CloudBackup.Database
 
         private SQLiteConnection _cnx;
         private int _nextJobUid;
+
+        static bool DisableEncryption()
+        {
+            var disableEncryptionStr = System.Configuration.ConfigurationManager.AppSettings["DisableEncryption"] ?? "False";
+            bool disableEncryption = false;
+
+            if (!bool.TryParse(disableEncryptionStr, out disableEncryption)) disableEncryption = false;
+
+            return disableEncryption;
+        }
         
         public Database ()
         {
@@ -45,7 +55,13 @@ namespace CloudBackup.Database
 
             log.DebugFormat("Database - Opening database [{0}]",cstr);
             _cnx = new SQLiteConnection(cstr);
-            _cnx.SetPassword(GetDatabasePassword());
+            if (!DisableEncryption())
+            {
+                log.Info("Applying security password");
+                _cnx.SetPassword(GetDatabasePassword());
+            }
+            else
+                log.Warn("NOTICE - The database is not encrypted !");
             _cnx.Open();
 
 

@@ -97,6 +97,7 @@
     <Compile Include="Backend\Backend.cs" />
     <Compile Include="Backend\FTP.cs" />
     <None Include="Backend\SCP.cs" />
+    <Compile Include="Backend\Proxy.cs" />
     <Compile Include="Backend\SFTP.cs" />
     <Compile Include="Backup\Engine.cs" />
     <Compile Include="Backup\Process.cs" />

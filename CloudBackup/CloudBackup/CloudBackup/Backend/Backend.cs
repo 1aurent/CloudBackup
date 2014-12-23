@@ -15,22 +15,29 @@ namespace CloudBackup.Backend
         public abstract void Upload(string fileName, Stream source);
         public abstract void Delete(string fileName);
 
+
         public static Backend OpenBackend(Target target)
         {
-            switch (target.TargetServer.Scheme.ToLowerInvariant())
+            if (target.ProxyServer != null) return new Proxy(target);
+            return OpenBackend(target.TargetServer, target.Password);
+        }
+
+        public static Backend OpenBackend(Uri targetServer,string password)
+        {
+            switch (targetServer.Scheme.ToLowerInvariant())
             {
                 case "sftp":
-                    return new SFTP(target);
+                    return new SFTP(targetServer, password);
                 case "ftp":
-                    return new FTP(target, FtpEncryptionMode.None);
+                    return new FTP(targetServer, password, FtpEncryptionMode.None);
                 case "ftps":
-                    return new FTP(target, FtpEncryptionMode.Implicit);
+                    return new FTP(targetServer, password, FtpEncryptionMode.Implicit);
                 case "ftpes":
-                    return new FTP(target, FtpEncryptionMode.Explicit);
+                    return new FTP(targetServer, password, FtpEncryptionMode.Explicit);
 
 
                 default:
-                    throw new Exception("Unsupported scheme "+target.TargetServer.Scheme);
+                    throw new Exception("Unsupported scheme "+targetServer.Scheme);
             }
         }
 
