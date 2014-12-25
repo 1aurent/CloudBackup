@@ -45,13 +45,17 @@
 
 <Target Name="CleanUp">
 		<RemoveDir Directories="Bin\**\*" />
-		<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug" Targets="Clean" />
-		<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release" Targets="Clean" />
+		<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug;Platform=x64"   Targets="Clean" />
+		<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release;Platform=x64" Targets="Clean" />
+		<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug;Platform=x86"   Targets="Clean" />
+		<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release;Platform=x86" Targets="Clean" />
 </Target>
 
 <Target Name="Main" DependsOnTargets="CleanUp" >
-	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug"   Targets="Build" />
-	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release" Targets="Build" />
+	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug;Platform=x64"   Targets="Build" />
+	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release;Platform=x64" Targets="Build" />
+	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Debug;Platform=x86"   Targets="Build" />
+	<MSBuild Projects="CloudBackup.sln" Properties="Configuration=Release;Platform=x86" Targets="Build" />
 </Target>
 <Target Name="Installers" DependsOnTargets="Installer32;Installer64" />
 <Target Name="ALL" DependsOnTargets="Main;Installers" />
