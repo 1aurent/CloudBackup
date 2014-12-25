@@ -27,7 +27,7 @@
         <Directory Id='INSTALLDIR' Name='CloudBackup'>
 					<Directory Id='BinDir' Name='Bin'>
             <Component Id='BinX64' Guid='3960C135-7768-4D41-9AAC-B589D67AB300' Win64="yes">
-              <File Id='ExeX64' Name='CloudBackup.EXE' DiskId='1' Source='bin\Srv\Release\CloudBackup.exe' KeyPath='yes' />
+              <File Id='ExeX64' Name='CloudBackup.EXE' DiskId='1' Source='bin\Srv64\Release\CloudBackup.exe' KeyPath='yes' />
               <ServiceInstall Id="CloudBackupSrv"
               	Name="CloudBackup"
               	DisplayName="CloudBackup"
@@ -40,22 +40,22 @@
               <ServiceControl Id="CloudBackupSrvCtrl" Start="install" Stop="both" Remove="uninstall" Name="CloudBackup" Wait="yes" />
             </Component>
             <Component Id='DllX64' Guid='3960C135-7768-4D41-9AAC-B589D67AB301' Win64="yes">
-              <File Id='Dll01' Name='AlphaFS.dll' DiskId='1' Source='bin\Srv\Release\AlphaFS.dll' KeyPath='yes' />
-              <File Id='Dll02' Name='AlphaVSS.52.x64.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.52.x64.dll' KeyPath='no' />
-              <File Id='Dll03' Name='AlphaVSS.60.x64.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.60.x64.dll' KeyPath='no' />
-              <File Id='Dll04' Name='AlphaVSS.Common.dll' DiskId='1' Source='bin\Srv\Release\AlphaVSS.Common.dll' KeyPath='no' />
-              <File Id='Dll05' Name='CloudBackup.API.dll' DiskId='1' Source='bin\Srv\Release\CloudBackup.API.dll' KeyPath='no' />
+              <File Id='Dll01' Name='AlphaFS.dll' DiskId='1' Source='bin\Srv64\Release\AlphaFS.dll' KeyPath='yes' />
+              <File Id='Dll02' Name='AlphaVSS.52.x64.dll' DiskId='1' Source='bin\Srv64\Release\AlphaVSS.52.x64.dll' KeyPath='no' />
+              <File Id='Dll03' Name='AlphaVSS.60.x64.dll' DiskId='1' Source='bin\Srv64\Release\AlphaVSS.60.x64.dll' KeyPath='no' />
+              <File Id='Dll04' Name='AlphaVSS.Common.dll' DiskId='1' Source='bin\Srv64\Release\AlphaVSS.Common.dll' KeyPath='no' />
+              <File Id='Dll05' Name='CloudBackup.API.dll' DiskId='1' Source='bin\Srv64\Release\CloudBackup.API.dll' KeyPath='no' />
               <File Id='Cfg01' Name='CloudBackup.exe.config' DiskId='1' Source='Installer\CloudBackup.exe.config' KeyPath='no' />
-              <File Id='Dll06' Name='Ionic.Zip.dll' DiskId='1' Source='bin\Srv\Release\Ionic.Zip.dll' KeyPath='no' />
-              <File Id='Dll07' Name='log4net.dll' DiskId='1' Source='bin\Srv\Release\log4net.dll' KeyPath='no' />
-              <File Id='Dll08' Name='Renci.SshNet.dll' DiskId='1' Source='bin\Srv\Release\Renci.SshNet.dll' KeyPath='no' />
-              <File Id='Dll09' Name='System.Data.SQLite.dll' DiskId='1' Source='bin\Srv\Release\System.Data.SQLite.dll' KeyPath='no' />
+              <File Id='Dll06' Name='Ionic.Zip.dll' DiskId='1' Source='bin\Srv64\Release\Ionic.Zip.dll' KeyPath='no' />
+              <File Id='Dll07' Name='log4net.dll' DiskId='1' Source='bin\Srv64\Release\log4net.dll' KeyPath='no' />
+              <File Id='Dll08' Name='Renci.SshNet.dll' DiskId='1' Source='bin\Srv64\Release\Renci.SshNet.dll' KeyPath='no' />
+              <File Id='Dll09' Name='System.Data.SQLite.dll' DiskId='1' Source='bin\Srv64\Release\System.Data.SQLite.dll' KeyPath='no' />
               <File Id='Dll0A' Name='SQLite.Interop.dll' DiskId='1' Source='3rdParty\Libs\SQLite.Interop.dll' KeyPath='no' />
-              <File Id='Dll0B' Name='System.Net.FtpClient.dll' DiskId='1' Source='bin\Srv\Release\System.Net.FtpClient.dll' KeyPath='no' />
+              <File Id='Dll0B' Name='System.Net.FtpClient.dll' DiskId='1' Source='bin\Srv64\Release\System.Net.FtpClient.dll' KeyPath='no' />
             </Component>
             <Component Id='Manager' Guid='3960C135-7768-4D41-9AAC-B589D67AB302' Win64="yes">
-            	<File Id='MngExe' Name='CloudBackup.Manager.exe' DiskId='1' Source='bin\Mgr\Release\CloudBackup.Manager.exe' KeyPath='yes' />
-            	<File Id='MngCfg' Name='CloudBackup.Manager.exe.config' DiskId='1' Source='bin\Mgr\Release\CloudBackup.Manager.exe.config' KeyPath='no' />
+            	<File Id='MngExe' Name='CloudBackup.Manager.exe' DiskId='1' Source='bin\Mgr64\Release\CloudBackup.Manager.exe' KeyPath='yes' />
+            	<File Id='MngCfg' Name='CloudBackup.Manager.exe.config' DiskId='1' Source='bin\Mgr64\Release\CloudBackup.Manager.exe.config' KeyPath='no' />
             </Component>
 					</Directory>
 					<Directory Id='LogDir' Name='LogDir'>
