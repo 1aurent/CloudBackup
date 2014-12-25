@@ -314,6 +314,9 @@ namespace CloudBackup.Backup
 
         void CommitTransaction()
         {
+            var jid = _job.JobUID.Value;
+            _proxy.ClearDeleteFiles(jid);
+
             _proxy.Transaction.Commit();
             _proxy = null;
         }
@@ -331,7 +334,7 @@ namespace CloudBackup.Backup
                 while (unneededFiles.MoveNext())
                 {
                     var fileToClear = unneededFiles.Current;
-                    log.InfoFormat("Clearing unneeded file {0}",fileToClear);
+                    log.InfoFormat("Clearing unneeded file [{0}]",fileToClear.FileName);
 
                     try
                     {
