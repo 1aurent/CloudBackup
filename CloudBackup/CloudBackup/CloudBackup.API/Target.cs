@@ -45,6 +45,13 @@ namespace CloudBackup.API
             }
         }
 
+        public override string ToString()
+        {
+            return string.Format("[Target {0} via {1}]",
+                TargetServer.ToString(),
+                ProxyServer == null ? "direct" : ProxyServer.ToString());
+        }
+
 
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

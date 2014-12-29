@@ -80,7 +80,7 @@ namespace CloudBackup.API
             }
 
             var xmlSchedule = ArchiveJob.SaveSchedule(job);
-            log.InfoFormat("Schedule : {0}",xmlSchedule);
+            log.InfoFormat("Schedule : {0}", job.ToString());
 
             Program.Database.JobProxy.InsertSchedule(
                 job.JobUID.Value,
@@ -130,13 +130,11 @@ namespace CloudBackup.API
             };
 
             IDictionary properties = new Hashtable();
-            properties["portName"] = "localhost:19888";
-            properties["authorizedGroup"] = "Interactive";
+            properties["portName"] = System.Configuration.ConfigurationManager.AppSettings["ApiPort"] ?? "localhost:19888";
+            properties["authorizedGroup"] = System.Configuration.ConfigurationManager.AppSettings["ApiAccessGroup"] ?? "Interactive";
 
             var serverChannel = new IpcChannel(properties, null, serverSinkProvider);
             ChannelServices.RegisterChannel(serverChannel,true);
-            
-            
 
             log.DebugFormat(" - The name of the channel is {0}.",serverChannel.ChannelName);
             log.DebugFormat(" - The priority of the channel is {0}.", serverChannel.ChannelPriority);

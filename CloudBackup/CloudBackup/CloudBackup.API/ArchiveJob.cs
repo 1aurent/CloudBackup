@@ -50,6 +50,26 @@ namespace CloudBackup.API
         public string JobRootPath { get; set; }
         public bool Active { get; set; }
 
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            sb.AppendFormat("[ArchiveJob : <{0}> <{1}> | Path=<{2}> [{3}] ",
+                JobUID, UniqueJobName, JobRootPath, Active);
+
+            sb.Append(JobTarget.ToString());
+
+            var serializer = new XmlSerializer(typeof(ArchiveJob));
+            using (TextWriter writer = new StringWriter())
+            {
+                serializer.Serialize(writer, Schedules);
+                sb.Append(writer.ToString());
+            }  
+
+
+            sb.Append("]");
+            return sb.ToString();
+        }
+
         public Target JobTarget { get; set; }
 
         public List<JobSchedule> Schedules { get; private set; }
