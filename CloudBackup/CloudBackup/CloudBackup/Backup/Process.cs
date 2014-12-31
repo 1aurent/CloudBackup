@@ -121,7 +121,7 @@ namespace CloudBackup.Backup
             _now = DateTime.Now;
             var jid = job.JobUID.Value;
             _id = _now.ToUniversalTime().Ticks;
-            _fileName = string.Format("{0:00000}_Archive_{1:0000}{2:00}{3:00}_{4:00}{5:00}{6:00}_{7:X}.zip", jid, _now.Year, _now.Month,
+            _fileName = string.Format("{0:00000}_CLDBCK_{1:0000}{2:00}{3:00}_{4:00}{5:00}{6:00}_{7:X}.zip", jid, _now.Year, _now.Month,
                 _now.Day, _now.Hour,_now.Minute,_now.Second,
                 _now.Millisecond);
 
@@ -135,6 +135,12 @@ namespace CloudBackup.Backup
                 CompressionLevel = CompressionLevel.BestCompression,
                 UseZip64WhenSaving = Zip64Option.Always
             };
+
+            if (string.IsNullOrWhiteSpace(job.JobTarget.ZipPassword))
+            {
+                _zipFile.Password = job.JobTarget.ZipPassword;
+            }
+
             _zipFile.SaveProgress += zip_SaveProgress;
         }
 

@@ -96,10 +96,11 @@ namespace CloudBackup.Backup
 
             DateTime GetRuntimeForMonthly(DateTime now, MonthlySchedule schedule)
             {
+                var reference = now;
                 for (;;)
                 {
-                    var time = new DateTime(now.Year, now.Month, 1);
-                    time = time.AddMonths(AdjustEvery(now.Month,schedule.Every));
+                    var time = new DateTime(reference.Year, reference.Month, 1);
+                    time = time.AddMonths(AdjustEvery(reference.Month, schedule.Every));
                     switch (schedule.RelativeTo)
                     {
                         case JobRelativeTo.BeginOfTheMonth:
@@ -117,7 +118,7 @@ namespace CloudBackup.Backup
                     time = time.AddMinutes(schedule.RunAt.Hour*60 + schedule.RunAt.Minute);
                     if (time > now) return time;
 
-                    now = now.AddMonths(1);
+                    reference = reference.AddMonths(1);
                 }
             }
 
@@ -243,7 +244,7 @@ namespace CloudBackup.Backup
                         log.InfoFormat("Setting up job {0}:[{1}]", jobs.Current.Uid, jobs.Current.Name);
                         var sc = new ScheduleJob(jobs.Current);
                         sc.ComputeNextRuntime(now);
-                        log.DebugFormat("Job {0}:[{1}] - Next run time @ {2}", jobs.Current.Uid, jobs.Current.Name,sc);
+                        log.DebugFormat("Job {0}:[{1}] - Next run time @ {2}", jobs.Current.Uid, jobs.Current.Name,sc.NextRunTime.ToString("yyyy-MM-dd hh:mm:ss"));
                         _allJobs.Add(jobs.Current.Uid, sc);
                     }
                 }
@@ -296,8 +297,8 @@ namespace CloudBackup.Backup
 
                     currentJob.ComputeNextRuntime(now);
                     log.DebugFormat("Job {0}:[{1}] - Next run time @ {2}",
-                        currentJob.JobSpec.JobUID, currentJob.JobSpec.UniqueJobName, 
-                        currentJob.NextRunTime);
+                        currentJob.JobSpec.JobUID, currentJob.JobSpec.UniqueJobName,
+                        currentJob.NextRunTime.ToString("yyyy-MM-dd hh:mm:ss"));
 
                 }
 
