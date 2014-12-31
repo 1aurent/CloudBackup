@@ -58,7 +58,7 @@ namespace CloudBackup.API
 
             sb.Append(JobTarget.ToString());
 
-            var serializer = new XmlSerializer(typeof(ArchiveJob));
+            var serializer = new XmlSerializer(typeof(List<JobSchedule>));
             using (TextWriter writer = new StringWriter())
             {
                 serializer.Serialize(writer, Schedules);
