@@ -13,23 +13,15 @@ ECHO                                                                            
 ECHO                                                                                               .JMML.                                                                
 
 
-IF EXIST "%VS120COMNTOOLS%\vsvars32.bat" GOTO Vs2013
-IF EXIST "%VS110COMNTOOLS%\vsvars32.bat" GOTO Vs2012
-GOTO NoVisualStudio
+IF EXIST "%ProgramFiles(x86)%\MSBuild\12.0\Bin\MSBuild.exe" GOTO BuildMe
 
-:Vs2013
-ECHO .. USING VS2013 ..
-CALL "%VS120COMNTOOLS%\vsvars32.bat"
-GOTO BuildMe
-
-:Vs2012
-ECHO .. USING VS2012 ..
-CALL "%VS110COMNTOOLS%\vsvars32.bat"
-GOTO BuildMe
+ECHO .. MSBUILD not detected or unsupported 32bit machine ..
+ECHO Ensure VS2013 and Windows 64bit
+GOTO Fin
 
 
 :BuildMe
-MSBUILD CloudBackup.Build
+"%ProgramFiles(x86)%\MSBuild\12.0\Bin\MSBuild.exe" CloudBackup.Build
 IF NOT "%ERRORLEVEL%" EQU "0" GOTO FailedFailed
 
 
@@ -46,7 +38,7 @@ Goto Fin
 
 :NoVisualStudio
 ECHO !!!
-ECHO !!! VISUAL STUDIO 2012 OR 2013 IS NOT INSTALLED. UNABLE TO COMPILE
+ECHO !!! VISUAL STUDIO 2013 IS NOT INSTALLED. UNABLE TO COMPILE
 ECHO !!!
 PAUSE
 Goto Fin

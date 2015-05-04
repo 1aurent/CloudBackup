@@ -41,8 +41,7 @@
             </Component>
             <Component Id='DllX64' Guid='3960C135-7768-4D41-9AAC-B589D67AB301' Win64="yes">
               <File Id='Dll01' Name='AlphaFS.dll' DiskId='1' Source='bin\Srv64\Release\AlphaFS.dll' KeyPath='yes' />
-              <File Id='Dll02' Name='AlphaVSS.52.x64.dll' DiskId='1' Source='bin\Srv64\Release\AlphaVSS.52.x64.dll' KeyPath='no' />
-              <File Id='Dll03' Name='AlphaVSS.60.x64.dll' DiskId='1' Source='bin\Srv64\Release\AlphaVSS.60.x64.dll' KeyPath='no' />
+              <File Id='Dll03' Name='AlphaVSS.60.x64.dll' DiskId='1' Source='bin\Srv64\Release\AlphaVSS.x64.dll' KeyPath='no' />
               <File Id='Dll04' Name='AlphaVSS.Common.dll' DiskId='1' Source='bin\Srv64\Release\AlphaVSS.Common.dll' KeyPath='no' />
               <File Id='Dll05' Name='CloudBackup.API.dll' DiskId='1' Source='bin\Srv64\Release\CloudBackup.API.dll' KeyPath='no' />
               <File Id='Cfg01' Name='CloudBackup.exe.config' DiskId='1' Source='Installer\CloudBackup.exe.config' KeyPath='no' />
