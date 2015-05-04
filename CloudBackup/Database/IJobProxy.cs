@@ -55,7 +55,8 @@ namespace CloudBackup.Database
 
         [SqlStatement("DELETE from Schedule where id=@uid;" +
                       "DELETE from SnapshotFile where sourceSchedule=@uid;" +
-                      "DELETE from ArchiveFiles where sourceSchedule=@uid;")]
+                      "DELETE from ArchiveFiles where sourceSchedule=@uid;" +
+                      "DELETE from BackupReport where sourceSchedule=@uid;")]
         void DropSchedule(int uid);
 
         [SqlStatement("DELETE from ArchiveFiles where sourceSchedule=@uid;")]

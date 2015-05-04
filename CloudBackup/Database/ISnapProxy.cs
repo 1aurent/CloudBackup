@@ -100,6 +100,9 @@ namespace CloudBackup.Database
                       "WHERE sourcePath=@sourcePath AND sourceSchedule=@schedule")]
         void UpdateFile(string sourcePath, int schedule, long fileSize,long created, long modified, long hash, long lastSnapshot);
 
+        [SqlStatement("INSERT INTO BackupReport (sourceSchedule,runtime,success,status) " +
+                      "VALUES (@id,@runtime,@success,@report)")]
+        void BackupReport(long id, long runtime, bool success, string report);
 
     }
 }
