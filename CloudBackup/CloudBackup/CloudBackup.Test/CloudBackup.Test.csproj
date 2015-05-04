@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CloudBackup.Test</RootNamespace>
     <AssemblyName>CloudBackup.Test</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -21,6 +21,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <OutputPath>bin\x64\Release\</OutputPath>
@@ -30,6 +31,7 @@
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -39,6 +41,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -48,21 +51,12 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AlphaFS, Version=1.5.0.0, Culture=neutral, PublicKeyToken=4b76c8c88cc75802, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\3rdParty\Libs\AlphaFS.dll</HintPath>
-    </Reference>
-    <Reference Include="AlphaVSS.52.x64">
-      <HintPath>..\3rdParty\Libs\AlphaVSS.52.x64.dll</HintPath>
-    </Reference>
-    <Reference Include="AlphaVSS.60.x64">
-      <HintPath>..\3rdParty\Libs\AlphaVSS.60.x64.dll</HintPath>
-    </Reference>
-    <Reference Include="AlphaVSS.Common, Version=1.2.4000.3, Culture=neutral, PublicKeyToken=959d3993561034e3, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\3rdParty\Libs\AlphaVSS.Common.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\3rdParty\Libs\log4net.dll</HintPath>
@@ -87,6 +81,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\3rdParty\AlphaVSS.Common\AlphaVSS.Common.csproj">
+      <Project>{2fb97b30-1050-4f6b-b729-b94aaa178ee4}</Project>
+      <Name>AlphaVSS.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\3rdParty\AlphaVSS.Platform\AlphaVSS.vcxproj">
+      <Project>{492458c9-0a41-41c3-bc18-b1f8c3d0aaf1}</Project>
+      <Name>AlphaVSS.Platform</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CloudBackup.API\CloudBackup.API.csproj">
       <Project>{0b4eacea-93b4-4205-841f-54a474c475c7}</Project>
       <Name>CloudBackup.API</Name>

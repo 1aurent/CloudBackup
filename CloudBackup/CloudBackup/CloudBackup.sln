@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudBackup", "CloudBackup\CloudBackup.csproj", "{7938EA58-8B23-43D1-9389-7FBC93B3D3F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudBackup.Test", "CloudBackup.Test\CloudBackup.Test.csproj", "{1E0F1E50-6105-4A4B-989A-F01CCD1093DA}"
@@ -8,6 +10,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudBackup.Manager", "CloudBackup.Manager\CloudBackup.Manager.csproj", "{5F7B7B30-1C46-42AA-8399-5945DA159891}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudBackup.API", "CloudBackup.API\CloudBackup.API.csproj", "{0B4EACEA-93B4-4205-841F-54A474C475C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VSS", "VSS", "{8D500600-FD59-48EA-ADEB-E1F6C48C65EC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaVSS.Common", "3rdParty\AlphaVSS.Common\AlphaVSS.Common.csproj", "{2FB97B30-1050-4F6B-B729-B94AAA178EE4}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlphaVSS.Platform", "3rdParty\AlphaVSS.Platform\AlphaVSS.vcxproj", "{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,8 +57,28 @@ Global
 		{0B4EACEA-93B4-4205-841F-54A474C475C7}.Release|x64.Build.0 = Release|x64
 		{0B4EACEA-93B4-4205-841F-54A474C475C7}.Release|x86.ActiveCfg = Release|x86
 		{0B4EACEA-93B4-4205-841F-54A474C475C7}.Release|x86.Build.0 = Release|x86
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4}.Debug|x64.Build.0 = Debug|Any CPU
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4}.Debug|x86.Build.0 = Debug|Any CPU
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4}.Release|x64.ActiveCfg = Release|Any CPU
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4}.Release|x64.Build.0 = Release|Any CPU
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4}.Release|x86.ActiveCfg = Release|Any CPU
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4}.Release|x86.Build.0 = Release|Any CPU
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Debug|x64.ActiveCfg = Debug|x64
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Debug|x64.Build.0 = Debug|x64
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Debug|x86.ActiveCfg = Debug|Win32
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Debug|x86.Build.0 = Debug|Win32
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Release|x64.ActiveCfg = Release|x64
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Release|x64.Build.0 = Release|x64
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Release|x86.ActiveCfg = Release|Win32
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4} = {8D500600-FD59-48EA-ADEB-E1F6C48C65EC}
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1} = {8D500600-FD59-48EA-ADEB-E1F6C48C65EC}
 	EndGlobalSection
 EndGlobal
