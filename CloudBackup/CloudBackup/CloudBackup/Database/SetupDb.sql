@@ -15,6 +15,14 @@ CREATE TABLE IF NOT EXISTS Schedule(
 );
 CREATE UNIQUE INDEX IF NOT EXISTS ScheduleNames ON Schedule(name);
 
+CREATE TABLE IF NOT EXISTS BackupReport(
+	sourceSchedule integer not null,
+	runtime integer not null,
+	success bit not null,
+	status text not null
+);
+CREATE UNIQUE INDEX IF NOT EXISTS BackupReportIndex ON BackupReport(scheduleId,runtime);
+
 CREATE TABLE IF NOT EXISTS SnapshotFile(
 	id integer not null primary key,
 	sourceSchedule  integer not null,

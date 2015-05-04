@@ -27,6 +27,7 @@ using CloudBackup.Utils;
 using Ionic.Zip;
 using Ionic.Zlib;
 using AlphaFS = Alphaleonis.Win32.Filesystem;
+using System.Text;
 
 namespace CloudBackup.Backup
 {
@@ -125,10 +126,14 @@ namespace CloudBackup.Backup
                 _now.Day, _now.Hour,_now.Minute,_now.Second,
                 _now.Millisecond);
 
+            _report = new StringBuilder();
+            _report.AppendLine("Target filename: " + _fileName);
+
             _proxy = Program.Database.CreateSnapProxy();
             _proxy.CreateSnapshotFile(_id, jid, _fileName, _id);
             _proxy.ClearSeenFlags(jid);
 
+            _report.AppendLine("Connect to target: " + job.JobTarget.TargetServer);
             _backend = Backend.Backend.OpenBackend(job.JobTarget);
             _zipFile = new ZipFile()
             {
@@ -154,6 +159,8 @@ namespace CloudBackup.Backup
         Backend.Backend _backend;
         ZipFile _zipFile;
 
+        StringBuilder _report;
+
 
         public void Dispose()
         {
@@ -176,6 +183,7 @@ namespace CloudBackup.Backup
 
             if (forceFullBackup)
             {
+                _report.AppendLine("Note: Running a full backup");
                 _proxy.ClearAllFiles(jid);
             }
 
@@ -184,6 +192,9 @@ namespace CloudBackup.Backup
             var rootPath = backup.GetSnapshotPath();
             var elements = backup.GetSnapshotElements();
 
+            _report.AppendLine();
+            _report.AppendLine("Backup process :");
+            _report.AppendLine("----------------");
             foreach (var element in elements)
             {
                 var file = _proxy.FindFile(jid, element.Path);
@@ -218,6 +229,7 @@ namespace CloudBackup.Backup
                     entry.AccessedTime = element.LastAccessed;
                     entry.ModifiedTime = element.LastModified;
 
+                    _report.AppendLine("Backup new file " + element.Path);
                     _proxy.AddFile(
                         element.Path, jid,
                         element.FileSize,
@@ -241,6 +253,7 @@ namespace CloudBackup.Backup
                 }
 
                 log.InfoFormat("[{0}] - File changed / Archiving", element.Path);
+                _report.AppendLine("Backup modified file " + element.Path);
                 var entryDoc2 = new SnapshotAccess(rootPath + element.Path);
                 var entry2 = _zipFile.AddEntry(element.Path, entryDoc2.OpenDelegate, entryDoc2.CloseDelegate);
                 entry2.CreationTime = element.Created;
@@ -261,6 +274,7 @@ namespace CloudBackup.Backup
             {
                 while (delFiles.MoveNext())
                 {
+                    _report.AppendLine("Deleted file " + delFiles.Current.SourcePath);
                     manifest.NotifyDelFile(delFiles.Current.SourcePath, delFiles.Current.FileSize);
                 }
             }
@@ -271,6 +285,9 @@ namespace CloudBackup.Backup
         void PublishZipFile(Engine.IBackup backup)
         {
             log.InfoFormat("Process completed - Streaming ZIP file");
+
+            _report.AppendLine();
+            _report.AppendLine("Streaming ZIP file to target");
 
             bool transfertIsSuccess;
             Exception transferException;
@@ -322,6 +339,8 @@ namespace CloudBackup.Backup
         {
             var jid = _job.JobUID.Value;
             _proxy.ClearDeleteFiles(jid);
+
+            _proxy.BackupReport(_job.JobUID.Value, _now.Ticks, true, _report.ToString());
 
             _proxy.Transaction.Commit();
             _proxy = null;
@@ -375,23 +394,38 @@ namespace CloudBackup.Backup
 
             using (var process = new Process(job))
             {
-                var engine = new Engine { RootPath = job.JobRootPath };
-                using (var backup = engine.CreateBackup())
+                try
                 {
-                    //- First create a snapshot
-                    process.BuildSnapshot(backup, forceFullBackup);
+                    var engine = new Engine { RootPath = job.JobRootPath };
+                    using (var backup = engine.CreateBackup())
+                    {
+                        //- First create a snapshot
+                        process.BuildSnapshot(backup, forceFullBackup);
 
-                    //- Publish ZIP file
-                    process.PublishZipFile(backup);
+                        //- Publish ZIP file
+                        process.PublishZipFile(backup);
+                    }
+
+                    log.InfoFormat("Process completed - Commit Transaction");
+                    process.CommitTransaction();
+
+                    // Post process
+                    if (job.JobTarget.ManageTargetFiles)
+                    {
+                        process.ClearUnneededFiles();
+                    }
                 }
-
-                log.InfoFormat("Process completed - Commit Transaction");
-                process.CommitTransaction();
-
-                // Post process
-                if (job.JobTarget.ManageTargetFiles)
+                catch(Exception ex)
                 {
-                    process.ClearUnneededFiles();
+                    process._proxy.Transaction.Rollback();
+                    process._proxy = null;
+
+                    log.Error("Process failed ! - Rollback Transaction", ex);
+                    process._report.AppendLine("** FAILED ** Exception: " + ex);
+
+                    var proxy = Program.Database.CreateSnapProxy();
+                    proxy.BackupReport(job.JobUID.Value, process._now.Ticks, false, process._report.ToString());
+                    proxy.Transaction.Commit();
                 }
             }
         }
@@ -399,7 +433,10 @@ namespace CloudBackup.Backup
         static void zip_SaveProgress(object sender, SaveProgressEventArgs e)
         {
             if(e.EventType==ZipProgressEventType.Saving_AfterRenameTempArchive)
-                log.InfoFormat("Zip Save [{0}]",e.ArchiveName);
+            {
+                log.InfoFormat("Zip Save [{0}]", e.ArchiveName);
+            }
+                
         }
 
     }
