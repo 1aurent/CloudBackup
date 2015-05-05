@@ -1,18 +1,26 @@
 <?xml version='1.0' encoding='windows-1252'?>
-<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  <Product Name='CloudBackup' Id='3960C135-7768-4D41-9AAC-B589D6700100' UpgradeCode='3960C135-7768-4D41-9AAC-0009D6700000'
+<Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' 
+	xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+	xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
+>
+  <Product Name='CloudBackup' Id='3960C135-7768-6464-9AAC-B589D6700100' UpgradeCode='3960C135-7768-4D41-9AAC-0009D6700000'
     Language='1033' Codepage='1252' Version='1.0.0' Manufacturer='Laurent Dupuis'>
 
     <Package Id='*' Keywords='Installer'
       Description="Laurent Dupuis's CloudBackup Installer 64bits"
       Comments="Laurent Dupuis's CloudBackup Installer" Manufacturer='Laurent Dupuis'
-      InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x64" />
+      InstallerVersion='405' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x64" />
       
     <Media Id='1' Cabinet='CloudBackup.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
     <Property Id='DiskPrompt' Value="Laurent Dupuis's CloudBackup Installation [1]" />
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
     <Property Id="SERV_SYSACCOUNT" Value="1" />
     <Property Id="UseSystemAccount" Value="1" />
+    
+    <PropertyRef Id="NETFRAMEWORK45"/>
+    <Condition Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again.">
+    	<![CDATA[Installed OR NETFRAMEWORK45]]>
+		</Condition>
     
 		<WixVariable Id="WixUILicenseRtf" Value="Installer\License.rtf" />
 	  <WixVariable Id="WixUIBannerBmp" Value="Installer\Bitmaps\banner.bmp" />
@@ -81,7 +89,11 @@
        </Component>
     </DirectoryRef>
     
-
+    
+		<DirectoryRef Id="TARGETDIR">
+		    <Merge Id="VCRedist" SourceFile="3rdParty\redist\Microsoft_VC120_CRT_x64.msm" DiskId="1" Language="0"/>
+		</DirectoryRef>
+		
     <Feature Id='Complete' Title='CloudBackup' Description='The complete package.'
       Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
       <Feature Id='Ed64bit' Title='CloudBackup' Description='CloudBackup' Level='1'>
@@ -90,6 +102,7 @@
         <ComponentRef Id='LogDir' />
         <ComponentRef Id='Manager' />
         <ComponentRef Id='ApplicationShortcut' />
+        <MergeRef Id="VCRedist"/>
       </Feature>
     </Feature>
 

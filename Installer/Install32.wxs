@@ -6,7 +6,7 @@
     <Package Id='*' Keywords='Installer'
       Description="Laurent Dupuis's CloudBackup Installer 32bits"
       Comments="Laurent Dupuis's CloudBackup Installer" Manufacturer='Laurent Dupuis'
-      InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x86" />
+      InstallerVersion='405' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x86" />
       
     <Media Id='1' Cabinet='CloudBackup.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
     <Property Id='DiskPrompt' Value="Laurent Dupuis's CloudBackup Installation [1]" />
@@ -14,6 +14,11 @@
     <Property Id="SERV_SYSACCOUNT" Value="1" />
     <Property Id="UseSystemAccount" Value="1" />
     
+    <PropertyRef Id="NETFRAMEWORK45"/>
+    <Condition Message="This application requires .NET Framework 4.5. Please install the .NET Framework then run this installer again.">
+    	<![CDATA[Installed OR NETFRAMEWORK45]]>
+		</Condition>
+		    
 		<WixVariable Id="WixUILicenseRtf" Value="Installer\License.rtf" />
 	  <WixVariable Id="WixUIBannerBmp" Value="Installer\Bitmaps\banner.bmp" />
   	<WixVariable Id="WixUIDialogBmp" Value="Installer\Bitmaps\dialog.bmp" />
@@ -81,6 +86,9 @@
        </Component>
     </DirectoryRef>
     
+		<DirectoryRef Id="TARGETDIR">
+		    <Merge Id="VCRedist" SourceFile="3rdParty\redist\Microsoft_VC120_CRT_x86.msm" DiskId="1" Language="0"/>
+		</DirectoryRef>
 
     <Feature Id='Complete' Title='CloudBackup' Description='The complete package.'
       Display='expand' Level='1' ConfigurableDirectory='INSTALLDIR'>
@@ -90,6 +98,7 @@
         <ComponentRef Id='LogDir' />
         <ComponentRef Id='Manager' />
         <ComponentRef Id='ApplicationShortcut' />
+        <MergeRef Id="VCRedist"/>
       </Feature>
     </Feature>
 
