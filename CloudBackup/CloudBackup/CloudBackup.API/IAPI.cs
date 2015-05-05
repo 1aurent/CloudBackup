@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,5 +43,7 @@ namespace CloudBackup.API
         void DropArchiveJob(int uid);
         void ResetArchiveJob(int uid);
         void RunJobNow(int uid, bool forceFullBackup);
+        DataTable GetBackupReports(int uid);
+        string GetBackupReport(int uid,long runtime);
     }
 }

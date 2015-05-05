@@ -19,6 +19,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Ipc;
@@ -92,6 +93,28 @@ namespace CloudBackup.API
             Program.Scheduler.ReLoadSchedule();
 
            return job.JobUID.Value;
+        }
+
+        public DataTable GetBackupReports(int uid)
+        {
+            var ret = new DataTable("Reports");
+
+            ret.Columns.Add("Runtime", typeof(DateTime));
+            ret.Columns.Add("Success", typeof(bool));
+            var jobReports = Program.Database.JobProxy.GetBackupReports(uid);
+
+            while(jobReports.MoveNext())
+            {
+                ret.Rows.Add(new DateTime(jobReports.Current.Runtime),
+                    jobReports.Current.Success);
+            }
+
+            return ret;
+        }
+
+        public string GetBackupReport(int uid, long runtime)
+        {
+            return Program.Database.JobProxy.GetBackupReport(uid, runtime);
         }
 
         public void DropArchiveJob(int uid)
