@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS BackupReport(
 	success bit not null,
 	status text not null
 );
-CREATE UNIQUE INDEX IF NOT EXISTS BackupReportIndex ON BackupReport(scheduleId,runtime);
+CREATE UNIQUE INDEX IF NOT EXISTS BackupReportIndex ON BackupReport(sourceSchedule,runtime);
 
 CREATE TABLE IF NOT EXISTS SnapshotFile(
 	id integer not null primary key,

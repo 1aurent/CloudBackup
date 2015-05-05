@@ -85,6 +85,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.rtbLicence = new System.Windows.Forms.RichTextBox();
+            this.tabPageHistory = new System.Windows.Forms.TabPage();
+            this.dgvJobHistory = new System.Windows.Forms.DataGridView();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -97,6 +99,8 @@
             this.flowLayoutPanel1.SuspendLayout();
             this.tabPageJobTarget.SuspendLayout();
             this.tabPageAbout.SuspendLayout();
+            this.tabPageHistory.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvJobHistory)).BeginInit();
             this.SuspendLayout();
             // 
             // tabInfos
@@ -210,6 +214,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabJobSettings.Controls.Add(this.tabPageJobSchedule);
             this.tabJobSettings.Controls.Add(this.tabPageJobTarget);
+            this.tabJobSettings.Controls.Add(this.tabPageHistory);
             this.tabJobSettings.Location = new System.Drawing.Point(3, 63);
             this.tabJobSettings.Name = "tabJobSettings";
             this.tabJobSettings.SelectedIndex = 0;
@@ -745,6 +750,28 @@
             this.rtbLicence.TabIndex = 0;
             this.rtbLicence.Text = "";
             // 
+            // tabPageHistory
+            // 
+            this.tabPageHistory.Controls.Add(this.dgvJobHistory);
+            this.tabPageHistory.Location = new System.Drawing.Point(4, 22);
+            this.tabPageHistory.Name = "tabPageHistory";
+            this.tabPageHistory.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageHistory.Size = new System.Drawing.Size(368, 390);
+            this.tabPageHistory.TabIndex = 2;
+            this.tabPageHistory.Text = "History";
+            this.tabPageHistory.UseVisualStyleBackColor = true;
+            // 
+            // dgvJobHistory
+            // 
+            this.dgvJobHistory.AllowUserToAddRows = false;
+            this.dgvJobHistory.AllowUserToDeleteRows = false;
+            this.dgvJobHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvJobHistory.Location = new System.Drawing.Point(6, 6);
+            this.dgvJobHistory.Name = "dgvJobHistory";
+            this.dgvJobHistory.ReadOnly = true;
+            this.dgvJobHistory.Size = new System.Drawing.Size(356, 346);
+            this.dgvJobHistory.TabIndex = 0;
+            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -772,6 +799,8 @@
             this.tabPageJobTarget.PerformLayout();
             this.tabPageAbout.ResumeLayout(false);
             this.tabPageAbout.PerformLayout();
+            this.tabPageHistory.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvJobHistory)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -835,6 +864,8 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.CheckBox cbForceFullbackup;
         private System.Windows.Forms.CheckBox cbTargetSelfclean;
+        private System.Windows.Forms.TabPage tabPageHistory;
+        private System.Windows.Forms.DataGridView dgvJobHistory;
     }
 }
 

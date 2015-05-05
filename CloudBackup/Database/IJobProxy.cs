@@ -36,6 +36,14 @@ namespace CloudBackup.Database
         public bool Active { get; set; }
     }
 
+    public class BackupReport
+    {
+        [ColumnMap("runtime")]
+        public long Runtime { get; set; }
+        [ColumnMap("success")]
+        public bool Success { get; set; }
+    }
+
     public interface IJobProxy
     {
         [SqlStatement("SELECT Id JobUID, Name, Active from Schedule")]
@@ -52,6 +60,12 @@ namespace CloudBackup.Database
 
         [SqlStatement("SELECT ifnull(max(Id),0) from Schedule")]
         long GetJobMaxId();
+
+        [SqlStatement("SELECT runtime,success from BackupReport where sourceSchedule=@uid order by runtime desc")]
+        IEnumerator<BackupReport> GetBackupReports(int uid);
+
+        [SqlStatement("SELECT status from BackupReport where sourceSchedule=@uid and runtime=@runtime")]
+        string GetBackupReport(int uid, long runtime);
 
         [SqlStatement("DELETE from Schedule where id=@uid;" +
                       "DELETE from SnapshotFile where sourceSchedule=@uid;" +

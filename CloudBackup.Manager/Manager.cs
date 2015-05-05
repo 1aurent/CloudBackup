@@ -146,6 +146,7 @@ namespace CloudBackup.Manager
                     tbRootFolder.Text = "";
                 cbAllSchedules.Items.Clear();
 
+                dgvJobHistory.DataSource = null;
                 panelSchedule.Controls.Clear();
                 return;
             }
@@ -153,6 +154,10 @@ namespace CloudBackup.Manager
             Utils.EnableDisablePanel(spltCtrlArchive.Panel2, true);
             btnResetStatus.Enabled =
             btnRunNow.Enabled = _archiveJob.JobUID.HasValue;
+
+            dgvJobHistory.DataSource = _archiveJob.JobUID.HasValue ?
+                _serverLink.GetBackupReports(_archiveJob.JobUID.Value) :
+                null;
 
             rdSchedDaily.Checked = false;
             rdSchedWeekly.Checked = false;
