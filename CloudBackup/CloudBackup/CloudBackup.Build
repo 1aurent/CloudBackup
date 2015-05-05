@@ -18,11 +18,11 @@
       ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
       SourceFiles="Installer\Install32.wxs"
       AdditionalOptions="$(CompilerAdditionalOptions)" 
-      Extensions="WixUtilExtension"
+      Extensions="WixUtilExtension;WixNetFxExtension"
       OutputFile="Bin\Installer\" />
     <Light
       ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
-      Extensions="WixUIExtension;WixUtilExtension"
+      Extensions="WixUIExtension;WixUtilExtension;WixNetFxExtension"
       ObjectFiles="Bin\Installer\Install32.wixobj"
       OutputFile="Bin\CloudBackup32.msi" />
 </Target>
@@ -34,11 +34,11 @@
       ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
       SourceFiles="Installer\Install64.wxs"
       AdditionalOptions="$(CompilerAdditionalOptions)" 
-      Extensions="WixUtilExtension"
+      Extensions="WixUtilExtension;WixNetFxExtension"
       OutputFile="Bin\Installer\" />
     <Light
       ToolPath="$(WixToolPath)" RunAsSeparateProcess="true"
-      Extensions="WixUIExtension;WixUtilExtension"
+      Extensions="WixUIExtension;WixUtilExtension;WixNetFxExtension"
       ObjectFiles="Bin\Installer\Install64.wixobj"
       OutputFile="Bin\CloudBackup64.msi" />
 </Target>
