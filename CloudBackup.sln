@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlphaVSS.Common", "3rdParty
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AlphaVSS.Platform", "3rdParty\AlphaVSS.Platform\AlphaVSS.vcxproj", "{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetZip.Zip", "3rdParty\DotNetZip.Zip\DotNetZip.Zip.csproj", "{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -73,6 +75,12 @@ Global
 		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Release|x64.Build.0 = Release|x64
 		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Release|x86.ActiveCfg = Release|Win32
 		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}.Release|x86.Build.0 = Release|Win32
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Debug|x64.Build.0 = Debug|Any CPU
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Debug|x86.Build.0 = Debug|Any CPU
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Release|x64.ActiveCfg = Release|Any CPU
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -80,5 +88,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{2FB97B30-1050-4F6B-B729-B94AAA178EE4} = {8D500600-FD59-48EA-ADEB-E1F6C48C65EC}
 		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1} = {8D500600-FD59-48EA-ADEB-E1F6C48C65EC}
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A} = {8D500600-FD59-48EA-ADEB-E1F6C48C65EC}
 	EndGlobalSection
 EndGlobal
