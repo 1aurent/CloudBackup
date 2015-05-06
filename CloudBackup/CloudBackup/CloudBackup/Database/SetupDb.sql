@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS BackupReport(
 	sourceSchedule integer not null,
 	runtime integer not null,
 	success bit not null,
+	operation text not null,
 	status text not null
 );
 CREATE UNIQUE INDEX IF NOT EXISTS BackupReportIndex ON BackupReport(sourceSchedule,runtime);

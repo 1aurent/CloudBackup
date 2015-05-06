@@ -255,7 +255,7 @@ namespace CloudBackup.Backup
         {
             var job = (dynamic) jobObj;
 
-            Process.RunBackup(job.Job,job.ForceFullBackup);
+            Process.RunBackup(job.Job,job.ForceFullBackup,"Scheduled Backup");
         }
 
         void ProcessSchedule(object unused)

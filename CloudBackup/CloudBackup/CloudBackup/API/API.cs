@@ -99,14 +99,16 @@ namespace CloudBackup.API
         {
             var ret = new DataTable("Reports");
 
-            ret.Columns.Add("Runtime", typeof(DateTime));
-            ret.Columns.Add("Success", typeof(bool));
+            ret.Columns.Add("Runtime",   typeof(DateTime));
+            ret.Columns.Add("Success",   typeof(bool));
+            ret.Columns.Add("Operation", typeof(string));
             var jobReports = Program.Database.JobProxy.GetBackupReports(uid);
 
             while(jobReports.MoveNext())
             {
                 ret.Rows.Add(new DateTime(jobReports.Current.Runtime),
-                    jobReports.Current.Success);
+                    jobReports.Current.Success,
+                    jobReports.Current.Operation);
             }
 
             return ret;
@@ -126,13 +128,16 @@ namespace CloudBackup.API
         public void ResetArchiveJob(int uid)
         {
             log.InfoFormat("Resetting job [{0}]", uid);
-            Program.Database.JobProxy.ResetStatus(uid);            
+            Program.Database.JobProxy.ResetStatus(uid);
+            Program.Database.JobProxy.BackupReport(uid, DateTime.Now.Ticks, true,
+                "Archive Job Reset",
+                "The Archive Job history was resetted");
         }
 
         void RunJobThread(object objJob)
         {
             var job = (dynamic)objJob;
-            Backup.Process.RunBackup(job.Job, job.ForceFullBackup);
+            Backup.Process.RunBackup(job.Job, job.ForceFullBackup, "Manual Backup");
         }
 
         public void RunJobNow(int uid,bool forceFullBackup)

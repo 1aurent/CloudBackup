@@ -122,8 +122,9 @@ namespace CloudBackup.Backup
             }
         }
 
-        Process(ArchiveJob job, bool forceFullBackup)
+        Process(ArchiveJob job, bool forceFullBackup,string reason)
         {
+            _backupReason = reason;
             _forceFullBackup = forceFullBackup;
             _job = job;
             _now = DateTime.Now;
@@ -163,6 +164,7 @@ namespace CloudBackup.Backup
         readonly DateTime _now;
         readonly long _id;
         readonly bool _forceFullBackup;
+        readonly string _backupReason;
 
         Database.ISnapProxy _proxy;
         Engine.IBackup _backup;
@@ -375,7 +377,7 @@ namespace CloudBackup.Backup
             _report.AppendLine();
             _report.AppendLine("** Backup completed with success **");
             _report.AppendLine();
-            _proxy.BackupReport(_job.JobUID.Value, _now.Ticks, true, _report.ToString());
+            _proxy.BackupReport(_job.JobUID.Value, _now.Ticks, true, _backupReason, _report.ToString());
 
             _proxy.Transaction.Commit();
             _proxy = null;
@@ -423,11 +425,11 @@ namespace CloudBackup.Backup
 
         }
 
-        public static void RunBackup(ArchiveJob job,bool forceFullBackup)
+        public static void RunBackup(ArchiveJob job,bool forceFullBackup, string reason)
         {
             log.InfoFormat("Starting backup of [{0}]", job.JobRootPath);
 
-            using (var process = new Process(job, forceFullBackup))
+            using (var process = new Process(job, forceFullBackup, reason))
             {
                 try
                 {
@@ -459,7 +461,7 @@ namespace CloudBackup.Backup
                     process._report.AppendLine("** FAILED ** Exception: " + ex);
 
                     var proxy = Program.Database.CreateSnapProxy();
-                    proxy.BackupReport(job.JobUID.Value, process._now.Ticks, false, process._report.ToString());
+                    proxy.BackupReport(job.JobUID.Value, process._now.Ticks, false,reason, process._report.ToString());
                     proxy.Transaction.Commit();
                 }
             }
