@@ -87,6 +87,12 @@ namespace CloudBackup.Backup
                 xmlEm.Attributes.SetNamedItem(szAttr);
                 _manifest.DocumentElement.AppendChild(xmlEm);                
             }
+            public void NotifyEmptyFile(string path)
+            {
+                var xmlEm = _manifest.CreateElement("emptyFile");
+                xmlEm.InnerText = path;
+                _manifest.DocumentElement.AppendChild(xmlEm);
+            }
 
             public string Manifest { get { return _manifest.OuterXml; }}
         }
@@ -116,15 +122,17 @@ namespace CloudBackup.Backup
             }
         }
 
-        Process(ArchiveJob job)
+        Process(ArchiveJob job, bool forceFullBackup)
         {
+            _forceFullBackup = forceFullBackup;
             _job = job;
             _now = DateTime.Now;
             var jid = job.JobUID.Value;
             _id = _now.ToUniversalTime().Ticks;
-            _fileName = string.Format("{0:00000}_CLDBCK_{1:0000}{2:00}{3:00}_{4:00}{5:00}{6:00}_{7:X}.zip", jid, _now.Year, _now.Month,
+            _fileName = string.Format("BACKUP_{0:00000}_{8}_{1:0000}{2:00}{3:00}_{4:00}{5:00}{6:00}_{7:000}.zip", jid, _now.Year, _now.Month,
                 _now.Day, _now.Hour,_now.Minute,_now.Second,
-                _now.Millisecond);
+                _now.Millisecond,
+                forceFullBackup?"FULL":"INCR");
 
             _report = new StringBuilder();
             _report.AppendLine("Target filename: " + _fileName);
@@ -141,9 +149,10 @@ namespace CloudBackup.Backup
                 UseZip64WhenSaving = Zip64Option.Always
             };
 
-            if (string.IsNullOrWhiteSpace(job.JobTarget.ZipPassword))
+            if (!string.IsNullOrWhiteSpace(job.JobTarget.ZipPassword))
             {
                 _zipFile.Password = job.JobTarget.ZipPassword;
+                _zipFile.Encryption = EncryptionAlgorithm.WinZipAes256;
             }
 
             _zipFile.SaveProgress += zip_SaveProgress;
@@ -153,6 +162,7 @@ namespace CloudBackup.Backup
         readonly string _fileName;
         readonly DateTime _now;
         readonly long _id;
+        readonly bool _forceFullBackup;
 
         Database.ISnapProxy _proxy;
         Engine.IBackup _backup;
@@ -169,7 +179,7 @@ namespace CloudBackup.Backup
             if(_backup!=null) { _backup.Dispose(); _backup=null;}
         }
 
-        private void BuildSnapshot(Engine.IBackup backup, bool forceFullBackup)
+        private void BuildSnapshot(Engine.IBackup backup)
         {
             log.Debug("Building backup snapshot");
 
@@ -177,11 +187,11 @@ namespace CloudBackup.Backup
             manifest.AddTag("date", XmlConvert.ToString(_now, XmlDateTimeSerializationMode.Utc));
             manifest.AddTag("source", Environment.MachineName);
             manifest.AddTag("from", _job.JobRootPath);
-            manifest.AddTag("fullBackup", XmlConvert.ToString(forceFullBackup));
+            manifest.AddTag("fullBackup", XmlConvert.ToString(_forceFullBackup));
 
             var jid = _job.JobUID.Value;
 
-            if (forceFullBackup)
+            if (_forceFullBackup)
             {
                 _report.AppendLine("Note: Running a full backup");
                 _proxy.ClearAllFiles(jid);
@@ -195,6 +205,8 @@ namespace CloudBackup.Backup
             _report.AppendLine();
             _report.AppendLine("Backup process :");
             _report.AppendLine("----------------");
+
+            var hash = 0L;
             foreach (var element in elements)
             {
                 var file = _proxy.FindFile(jid, element.Path);
@@ -223,11 +235,21 @@ namespace CloudBackup.Backup
                 if (file == null)
                 {
                     log.InfoFormat("[{0}] - New file / Archive", element.Path);
-                    var entryDoc = new SnapshotAccess(rootPath + element.Path);
-                    var entry = _zipFile.AddEntry(element.Path, entryDoc.OpenDelegate, entryDoc.CloseDelegate);
-                    entry.CreationTime = element.Created;
-                    entry.AccessedTime = element.LastAccessed;
-                    entry.ModifiedTime = element.LastModified;
+                    if (element.FileSize != 0)
+                    {
+                        var entryDoc = new SnapshotAccess(rootPath + element.Path);
+                        var entry = _zipFile.AddEntry(element.Path, entryDoc.OpenDelegate, entryDoc.CloseDelegate);
+                        entry.CreationTime = element.Created;
+                        entry.AccessedTime = element.LastAccessed;
+                        entry.ModifiedTime = element.LastModified;
+                        hash = entry.Crc;
+                    }
+                    else
+                    {
+                        hash = 0L;
+                        manifest.NotifyEmptyFile(element.Path);
+                    }
+                        
 
                     _report.AppendLine("Backup new file " + element.Path);
                     _proxy.AddFile(
@@ -235,7 +257,7 @@ namespace CloudBackup.Backup
                         element.FileSize,
                         element.Created.Ticks,
                         element.LastModified.Ticks,
-                        entry.Crc,
+                        hash,
                         _id
                         );
                     continue;
@@ -254,18 +276,28 @@ namespace CloudBackup.Backup
 
                 log.InfoFormat("[{0}] - File changed / Archiving", element.Path);
                 _report.AppendLine("Backup modified file " + element.Path);
-                var entryDoc2 = new SnapshotAccess(rootPath + element.Path);
-                var entry2 = _zipFile.AddEntry(element.Path, entryDoc2.OpenDelegate, entryDoc2.CloseDelegate);
-                entry2.CreationTime = element.Created;
-                entry2.AccessedTime = element.LastAccessed;
-                entry2.ModifiedTime = element.LastModified;
+
+                if (element.FileSize != 0)
+                {
+                    var entryDoc2 = new SnapshotAccess(rootPath + element.Path);
+                    var entry2 = _zipFile.AddEntry(element.Path, entryDoc2.OpenDelegate, entryDoc2.CloseDelegate);
+                    entry2.CreationTime = element.Created;
+                    entry2.AccessedTime = element.LastAccessed;
+                    entry2.ModifiedTime = element.LastModified;
+                    hash = entry2.Crc;
+                }
+                else
+                {
+                    hash = 0L;
+                    manifest.NotifyEmptyFile(element.Path);
+                }
 
                 _proxy.UpdateFile(
                     element.Path, jid,
                     element.FileSize,
                     element.Created.Ticks,
                     element.LastModified.Ticks,
-                    entry2.Crc,
+                    hash,
                     _id
                     );
             }
@@ -340,6 +372,9 @@ namespace CloudBackup.Backup
             var jid = _job.JobUID.Value;
             _proxy.ClearDeleteFiles(jid);
 
+            _report.AppendLine();
+            _report.AppendLine("** Backup completed with success **");
+            _report.AppendLine();
             _proxy.BackupReport(_job.JobUID.Value, _now.Ticks, true, _report.ToString());
 
             _proxy.Transaction.Commit();
@@ -392,7 +427,7 @@ namespace CloudBackup.Backup
         {
             log.InfoFormat("Starting backup of [{0}]", job.JobRootPath);
 
-            using (var process = new Process(job))
+            using (var process = new Process(job, forceFullBackup))
             {
                 try
                 {
@@ -400,7 +435,7 @@ namespace CloudBackup.Backup
                     using (var backup = engine.CreateBackup())
                     {
                         //- First create a snapshot
-                        process.BuildSnapshot(backup, forceFullBackup);
+                        process.BuildSnapshot(backup);
 
                         //- Publish ZIP file
                         process.PublishZipFile(backup);

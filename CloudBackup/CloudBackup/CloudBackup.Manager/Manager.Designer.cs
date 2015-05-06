@@ -71,6 +71,8 @@
             this.txtTargetPort = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.tabPageHistory = new System.Windows.Forms.TabPage();
+            this.dgvJobHistory = new System.Windows.Forms.DataGridView();
             this.btnResetStatus = new System.Windows.Forms.Button();
             this.btnRunNow = new System.Windows.Forms.Button();
             this.btnSaveSchedule = new System.Windows.Forms.Button();
@@ -85,8 +87,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.rtbLicence = new System.Windows.Forms.RichTextBox();
-            this.tabPageHistory = new System.Windows.Forms.TabPage();
-            this.dgvJobHistory = new System.Windows.Forms.DataGridView();
+            this.btnRefresh = new System.Windows.Forms.Button();
+            this.btnShowDetails = new System.Windows.Forms.Button();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -98,9 +100,9 @@
             this.tabPageJobSchedule.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.tabPageJobTarget.SuspendLayout();
-            this.tabPageAbout.SuspendLayout();
             this.tabPageHistory.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvJobHistory)).BeginInit();
+            this.tabPageAbout.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabInfos
@@ -604,6 +606,30 @@
             this.label9.TabIndex = 4;
             this.label9.Text = "Port:";
             // 
+            // tabPageHistory
+            // 
+            this.tabPageHistory.Controls.Add(this.btnShowDetails);
+            this.tabPageHistory.Controls.Add(this.btnRefresh);
+            this.tabPageHistory.Controls.Add(this.dgvJobHistory);
+            this.tabPageHistory.Location = new System.Drawing.Point(4, 22);
+            this.tabPageHistory.Name = "tabPageHistory";
+            this.tabPageHistory.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageHistory.Size = new System.Drawing.Size(368, 390);
+            this.tabPageHistory.TabIndex = 2;
+            this.tabPageHistory.Text = "History";
+            this.tabPageHistory.UseVisualStyleBackColor = true;
+            // 
+            // dgvJobHistory
+            // 
+            this.dgvJobHistory.AllowUserToAddRows = false;
+            this.dgvJobHistory.AllowUserToDeleteRows = false;
+            this.dgvJobHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvJobHistory.Location = new System.Drawing.Point(6, 6);
+            this.dgvJobHistory.Name = "dgvJobHistory";
+            this.dgvJobHistory.ReadOnly = true;
+            this.dgvJobHistory.Size = new System.Drawing.Size(356, 346);
+            this.dgvJobHistory.TabIndex = 0;
+            // 
             // btnResetStatus
             // 
             this.btnResetStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -750,27 +776,25 @@
             this.rtbLicence.TabIndex = 0;
             this.rtbLicence.Text = "";
             // 
-            // tabPageHistory
+            // btnRefresh
             // 
-            this.tabPageHistory.Controls.Add(this.dgvJobHistory);
-            this.tabPageHistory.Location = new System.Drawing.Point(4, 22);
-            this.tabPageHistory.Name = "tabPageHistory";
-            this.tabPageHistory.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageHistory.Size = new System.Drawing.Size(368, 390);
-            this.tabPageHistory.TabIndex = 2;
-            this.tabPageHistory.Text = "History";
-            this.tabPageHistory.UseVisualStyleBackColor = true;
+            this.btnRefresh.Location = new System.Drawing.Point(287, 358);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 1;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
             // 
-            // dgvJobHistory
+            // btnShowDetails
             // 
-            this.dgvJobHistory.AllowUserToAddRows = false;
-            this.dgvJobHistory.AllowUserToDeleteRows = false;
-            this.dgvJobHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvJobHistory.Location = new System.Drawing.Point(6, 6);
-            this.dgvJobHistory.Name = "dgvJobHistory";
-            this.dgvJobHistory.ReadOnly = true;
-            this.dgvJobHistory.Size = new System.Drawing.Size(356, 346);
-            this.dgvJobHistory.TabIndex = 0;
+            this.btnShowDetails.Location = new System.Drawing.Point(6, 358);
+            this.btnShowDetails.Name = "btnShowDetails";
+            this.btnShowDetails.Size = new System.Drawing.Size(75, 23);
+            this.btnShowDetails.TabIndex = 2;
+            this.btnShowDetails.Text = "Show detail";
+            this.btnShowDetails.UseVisualStyleBackColor = true;
+            this.btnShowDetails.Click += new System.EventHandler(this.btnShowDetails_Click);
             // 
             // Manager
             // 
@@ -797,10 +821,10 @@
             this.flowLayoutPanel1.PerformLayout();
             this.tabPageJobTarget.ResumeLayout(false);
             this.tabPageJobTarget.PerformLayout();
-            this.tabPageAbout.ResumeLayout(false);
-            this.tabPageAbout.PerformLayout();
             this.tabPageHistory.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvJobHistory)).EndInit();
+            this.tabPageAbout.ResumeLayout(false);
+            this.tabPageAbout.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -866,6 +890,8 @@
         private System.Windows.Forms.CheckBox cbTargetSelfclean;
         private System.Windows.Forms.TabPage tabPageHistory;
         private System.Windows.Forms.DataGridView dgvJobHistory;
+        private System.Windows.Forms.Button btnRefresh;
+        private System.Windows.Forms.Button btnShowDetails;
     }
 }
 

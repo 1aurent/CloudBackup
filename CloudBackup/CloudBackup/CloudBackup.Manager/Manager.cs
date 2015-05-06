@@ -432,5 +432,27 @@ will be a full image. Existing backup will not be dropped. Do you really want to
             (new LegalNoticies()).ShowDialog(this);
         }
 
+        private void btnRefresh_Click(object sender, EventArgs e)
+        {
+            if (_archiveJob == null || !_archiveJob.JobUID.HasValue)
+            {
+                dgvJobHistory.DataSource = null;
+            }
+            else
+                dgvJobHistory.DataSource = 
+                            _serverLink.GetBackupReports(_archiveJob.JobUID.Value);
+        }
+
+        private void btnShowDetails_Click(object sender, EventArgs e)
+        {
+            if (_archiveJob == null || !_archiveJob.JobUID.HasValue) return;
+            if (dgvJobHistory.SelectedRows.Count == 0) return;
+
+            var time = ((DateTime)dgvJobHistory.SelectedRows[0].Cells[0].Value).Ticks;
+            var report = _serverLink.GetBackupReport(_archiveJob.JobUID.Value, time);
+
+            var viewer = new BackupReportViewer(report);
+            viewer.ShowDialog(this);
+        }
     }
 }
