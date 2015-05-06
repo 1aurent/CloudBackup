@@ -82,9 +82,6 @@
     <Reference Include="AlphaFS">
       <HintPath>..\3rdParty\Libs\AlphaFS.dll</HintPath>
     </Reference>
-    <Reference Include="Ionic.Zip">
-      <HintPath>..\3rdParty\Libs\Ionic.Zip.dll</HintPath>
-    </Reference>
     <Reference Include="log4net">
       <HintPath>..\3rdParty\Libs\log4net.dll</HintPath>
     </Reference>
@@ -155,6 +152,10 @@
     <ProjectReference Include="..\3rdParty\AlphaVSS.Platform\AlphaVSS.vcxproj">
       <Project>{492458c9-0a41-41c3-bc18-b1f8c3d0aaf1}</Project>
       <Name>AlphaVSS.Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\3rdParty\DotNetZip.Zip\DotNetZip.Zip.csproj">
+      <Project>{d3b0ad67-44d8-4b3d-bed9-ce1fd6de2c5a}</Project>
+      <Name>DotNetZip.Zip</Name>
     </ProjectReference>
     <ProjectReference Include="..\CloudBackup.API\CloudBackup.API.csproj">
       <Project>{0b4eacea-93b4-4205-841f-54a474c475c7}</Project>
