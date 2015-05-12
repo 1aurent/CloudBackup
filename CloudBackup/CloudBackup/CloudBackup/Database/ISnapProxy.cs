@@ -77,26 +77,26 @@ namespace CloudBackup.Database
                       "FROM ArchiveFiles WHERE sourceSchedule=@schedule AND sourcePath=@path")]
         ArchiveFile FindFile(int schedule, string path);
 
-        [SqlStatement("UPDATE ArchiveFiles SET seen=0 WHERE sourceSchedule=@schedule")]
+        [SqlStatement("UPDATE ArchiveFiles SET status=0 WHERE sourceSchedule=@schedule AND status=1")]
         void ClearSeenFlags(int schedule);
 
-        [SqlStatement("UPDATE ArchiveFiles SET seen=1 WHERE sourceSchedule=@schedule AND sourcePath=@path")]
+        [SqlStatement("UPDATE ArchiveFiles SET status=1 WHERE sourceSchedule=@schedule AND sourcePath=@path")]
         void SetSeenFlags(int schedule, string path);
 
-        [SqlStatement("SELECT sourcePath,fileSize FROM ArchiveFiles WHERE seen=0 AND sourceSchedule=@schedule")]
+        [SqlStatement("SELECT sourcePath,fileSize FROM ArchiveFiles WHERE status=0 AND sourceSchedule=@schedule")]
         IEnumerator<DeleteFile> GetDeletedFiles(int schedule);
 
         [SqlStatement("DELETE FROM ArchiveFiles WHERE sourceSchedule=@schedule")]
         void ClearAllFiles(int schedule);
 
-        [SqlStatement("DELETE FROM ArchiveFiles WHERE seen=0 AND sourceSchedule=@schedule")]
+        [SqlStatement("UPDATE ArchiveFiles SET status=2 WHERE status=0 AND sourceSchedule=@schedule")]
         void ClearDeleteFiles(int schedule);
-            
-        [SqlStatement("INSERT INTO ArchiveFiles (sourcePath,sourceSchedule,fileSize,created,modified,notedHash,lastSnapshot,seen) " +
+
+        [SqlStatement("INSERT INTO ArchiveFiles (sourcePath,sourceSchedule,fileSize,created,modified,notedHash,lastSnapshot,status) " +
                       "VALUES (@sourcePath,@schedule,@fileSize,@created,@modified,@hash,@lastSnapshot,1)")]
         void AddFile(string sourcePath, int schedule, long fileSize,long created, long modified, long hash, long lastSnapshot);
 
-        [SqlStatement("UPDATE ArchiveFiles SET fileSize=@fileSize,created=@created,modified=@modified,notedHash=@hash,lastSnapshot=@lastSnapshot,seen=1 " +
+        [SqlStatement("UPDATE ArchiveFiles SET fileSize=@fileSize,created=@created,modified=@modified,notedHash=@hash,lastSnapshot=@lastSnapshot,status=1 " +
                       "WHERE sourcePath=@sourcePath AND sourceSchedule=@schedule")]
         void UpdateFile(string sourcePath, int schedule, long fileSize,long created, long modified, long hash, long lastSnapshot);
 

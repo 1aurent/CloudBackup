@@ -86,5 +86,8 @@ namespace CloudBackup.Database
         [SqlStatement("INSERT INTO BackupReport (sourceSchedule,runtime,success,operation,status) " +
                       "VALUES (@id,@runtime,@success,@operation,@report)")]
         void BackupReport(long id, long runtime, bool success, string operation, string report);
+
+        [SqlStatement("DELETE FROM BackupReport WHERE runtime<@olderThan")]
+        void ClearOldReports(long olderThan);
     }
 }

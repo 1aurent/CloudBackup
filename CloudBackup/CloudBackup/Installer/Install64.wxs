@@ -9,7 +9,8 @@
     <Package Id='*' Keywords='Installer'
       Description="Laurent Dupuis's CloudBackup Installer 64bits"
       Comments="Laurent Dupuis's CloudBackup Installer" Manufacturer='Laurent Dupuis'
-      InstallerVersion='405' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x64" />
+      InstallerVersion='405' Languages='1033' Compressed='yes' SummaryCodepage='1252' Platform="x64"
+      InstallPrivileges="elevated" InstallScope="perMachine" />
       
     <Media Id='1' Cabinet='CloudBackup.cab' EmbedCab='yes' DiskPrompt="CD-ROM #1" />
     <Property Id='DiskPrompt' Value="Laurent Dupuis's CloudBackup Installation [1]" />
@@ -91,7 +92,7 @@
     
     
 		<DirectoryRef Id="TARGETDIR">
-		    <Merge Id="VCRedist" SourceFile="3rdParty\redist\Microsoft_VC120_CRT_x64.msm" DiskId="1" Language="0"/>
+		    <Merge Id="VCRedist120_64" SourceFile="3rdParty\redist\Microsoft_VC120_CRT_x64.msm" DiskId="1" Language="0"/>
 		</DirectoryRef>
 		
     <Feature Id='Complete' Title='CloudBackup' Description='The complete package.'
@@ -102,7 +103,7 @@
         <ComponentRef Id='LogDir' />
         <ComponentRef Id='Manager' />
         <ComponentRef Id='ApplicationShortcut' />
-        <MergeRef Id="VCRedist"/>
+        <MergeRef Id="VCRedist120_64"/>
       </Feature>
     </Feature>
 
