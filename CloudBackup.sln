@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudBackup", "CloudBackup\CloudBackup.csproj", "{7938EA58-8B23-43D1-9389-7FBC93B3D3F0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2FB97B30-1050-4F6B-B729-B94AAA178EE4} = {2FB97B30-1050-4F6B-B729-B94AAA178EE4}
+		{492458C9-0A41-41C3-BC18-B1F8C3D0AAF1} = {492458C9-0A41-41C3-BC18-B1F8C3D0AAF1}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudBackup.Test", "CloudBackup.Test\CloudBackup.Test.csproj", "{1E0F1E50-6105-4A4B-989A-F01CCD1093DA}"
 EndProject
@@ -80,7 +84,9 @@ Global
 		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Debug|x86.Build.0 = Debug|Any CPU
 		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Release|x64.ActiveCfg = Release|Any CPU
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Release|x64.Build.0 = Release|Any CPU
 		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Release|x86.ActiveCfg = Release|Any CPU
+		{D3B0AD67-44D8-4B3D-BED9-CE1FD6DE2C5A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

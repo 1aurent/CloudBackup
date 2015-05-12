@@ -40,6 +40,6 @@ CREATE TABLE IF NOT EXISTS ArchiveFiles(
 	modified integer not null,
 	notedHash integer not null,
 	lastSnapshot integer not null,
-	seen bit not null
+	status integer not null
 );	
 CREATE UNIQUE INDEX IF NOT EXISTS ArchiveFileIds ON ArchiveFiles(sourceSchedule,sourcePath);

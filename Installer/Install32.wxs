@@ -87,7 +87,7 @@
     </DirectoryRef>
     
 		<DirectoryRef Id="TARGETDIR">
-		    <Merge Id="VCRedist" SourceFile="3rdParty\redist\Microsoft_VC120_CRT_x86.msm" DiskId="1" Language="0"/>
+		    <Merge Id="VCRedist120_32" SourceFile="3rdParty\redist\Microsoft_VC120_CRT_x86.msm" DiskId="1" Language="0"/>
 		</DirectoryRef>
 
     <Feature Id='Complete' Title='CloudBackup' Description='The complete package.'
@@ -98,10 +98,10 @@
         <ComponentRef Id='LogDir' />
         <ComponentRef Id='Manager' />
         <ComponentRef Id='ApplicationShortcut' />
-        <MergeRef Id="VCRedist"/>
+        <MergeRef Id="VCRedist120_32"/>
       </Feature>
     </Feature>
-
+    
 		<UI>
 	
     	<!--UIRef Id="WixUI_InstallDir" /-->

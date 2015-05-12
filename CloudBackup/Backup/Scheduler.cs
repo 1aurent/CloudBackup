@@ -269,7 +269,7 @@ namespace CloudBackup.Backup
             var now = DateTime.Now;
             ScheduleJob currentJob;
 
-            log.InfoFormat("Starting processing @ {0}",now);
+            log.DebugFormat("Starting processing @ {0}", now);
             do
             {
                 currentJob = null;
@@ -304,12 +304,17 @@ namespace CloudBackup.Backup
 
             } while (currentJob != null);
 
+            var oldReports = now.AddDays(-365);
+            log.DebugFormat("Clear old reports (older than 1 year) {0}", oldReports);
+            Program.Database.JobProxy.ClearOldReports(oldReports.Ticks);
+
             lock (_lock)
             {
                 _timerActive = false;
             }
 
-            log.InfoFormat("Schedule processing @ {0} completed", now);
+
+            log.DebugFormat("Schedule processing @ {0} completed", now);
         }
 
 
