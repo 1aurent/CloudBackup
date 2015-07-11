@@ -25,15 +25,16 @@ GOTO Fin
 IF NOT "%ERRORLEVEL%" EQU "0" GOTO FailedFailed
 
 
-ECHO  .M"""bgd                                                     OO
-ECHO ,MI    "Y                                                     88
-ECHO `MMb.   `7MM  `7MM  ,p6"bo   ,p6"bo   .gP"Ya  ,pP"Ybd ,pP"Ybd ||
-ECHO   `YMMNq. MM    MM 6M'  OO  6M'  OO  ,M'   Yb 8I   `" 8I   `" ||
-ECHO .     `MM MM    MM 8M       8M       8M"""""" `YMMMa. `YMMMa. `'
-ECHO Mb     dM MM    MM YM.    , YM.    , YM.    , L.   I8 L.   I8 ,,
-ECHO P"Ybmmd"  `Mbod"YML.YMbmd'   YMbmd'   `Mbmmd' M9mmmP' M9mmmP' db
+ECHO   _____   __    __     ____     ____    _____    _____    _____ 
+ECHO  / ____\  ) )  ( (    / ___)   / ___)  / ___/   / ____\  / ____\
+ECHO ( (___   ( (    ) )  / /      / /     ( (__    ( (___   ( (___  
+ECHO  \___ \   ) )  ( (  ( (      ( (       ) __)    \___ \   \___ \ 
+ECHO      ) ) ( (    ) ) ( (      ( (      ( (           ) )      ) )
+ECHO  ___/ /   ) \__/ (   \ \___   \ \___   \ \___   ___/ /   ___/ / 
+ECHO /____/    \______/    \____)   \____)   \____\ /____/   /____/  
+                                                                
 
-sleep 10
+PAUSE
 Goto Fin
 
 :NoVisualStudio
