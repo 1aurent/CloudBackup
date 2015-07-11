@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Manager));
             this.tabInfos = new System.Windows.Forms.TabControl();
             this.tabPageArchive = new System.Windows.Forms.TabPage();
             this.spltCtrlArchive = new System.Windows.Forms.SplitContainer();
@@ -72,6 +73,8 @@
             this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.tabPageHistory = new System.Windows.Forms.TabPage();
+            this.btnShowDetails = new System.Windows.Forms.Button();
+            this.btnRefresh = new System.Windows.Forms.Button();
             this.dgvJobHistory = new System.Windows.Forms.DataGridView();
             this.btnResetStatus = new System.Windows.Forms.Button();
             this.btnRunNow = new System.Windows.Forms.Button();
@@ -87,8 +90,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.rtbLicence = new System.Windows.Forms.RichTextBox();
-            this.btnRefresh = new System.Windows.Forms.Button();
-            this.btnShowDetails = new System.Windows.Forms.Button();
             this.tabInfos.SuspendLayout();
             this.tabPageArchive.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.spltCtrlArchive)).BeginInit();
@@ -619,6 +620,26 @@
             this.tabPageHistory.Text = "History";
             this.tabPageHistory.UseVisualStyleBackColor = true;
             // 
+            // btnShowDetails
+            // 
+            this.btnShowDetails.Location = new System.Drawing.Point(6, 358);
+            this.btnShowDetails.Name = "btnShowDetails";
+            this.btnShowDetails.Size = new System.Drawing.Size(75, 23);
+            this.btnShowDetails.TabIndex = 2;
+            this.btnShowDetails.Text = "Show detail";
+            this.btnShowDetails.UseVisualStyleBackColor = true;
+            this.btnShowDetails.Click += new System.EventHandler(this.btnShowDetails_Click);
+            // 
+            // btnRefresh
+            // 
+            this.btnRefresh.Location = new System.Drawing.Point(287, 358);
+            this.btnRefresh.Name = "btnRefresh";
+            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.btnRefresh.TabIndex = 1;
+            this.btnRefresh.Text = "Refresh";
+            this.btnRefresh.UseVisualStyleBackColor = true;
+            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
+            // 
             // dgvJobHistory
             // 
             this.dgvJobHistory.AllowUserToAddRows = false;
@@ -776,32 +797,13 @@
             this.rtbLicence.TabIndex = 0;
             this.rtbLicence.Text = "";
             // 
-            // btnRefresh
-            // 
-            this.btnRefresh.Location = new System.Drawing.Point(287, 358);
-            this.btnRefresh.Name = "btnRefresh";
-            this.btnRefresh.Size = new System.Drawing.Size(75, 23);
-            this.btnRefresh.TabIndex = 1;
-            this.btnRefresh.Text = "Refresh";
-            this.btnRefresh.UseVisualStyleBackColor = true;
-            this.btnRefresh.Click += new System.EventHandler(this.btnRefresh_Click);
-            // 
-            // btnShowDetails
-            // 
-            this.btnShowDetails.Location = new System.Drawing.Point(6, 358);
-            this.btnShowDetails.Name = "btnShowDetails";
-            this.btnShowDetails.Size = new System.Drawing.Size(75, 23);
-            this.btnShowDetails.TabIndex = 2;
-            this.btnShowDetails.Text = "Show detail";
-            this.btnShowDetails.UseVisualStyleBackColor = true;
-            this.btnShowDetails.Click += new System.EventHandler(this.btnShowDetails_Click);
-            // 
             // Manager
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(634, 553);
             this.Controls.Add(this.tabInfos);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(650, 560);
             this.Name = "Manager";
             this.Padding = new System.Windows.Forms.Padding(5);

@@ -18,6 +18,7 @@
  */
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Xml;
@@ -130,10 +131,11 @@ namespace CloudBackup.Backup
             _now = DateTime.Now;
             var jid = job.JobUID.Value;
             _id = _now.ToUniversalTime().Ticks;
-            _fileName = string.Format("BACKUP_{0:00000}_{8}_{1:0000}{2:00}{3:00}_{4:00}{5:00}{6:00}_{7:000}.zip", jid, _now.Year, _now.Month,
+            _fileName = string.Format("BACKUP_{0:00000}_{8}_{1:0000}{2:00}{3:00}_{4:00}{5:00}{6:00}_{7:000}.{9}.zip", jid, _now.Year, _now.Month,
                 _now.Day, _now.Hour,_now.Minute,_now.Second,
                 _now.Millisecond,
-                forceFullBackup?"FULL":"INCR");
+                forceFullBackup?"FULL":"INCR",
+                Environment.MachineName);
 
             _report = new StringBuilder();
             _report.AppendLine("Target filename: " + _fileName);
@@ -141,22 +143,25 @@ namespace CloudBackup.Backup
             _proxy = Program.Database.CreateSnapProxy();
             _proxy.CreateSnapshotFile(_id, jid, _fileName, _id);
             _proxy.ClearSeenFlags(jid);
+        }
 
-            _report.AppendLine("Connect to target: " + job.JobTarget.TargetServer);
-            _backend = Backend.Backend.OpenBackend(job.JobTarget);
+        void BuildConnectBackend()
+        {
+            _report.AppendLine("Connect to target: " + _job.JobTarget.TargetServer);
+            _backend = Backend.Backend.OpenBackend(_job.JobTarget);
             _zipFile = new ZipFile()
             {
                 CompressionLevel = CompressionLevel.BestCompression,
                 UseZip64WhenSaving = Zip64Option.Always
             };
 
-            if (!string.IsNullOrWhiteSpace(job.JobTarget.ZipPassword))
+            if (!string.IsNullOrWhiteSpace(_job.JobTarget.ZipPassword))
             {
-                _zipFile.Password = job.JobTarget.ZipPassword;
+                _zipFile.Password = _job.JobTarget.ZipPassword;
                 _zipFile.Encryption = EncryptionAlgorithm.WinZipAes256;
             }
 
-            _zipFile.SaveProgress += zip_SaveProgress;
+            _zipFile.SaveProgress += zip_SaveProgress;            
         }
 
         readonly ArchiveJob _job;
@@ -205,8 +210,12 @@ namespace CloudBackup.Backup
             var elements = backup.GetSnapshotElements();
 
             _report.AppendLine();
-            _report.AppendLine("Backup process :");
-            _report.AppendLine("----------------");
+            _report.AppendLine(" * Backup process :");
+            _report.AppendLine();
+
+            var countNewFiles = 0L;
+            var countChangeFiles = 0L;
+            var countDeletedFiles = 0L;
 
             var hash = 0L;
             foreach (var element in elements)
@@ -254,6 +263,7 @@ namespace CloudBackup.Backup
                         
 
                     _report.AppendLine("Backup new file " + element.Path);
+                    ++countNewFiles;
                     _proxy.AddFile(
                         element.Path, jid,
                         element.FileSize,
@@ -271,13 +281,14 @@ namespace CloudBackup.Backup
                     file.FileSize == element.FileSize
                     )
                 {
-                    log.InfoFormat("[{0}] - No change / No archive", element.Path);
+                    log.DebugFormat("[{0}] - No change / No archive", element.Path);
                     _proxy.SetSeenFlags(jid, element.Path);
                     continue;
                 }
 
                 log.InfoFormat("[{0}] - File changed / Archiving", element.Path);
                 _report.AppendLine("Backup modified file " + element.Path);
+                ++countChangeFiles;
 
                 if (element.FileSize != 0)
                 {
@@ -309,9 +320,13 @@ namespace CloudBackup.Backup
                 while (delFiles.MoveNext())
                 {
                     _report.AppendLine("Deleted file " + delFiles.Current.SourcePath);
+                    ++countDeletedFiles;
                     manifest.NotifyDelFile(delFiles.Current.SourcePath, delFiles.Current.FileSize);
                 }
             }
+
+            _report.AppendLine();
+            _report.AppendLine(string.Format(" * Report: New files: {0} / Modified files: {1} / Deleted files: {2}", countNewFiles, countChangeFiles, countDeletedFiles));
 
             _zipFile.Comment = manifest.Manifest;
         }
@@ -321,7 +336,10 @@ namespace CloudBackup.Backup
             log.InfoFormat("Process completed - Streaming ZIP file");
 
             _report.AppendLine();
-            _report.AppendLine("Streaming ZIP file to target");
+            _report.AppendLine(" * Streaming ZIP file to target");
+
+            var swTimer = new Stopwatch();
+            swTimer.Start();
 
             bool transfertIsSuccess;
             Exception transferException;
@@ -359,7 +377,10 @@ namespace CloudBackup.Backup
                 transferException = param.Exception;
             }
 
-            log.InfoFormat("Process completed - Droping backup");
+            swTimer.Stop();
+
+            log.InfoFormat("Process completed in {0} - Droping backup", swTimer.Elapsed);
+            _report.AppendLine("   Total time for transfert : " + swTimer.Elapsed);
             backup.DropBackup();
 
             if (!transfertIsSuccess)
@@ -433,6 +454,8 @@ namespace CloudBackup.Backup
             {
                 try
                 {
+                    process.BuildConnectBackend();
+
                     var engine = new Engine { RootPath = job.JobRootPath };
                     using (var backup = engine.CreateBackup())
                     {
