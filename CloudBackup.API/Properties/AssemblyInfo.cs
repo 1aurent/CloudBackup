@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("CloudBackup.API")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Laurent Dupuis's CloudBackup Service")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Barclays ")]
-[assembly: AssemblyProduct("CloudBackup.API")]
-[assembly: AssemblyCopyright("Copyright © Barclays  2013")]
+[assembly: AssemblyCompany("Laurent Dupuis")]
+[assembly: AssemblyProduct("CloudBackup")]
+[assembly: AssemblyCopyright("Copyright © Laurent Dupuis 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

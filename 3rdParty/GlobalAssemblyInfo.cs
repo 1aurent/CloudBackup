@@ -30,10 +30,10 @@ using System.Resources;
 [assembly: AssemblyConfiguration("Release")]
 #endif
 
-[assembly: AssemblyCompany("Alphaleonis")]
-[assembly: AssemblyProduct("AlphaVSS")]
-[assembly: AssemblyCopyright("Copyright © Peter Palotas 2008-2012")]
-[assembly: AssemblyTrademark("")]
+//[assembly: AssemblyCompany("Alphaleonis")]
+//[assembly: AssemblyProduct("AlphaVSS")]
+//[assembly: AssemblyCopyright("Copyright © Peter Palotas 2008-2012")]
+//[assembly: AssemblyTrademark("")]
 
 [assembly: AssemblyVersion("1.3.0.0")]
 [assembly: AssemblyFileVersion("1.3.0.0")]
