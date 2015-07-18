@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("CloudBackup.Test")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Barclays ")]
-[assembly: AssemblyProduct("CloudBackup.Test")]
-[assembly: AssemblyCopyright("Copyright © Barclays  2013")]
+[assembly: AssemblyCompany("Copyright © Laurent Dupuis 2015")]
+[assembly: AssemblyProduct("Copyright © Laurent Dupuis 2015")]
+[assembly: AssemblyCopyright("Copyright © Laurent Dupuis 2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

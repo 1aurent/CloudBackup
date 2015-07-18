@@ -31,3 +31,4 @@ using System.Resources;
 [assembly: Guid("9645b1d8-6220-43ab-a6ab-3197c56e3327")]
 [assembly: CLSCompliant(false)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
+[assembly: AssemblyProductAttribute("")]
